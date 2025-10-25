@@ -1,10 +1,13 @@
 package com.example.energy
 
-import com.example.energy.chacha20.ChaCha20Cipher
+import com.example.energy.elgamal.ElGamalLite
+import org.bouncycastle.crypto.params.ElGamalPrivateKeyParameters
+import org.bouncycastle.crypto.params.ElGamalPublicKeyParameters
+import java.security.SecureRandom
 import kotlin.math.pow
 import kotlin.system.measureNanoTime
 
-object ChaCha20Benchmark {
+object ElGamalBenchmark {
 
     data class SingleResult(
         val sizeBytes: Int,
@@ -22,24 +25,16 @@ object ChaCha20Benchmark {
         while (length < 1024) append(pattern)
     }.substring(0, 1024)
 
-    // ---- Deterministic key (32B) & nonce (12B) for reproducible timings ----
-    private val FIXED_KEY: ByteArray = ByteArray(32) { it.toByte() }           // 00 01 02 ... 1F
-    private val FIXED_NONCE: ByteArray = ByteArray(12) { (it * 3).toByte() }   // simple pattern
-
-    // ---- Build plaintext by repeating the base ----
     private fun buildPlain(size: Int): String {
-        val builder = StringBuilder(size)
-        while (builder.length < size) {
-            val remaining = size - builder.length
-            if (remaining >= BASE_SAMPLE.length)
-                builder.append(BASE_SAMPLE)
-            else
-                builder.append(BASE_SAMPLE.substring(0, remaining))
+        val b = StringBuilder(size)
+        while (b.length < size) {
+            val remain = size - b.length
+            if (remain >= BASE_SAMPLE.length) b.append(BASE_SAMPLE)
+            else b.append(BASE_SAMPLE.substring(0, remain))
         }
-        return builder.toString()
+        return b.toString()
     }
 
-    // ---- CSV (no “rounds” column) ----
     fun csvHeader(): String =
         "size_bytes,enc_min_ns,enc_median_ns,enc_max_ns,dec_min_ns,dec_median_ns,dec_max_ns"
 
@@ -53,30 +48,41 @@ object ChaCha20Benchmark {
         append(r.decMax); append('\n')
     }
 
-    // ---- Single-size benchmark (fixed 15 rounds) ----
-    private fun runSingleSize(
-        sizePow: Int,
-        rounds: Int = 15
-    ): SingleResult {
+    private fun runSingleSize(sizePow: Int, rounds: Int = 15): SingleResult {
+        val rnd = SecureRandom()
+
+        // One ElGamal keypair reused across rounds for this size
+        val kp = ElGamalLite.generateKeyPair()
+        val pub = kp.public as ElGamalPublicKeyParameters
+        val priv = kp.private as ElGamalPrivateKeyParameters
+
         val size = 2.0.pow(sizePow).toInt()
         val plain = buildPlain(size)
 
         val encTimes = LongArray(rounds)
         val decTimes = LongArray(rounds)
 
-        repeat(rounds) { i ->
-            var cipherText: String
-            val encNanos = measureNanoTime {
-                cipherText = ChaCha20Cipher.encrypt(plain, FIXED_KEY, FIXED_NONCE)
-            }
-            encTimes[i] = encNanos
+        repeat(rounds) {
+            // fresh AES key + IV each round
+            val aesKey = ByteArray(32).also { rnd.nextBytes(it) }
+            val iv = ByteArray(16).also { rnd.nextBytes(it) }
+            val keyBlob = aesKey + iv
 
-            val decNanos = measureNanoTime {
-                // decrypt the ciphertext produced in the same round
-                @Suppress("UNUSED_VARIABLE")
-                val back = ChaCha20Cipher.decrypt(cipherText, FIXED_KEY, FIXED_NONCE)
+            var cipherTextB64: String
+            var wrappedKey: ByteArray
+
+            encTimes[it] = measureNanoTime {
+                cipherTextB64 = AES.encrypt(plain, aesKey, iv)
+                wrappedKey = ElGamalLite.encryptSmall(keyBlob, pub)
             }
-            decTimes[i] = decNanos
+
+            decTimes[it] = measureNanoTime {
+                val unwrapped = ElGamalLite.decryptSmall(wrappedKey, priv)
+                val recKey = unwrapped.copyOfRange(0, 32)
+                val recIv  = unwrapped.copyOfRange(32, 48)
+                @Suppress("UNUSED_VARIABLE")
+                val back = AES.decrypt(cipherTextB64, recKey, recIv)
+            }
         }
 
         return SingleResult(
@@ -90,30 +96,24 @@ object ChaCha20Benchmark {
         )
     }
 
-    // ---- Full range 2^10 → 2^20 (writes/append to CSV) ----
     fun runRangeAndLog(
         context: android.content.Context,
         minPow: Int = 10,
         maxPow: Int = 20,
-        fileName: String = "chacha_bench_2p10_2p20.csv"
+        fileName: String = "elgamal_bench_2p10_2p20.csv"
     ): String {
-        require(minPow <= maxPow) { "minPow must be <= maxPow" }
+        require(minPow <= maxPow)
         val logger = CsvLogger(context, fileName, csvHeader())
-
-        for (powVal in minPow..maxPow) {
-            val result = runSingleSize(powVal, rounds = 15)
-            logger.appendLine(toCsvLine(result))
+        for (p in minPow..maxPow) {
+            val r = runSingleSize(p, rounds = 15)
+            logger.appendLine(toCsvLine(r))
         }
         return logger.file().absolutePath
     }
 
-    // ---- Helpers ----
     private fun median(values: LongArray): Long {
-        val sorted = values.sorted()
-        val mid = sorted.size / 2
-        return if (sorted.size % 2 == 0)
-            ((sorted[mid - 1] + sorted[mid]) / 2)
-        else
-            sorted[mid]
+        val s = values.sorted()
+        val m = s.size / 2
+        return if (s.size % 2 == 0) ((s[m - 1] + s[m]) / 2) else s[m]
     }
 }

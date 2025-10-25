@@ -1,93 +1,114 @@
 package com.example.energy
 
+import android.content.Context
+import java.security.SecureRandom
 import kotlin.math.pow
 import kotlin.system.measureNanoTime
-import java.security.SecureRandom
 
 object AesBenchmark {
 
-    data class Result(
+    data class SingleResult(
         val sizeBytes: Int,
-        val rounds: Int,
-        val encryptNanosMedian: Long,
-        val decryptNanosMedian: Long
-    ) {
-        fun asLine(): String {
-            val pow = Integer.numberOfTrailingZeros(sizeBytes)
-            return "2^$pow (${sizeBytes}B)  enc=${encryptNanosMedian} ns  dec=${decryptNanosMedian} ns"
+        val encMin: Long,
+        val encMedian: Long,
+        val encMax: Long,
+        val decMin: Long,
+        val decMedian: Long,
+        val decMax: Long
+    )
+
+    // ---- Constant 1024-byte base sample (deterministic) ----
+    private val BASE_SAMPLE: String = buildString(1024) {
+        val pattern = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        while (length < 1024) append(pattern)
+    }.substring(0, 1024)
+
+    // ---- Build plaintext by repeating the base ----
+    private fun buildPlain(size: Int): String {
+        val builder = StringBuilder(size)
+        while (builder.length < size) {
+            val remaining = size - builder.length
+            if (remaining >= BASE_SAMPLE.length)
+                builder.append(BASE_SAMPLE)
+            else
+                builder.append(BASE_SAMPLE.substring(0, remaining))
         }
+        return builder.toString()
     }
 
-    /**
-     * Benchmarks AES/CBC/PKCS7 using the AES helper (BouncyCastle).
-     *
-     * @param password  password for PBKDF2 (test only)
-     * @param salt      salt for PBKDF2 (random if not provided)
-     * @param keyBits   128/192/256 (default 256)
-     * @param iterations PBKDF2 iterations (default AES.KEY_GENERATION_ITERATIONS)
-     * @param minPow    smallest size as 2^minPow bytes (default 4 => 16 bytes)
-     * @param maxPow    largest size as 2^maxPow bytes (default 16 => 65536 bytes)
-     * @param rounds    number of repetitions per size (default 5, median reported)
-     * @param useBlankIv if true, uses AES.IV_BLANK (deterministic); otherwise random 16B IV per op
-     */
-    fun run(
+    // ---- CSV helpers (no “rounds” column) ----
+    fun csvHeader(): String =
+        "size_bytes,enc_min_ns,enc_median_ns,enc_max_ns,dec_min_ns,dec_median_ns,dec_max_ns"
+
+    fun toCsvLine(r: SingleResult): String = buildString {
+        append(r.sizeBytes); append(',')
+        append(r.encMin); append(',')
+        append(r.encMedian); append(',')
+        append(r.encMax); append(',')
+        append(r.decMin); append(',')
+        append(r.decMedian); append(',')
+        append(r.decMax); append('\n')
+    }
+
+    // ---- Single-size benchmark (fixed 15 rounds) ----
+    private fun runSingleSize(
+        sizePow: Int,
+        rounds: Int = 15,
         password: String = "test-password",
         salt: ByteArray = ByteArray(16).apply { SecureRandom().nextBytes(this) },
         keyBits: Int = AES.KEY_SIZE_256_BITS,
         iterations: Int = AES.KEY_GENERATION_ITERATIONS,
-        minPow: Int = 4,
-        maxPow: Int = 16,
-        rounds: Int = 5,
         useBlankIv: Boolean = true
-    ): List<Result> {
-
-        require(minPow <= maxPow) { "minPow must be <= maxPow" }
-        require(rounds >= 1) { "rounds must be >= 1" }
-
-        // Derive key once for the whole run (benchmarking payload size, not PBKDF2)
+    ): SingleResult {
         val keyParam = AES.createKey(password, salt, iterations, keyBits)
         val key = keyParam.key
-
-        // Warm-up (avoid first-run bias)
         warmUp(key)
 
-        val results = mutableListOf<Result>()
-        for (powVal in minPow..maxPow) {
-            val size = 2.0.pow(powVal).toInt()
-            val plain = buildString(size) { repeat(size) { append('A') } }
+        val size = 2.0.pow(sizePow).toInt()
+        val plain = buildPlain(size)
 
-            val encTimes = LongArray(rounds)
-            val decTimes = LongArray(rounds)
+        val encTimes = LongArray(rounds)
+        val decTimes = LongArray(rounds)
 
-            repeat(rounds) { r ->
-                val iv = if (useBlankIv) AES.IV_BLANK else ByteArray(16).also { SecureRandom().nextBytes(it) }
+        repeat(rounds) { i ->
+            val iv = if (useBlankIv) AES.IV_BLANK else ByteArray(16).also { SecureRandom().nextBytes(it) }
+            val encNanos = measureNanoTime { AES.encrypt(plain, key, iv) }
+            encTimes[i] = encNanos
 
-                // measure encrypt
-                val encNanos = measureNanoTime {
-                    AES.encrypt(plain, key, iv)
-                }
-                encTimes[r] = encNanos
-
-                // measure decrypt (encrypt once, then decrypt)
-                val cipher = AES.encrypt(plain, key, iv)
-                val decNanos = measureNanoTime {
-                    AES.decrypt(cipher, key, iv)
-                }
-                decTimes[r] = decNanos
-            }
-
-            results += Result(
-                sizeBytes = size,
-                rounds = rounds,
-                encryptNanosMedian = median(encTimes),
-                decryptNanosMedian = median(decTimes)
-            )
+            val cipher = AES.encrypt(plain, key, iv)
+            val decNanos = measureNanoTime { AES.decrypt(cipher, key, iv) }
+            decTimes[i] = decNanos
         }
-        return results
+
+        return SingleResult(
+            sizeBytes = size,
+            encMin = encTimes.minOrNull() ?: 0,
+            encMedian = median(encTimes),
+            encMax = encTimes.maxOrNull() ?: 0,
+            decMin = decTimes.minOrNull() ?: 0,
+            decMedian = median(decTimes),
+            decMax = decTimes.maxOrNull() ?: 0
+        )
     }
 
-    // --- helpers ---
+    // ---- Range benchmark (2^10 → 2^20, 15 rounds each) ----
+    fun runRangeAndLog(
+        context: Context,
+        minPow: Int = 10,
+        maxPow: Int = 20,
+        fileName: String = "aes_bench_2p10_2p20.csv"
+    ): String {
+        val logger = CsvLogger(context, fileName, csvHeader())
 
+        for (powVal in minPow..maxPow) {
+            val result = runSingleSize(powVal, rounds = 15)
+            logger.appendLine(toCsvLine(result))
+        }
+
+        return logger.file().absolutePath
+    }
+
+    // ---- Helpers ----
     private fun warmUp(key: ByteArray) {
         val iv = AES.IV_BLANK
         val s = "warmup"
@@ -98,13 +119,11 @@ object AesBenchmark {
     }
 
     private fun median(values: LongArray): Long {
-        val copy = values.copyOf()
-        copy.sort()
-        val mid = copy.size / 2
-        return if (copy.size % 2 == 0) {
-            ((copy[mid - 1] + copy[mid]) / 2.0).toLong()
-        } else {
-            copy[mid]
-        }
+        val sorted = values.sorted()
+        val mid = sorted.size / 2
+        return if (sorted.size % 2 == 0)
+            ((sorted[mid - 1] + sorted[mid]) / 2)
+        else
+            sorted[mid]
     }
 }

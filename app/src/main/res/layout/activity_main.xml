@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Encrypt"
+        android:text="AES"
         android:textSize="24sp" />
 
     <Button
@@ -23,7 +23,33 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
-        android:text="Decrypt"
+        android:text="CHACHA20"
         android:textSize="24sp" />
+    <Button
+        android:id="@+id/btVar3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="ELGAMAL"
+        android:textSize="24sp" />
+    <Button
+        android:id="@+id/btVar4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="AES-GCM"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/btVar5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="RSA (hybrid)"
+        android:textSize="24sp" />
+
 
 </LinearLayout>
