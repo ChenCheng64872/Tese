@@ -45,16 +45,15 @@ object RsaHybridBenchmark {
         append(r.decMax); append('\n')
     }
 
-    private fun median(values: LongArray): Long {
-        val s = values.sorted()
-        val m = s.size / 2
-        return if (s.size % 2 == 0) ((s[m - 1] + s[m]) / 2) else s[m]
-    }
+    private fun median(values: LongArray): Long =
+        values.sorted().let { s ->
+            val m = s.size / 2
+            if (s.size % 2 == 0) (s[m - 1] + s[m]) / 2 else s[m]
+        }
 
     private fun runSingleSize(sizePow: Int, rounds: Int = 15): SingleResult {
         val rnd = SecureRandom()
 
-        // Reuse a single RSA keypair per size so keygen doesn't dominate
         val kp = RsaLite.generateKeyPair(2048)
         val pub = kp.public as RSAKeyParameters
         val priv = kp.private as RSAKeyParameters
@@ -66,7 +65,6 @@ object RsaHybridBenchmark {
         val dec = LongArray(rounds)
 
         repeat(rounds) {
-            // fresh AES-256 key and 16-byte IV per round
             val aesKey = ByteArray(32).also { rnd.nextBytes(it) }
             val iv = ByteArray(16).also { rnd.nextBytes(it) }
             val keyBlob = aesKey + iv
@@ -74,7 +72,7 @@ object RsaHybridBenchmark {
             var cipherB64: String
             var wrapped: ByteArray
             enc[it] = measureNanoTime {
-                cipherB64 = AES.encrypt(plain, aesKey, iv) // AES-CBC (your AES.kt)
+                cipherB64 = AES.encrypt(plain, aesKey, iv) // AES-CBC
                 wrapped = RsaLite.encryptSmall(keyBlob, pub) // RSA-OAEP(SHA256)
             }
 

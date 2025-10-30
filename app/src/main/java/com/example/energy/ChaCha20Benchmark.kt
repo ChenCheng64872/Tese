@@ -16,30 +16,24 @@ object ChaCha20Benchmark {
         val decMax: Long
     )
 
-    // ---- Constant 1024-byte base sample (deterministic) ----
     private val BASE_SAMPLE: String = buildString(1024) {
         val pattern = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         while (length < 1024) append(pattern)
     }.substring(0, 1024)
 
-    // ---- Deterministic key (32B) & nonce (12B) for reproducible timings ----
     private val FIXED_KEY: ByteArray = ByteArray(32) { it.toByte() }           // 00 01 02 ... 1F
     private val FIXED_NONCE: ByteArray = ByteArray(12) { (it * 3).toByte() }   // simple pattern
 
-    // ---- Build plaintext by repeating the base ----
     private fun buildPlain(size: Int): String {
         val builder = StringBuilder(size)
         while (builder.length < size) {
             val remaining = size - builder.length
-            if (remaining >= BASE_SAMPLE.length)
-                builder.append(BASE_SAMPLE)
-            else
-                builder.append(BASE_SAMPLE.substring(0, remaining))
+            if (remaining >= BASE_SAMPLE.length) builder.append(BASE_SAMPLE)
+            else builder.append(BASE_SAMPLE.substring(0, remaining))
         }
         return builder.toString()
     }
 
-    // ---- CSV (no “rounds” column) ----
     fun csvHeader(): String =
         "size_bytes,enc_min_ns,enc_median_ns,enc_max_ns,dec_min_ns,dec_median_ns,dec_max_ns"
 
@@ -53,11 +47,7 @@ object ChaCha20Benchmark {
         append(r.decMax); append('\n')
     }
 
-    // ---- Single-size benchmark (fixed 15 rounds) ----
-    private fun runSingleSize(
-        sizePow: Int,
-        rounds: Int = 15
-    ): SingleResult {
+    private fun runSingleSize(sizePow: Int, rounds: Int = 15): SingleResult {
         val size = 2.0.pow(sizePow).toInt()
         val plain = buildPlain(size)
 
@@ -66,17 +56,13 @@ object ChaCha20Benchmark {
 
         repeat(rounds) { i ->
             var cipherText: String
-            val encNanos = measureNanoTime {
+            encTimes[i] = measureNanoTime {
                 cipherText = ChaCha20Cipher.encrypt(plain, FIXED_KEY, FIXED_NONCE)
             }
-            encTimes[i] = encNanos
-
-            val decNanos = measureNanoTime {
-                // decrypt the ciphertext produced in the same round
+            decTimes[i] = measureNanoTime {
                 @Suppress("UNUSED_VARIABLE")
                 val back = ChaCha20Cipher.decrypt(cipherText, FIXED_KEY, FIXED_NONCE)
             }
-            decTimes[i] = decNanos
         }
 
         return SingleResult(
@@ -90,7 +76,6 @@ object ChaCha20Benchmark {
         )
     }
 
-    // ---- Full range 2^10 → 2^20 (writes/append to CSV) ----
     fun runRangeAndLog(
         context: android.content.Context,
         minPow: Int = 10,
@@ -107,13 +92,9 @@ object ChaCha20Benchmark {
         return logger.file().absolutePath
     }
 
-    // ---- Helpers ----
-    private fun median(values: LongArray): Long {
-        val sorted = values.sorted()
-        val mid = sorted.size / 2
-        return if (sorted.size % 2 == 0)
-            ((sorted[mid - 1] + sorted[mid]) / 2)
-        else
-            sorted[mid]
-    }
+    private fun median(values: LongArray): Long =
+        values.sorted().let { s ->
+            val m = s.size / 2
+            if (s.size % 2 == 0) (s[m - 1] + s[m]) / 2 else s[m]
+        }
 }

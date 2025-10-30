@@ -17,13 +17,11 @@ object AesBenchmark {
         val decMax: Long
     )
 
-    // ---- Constant 1024-byte base sample (deterministic) ----
     private val BASE_SAMPLE: String = buildString(1024) {
         val pattern = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         while (length < 1024) append(pattern)
     }.substring(0, 1024)
 
-    // ---- Build plaintext by repeating the base ----
     private fun buildPlain(size: Int): String {
         val builder = StringBuilder(size)
         while (builder.length < size) {
@@ -36,7 +34,6 @@ object AesBenchmark {
         return builder.toString()
     }
 
-    // ---- CSV helpers (no “rounds” column) ----
     fun csvHeader(): String =
         "size_bytes,enc_min_ns,enc_median_ns,enc_max_ns,dec_min_ns,dec_median_ns,dec_max_ns"
 
@@ -50,7 +47,6 @@ object AesBenchmark {
         append(r.decMax); append('\n')
     }
 
-    // ---- Single-size benchmark (fixed 15 rounds) ----
     private fun runSingleSize(
         sizePow: Int,
         rounds: Int = 15,
@@ -91,7 +87,6 @@ object AesBenchmark {
         )
     }
 
-    // ---- Range benchmark (2^10 → 2^20, 15 rounds each) ----
     fun runRangeAndLog(
         context: Context,
         minPow: Int = 10,
@@ -108,7 +103,6 @@ object AesBenchmark {
         return logger.file().absolutePath
     }
 
-    // ---- Helpers ----
     private fun warmUp(key: ByteArray) {
         val iv = AES.IV_BLANK
         val s = "warmup"
@@ -118,12 +112,9 @@ object AesBenchmark {
         }
     }
 
-    private fun median(values: LongArray): Long {
-        val sorted = values.sorted()
-        val mid = sorted.size / 2
-        return if (sorted.size % 2 == 0)
-            ((sorted[mid - 1] + sorted[mid]) / 2)
-        else
-            sorted[mid]
-    }
+    private fun median(values: LongArray): Long =
+        values.sorted().let { s ->
+            val m = s.size / 2
+            if (s.size % 2 == 0) (s[m - 1] + s[m]) / 2 else s[m]
+        }
 }

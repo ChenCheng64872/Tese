@@ -19,7 +19,6 @@ object ElGamalBenchmark {
         val decMax: Long
     )
 
-    // ---- Constant 1024-byte base sample (deterministic) ----
     private val BASE_SAMPLE: String = buildString(1024) {
         val pattern = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         while (length < 1024) append(pattern)
@@ -111,9 +110,9 @@ object ElGamalBenchmark {
         return logger.file().absolutePath
     }
 
-    private fun median(values: LongArray): Long {
-        val s = values.sorted()
-        val m = s.size / 2
-        return if (s.size % 2 == 0) ((s[m - 1] + s[m]) / 2) else s[m]
-    }
+    private fun median(values: LongArray): Long =
+        values.sorted().let { s ->
+            val m = s.size / 2
+            if (s.size % 2 == 0) (s[m - 1] + s[m]) / 2 else s[m]
+        }
 }
