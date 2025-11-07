@@ -1,120 +1,41 @@
 package com.example.energy
 
 import android.content.Context
-import java.security.SecureRandom
-import kotlin.math.pow
 import kotlin.system.measureNanoTime
 
 object AesBenchmark {
-
-    data class SingleResult(
-        val sizeBytes: Int,
-        val encMin: Long,
-        val encMedian: Long,
-        val encMax: Long,
-        val decMin: Long,
-        val decMedian: Long,
-        val decMax: Long
-    )
-
-    private val BASE_SAMPLE: String = buildString(1024) {
-        val pattern = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        while (length < 1024) append(pattern)
-    }.substring(0, 1024)
-
-    private fun buildPlain(size: Int): String {
-        val builder = StringBuilder(size)
-        while (builder.length < size) {
-            val remaining = size - builder.length
-            if (remaining >= BASE_SAMPLE.length)
-                builder.append(BASE_SAMPLE)
-            else
-                builder.append(BASE_SAMPLE.substring(0, remaining))
-        }
-        return builder.toString()
-    }
-
-    fun csvHeader(): String =
-        "size_bytes,enc_min_ns,enc_median_ns,enc_max_ns,dec_min_ns,dec_median_ns,dec_max_ns"
-
-    fun toCsvLine(r: SingleResult): String = buildString {
-        append(r.sizeBytes); append(',')
-        append(r.encMin); append(',')
-        append(r.encMedian); append(',')
-        append(r.encMax); append(',')
-        append(r.decMin); append(',')
-        append(r.decMedian); append(',')
-        append(r.decMax); append('\n')
-    }
-
-    private fun runSingleSize(
-        sizePow: Int,
-        rounds: Int = 15,
-        password: String = "test-password",
-        salt: ByteArray = ByteArray(16).apply { SecureRandom().nextBytes(this) },
-        keyBits: Int = AES.KEY_SIZE_256_BITS,
-        iterations: Int = AES.KEY_GENERATION_ITERATIONS,
-        useBlankIv: Boolean = true
-    ): SingleResult {
-        val keyParam = AES.createKey(password, salt, iterations, keyBits)
-        val key = keyParam.key
-        warmUp(key)
-
-        val size = 2.0.pow(sizePow).toInt()
-        val plain = buildPlain(size)
-
-        val encTimes = LongArray(rounds)
-        val decTimes = LongArray(rounds)
-
-        repeat(rounds) { i ->
-            val iv = if (useBlankIv) AES.IV_BLANK else ByteArray(16).also { SecureRandom().nextBytes(it) }
-            val encNanos = measureNanoTime { AES.encrypt(plain, key, iv) }
-            encTimes[i] = encNanos
-
-            val cipher = AES.encrypt(plain, key, iv)
-            val decNanos = measureNanoTime { AES.decrypt(cipher, key, iv) }
-            decTimes[i] = decNanos
-        }
-
-        return SingleResult(
-            sizeBytes = size,
-            encMin = encTimes.minOrNull() ?: 0,
-            encMedian = median(encTimes),
-            encMax = encTimes.maxOrNull() ?: 0,
-            decMin = decTimes.minOrNull() ?: 0,
-            decMedian = median(decTimes),
-            decMax = decTimes.maxOrNull() ?: 0
-        )
-    }
-
     fun runRangeAndLog(
         context: Context,
         minPow: Int = 10,
         maxPow: Int = 20,
-        fileName: String = "aes_bench_2p10_2p20.csv"
+        rounds: Int = 15,
+        fileName: String = "aes_bench_2p${minPow}_2p${maxPow}.csv"
     ): String {
-        val logger = CsvLogger(context, fileName, csvHeader())
+        // Fixed, repeatable key for benchmarking (PBKDF2 from password+salt).
+        val password = "test-password"
+        val salt = ByteArray(16) { 0x33 }
+        val keyBits = AES.KEY_SIZE_256_BITS
+        val iterations = AES.KEY_GENERATION_ITERATIONS
+        val key = AES.createKey(password, salt, iterations, keyBits).key
+        val blankIv = AES.IV_BLANK
 
-        for (powVal in minPow..maxPow) {
-            val result = runSingleSize(powVal, rounds = 15)
-            logger.appendLine(toCsvLine(result))
+        val factory = SizeRunnerFactory { sizeBytes ->
+            val plain = BenchmarkPlain.build(sizeBytes)
+            RoundRunner {
+                lateinit var ctB64: String
+                val encNs = measureNanoTime { ctB64 = AES.encrypt(plain, key, blankIv) }
+                val decNs = measureNanoTime { AES.decrypt(ctB64, key, blankIv) }
+                encNs to decNs
+            }
         }
 
-        return logger.file().absolutePath
+        return BenchmarkRunner.runRangeAndLog(
+            context = context,
+            minPow = minPow,
+            maxPow = maxPow,
+            rounds = rounds,
+            factory = factory,
+            fileName = fileName
+        )
     }
-
-    private fun warmUp(key: ByteArray) {
-        val iv = AES.IV_BLANK
-        val s = "warmup"
-        repeat(3) {
-            val c = AES.encrypt(s, key, iv)
-            AES.decrypt(c, key, iv)
-        }
-    }
-
-    private fun median(values: LongArray): Long =
-        values.sorted().let { s ->
-            val m = s.size / 2
-            if (s.size % 2 == 0) (s[m - 1] + s[m]) / 2 else s[m]
-        }
 }

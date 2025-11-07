@@ -1,112 +1,49 @@
 package com.example.energy
 
+import android.content.Context
 import com.example.energy.rsa.RsaLite
-import org.bouncycastle.crypto.params.RSAKeyParameters
 import java.security.SecureRandom
-import kotlin.math.pow
 import kotlin.system.measureNanoTime
+import org.bouncycastle.crypto.params.RSAKeyParameters
 
 object RsaHybridBenchmark {
-
-    data class SingleResult(
-        val sizeBytes: Int,
-        val encMin: Long,
-        val encMedian: Long,
-        val encMax: Long,
-        val decMin: Long,
-        val decMedian: Long,
-        val decMax: Long
-    )
-
-    private val BASE_SAMPLE: String = buildString(1024) {
-        val pattern = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        while (length < 1024) append(pattern)
-    }.substring(0, 1024)
-
-    private fun buildPlain(size: Int): String {
-        val b = StringBuilder(size)
-        while (b.length < size) {
-            val r = size - b.length
-            if (r >= BASE_SAMPLE.length) b.append(BASE_SAMPLE) else b.append(BASE_SAMPLE.substring(0, r))
-        }
-        return b.toString()
-    }
-
-    fun csvHeader(): String =
-        "size_bytes,enc_min_ns,enc_median_ns,enc_max_ns,dec_min_ns,dec_median_ns,dec_max_ns"
-
-    fun toCsvLine(r: SingleResult): String = buildString {
-        append(r.sizeBytes); append(',')
-        append(r.encMin); append(',')
-        append(r.encMedian); append(',')
-        append(r.encMax); append(',')
-        append(r.decMin); append(',')
-        append(r.decMedian); append(',')
-        append(r.decMax); append('\n')
-    }
-
-    private fun median(values: LongArray): Long =
-        values.sorted().let { s ->
-            val m = s.size / 2
-            if (s.size % 2 == 0) (s[m - 1] + s[m]) / 2 else s[m]
-        }
-
-    private fun runSingleSize(sizePow: Int, rounds: Int = 15): SingleResult {
-        val rnd = SecureRandom()
-
-        val kp = RsaLite.generateKeyPair(2048)
-        val pub = kp.public as RSAKeyParameters
-        val priv = kp.private as RSAKeyParameters
-
-        val size = 2.0.pow(sizePow).toInt()
-        val plain = buildPlain(size)
-
-        val enc = LongArray(rounds)
-        val dec = LongArray(rounds)
-
-        repeat(rounds) {
-            val aesKey = ByteArray(32).also { rnd.nextBytes(it) }
-            val iv = ByteArray(16).also { rnd.nextBytes(it) }
-            val keyBlob = aesKey + iv
-
-            var cipherB64: String
-            var wrapped: ByteArray
-            enc[it] = measureNanoTime {
-                cipherB64 = AES.encrypt(plain, aesKey, iv) // AES-CBC
-                wrapped = RsaLite.encryptSmall(keyBlob, pub) // RSA-OAEP(SHA256)
-            }
-
-            dec[it] = measureNanoTime {
-                val unwrapped = RsaLite.decryptSmall(wrapped, priv)
-                val recKey = unwrapped.copyOfRange(0, 32)
-                val recIv  = unwrapped.copyOfRange(32, 48)
-                @Suppress("UNUSED_VARIABLE")
-                val back = AES.decrypt(cipherB64, recKey, recIv)
-            }
-        }
-
-        return SingleResult(
-            sizeBytes = size,
-            encMin = enc.minOrNull() ?: 0,
-            encMedian = median(enc),
-            encMax = enc.maxOrNull() ?: 0,
-            decMin = dec.minOrNull() ?: 0,
-            decMedian = median(dec),
-            decMax = dec.maxOrNull() ?: 0
-        )
-    }
-
     fun runRangeAndLog(
-        context: android.content.Context,
+        context: Context,
         minPow: Int = 10,
         maxPow: Int = 20,
-        fileName: String = "rsa_bench_2p10_2p20.csv"
+        rounds: Int = 15,
+        fileName: String = "rsa_hybrid_bench_2p${minPow}_2p${maxPow}.csv"
     ): String {
-        val logger = CsvLogger(context, fileName, csvHeader())
-        for (p in minPow..maxPow) {
-            val r = runSingleSize(p, 15)
-            logger.appendLine(toCsvLine(r))
+        val rnd = SecureRandom()
+
+        val factory = SizeRunnerFactory { sizeBytes ->
+            val plain = BenchmarkPlain.build(sizeBytes)
+            // one keypair per size to avoid keygen dominating timings
+            val kp = RsaLite.generateKeyPair(2048)
+            val pub = kp.public as RSAKeyParameters
+            val priv = kp.private as RSAKeyParameters
+
+            RoundRunner {
+                val aesKey = ByteArray(32).apply { rnd.nextBytes(this) }
+                val iv     = ByteArray(16).apply { rnd.nextBytes(this) }
+
+                lateinit var ctB64: String
+                lateinit var wrapped: ByteArray
+
+                val encNs = measureNanoTime {
+                    ctB64 = AES.encrypt(plain, aesKey, iv)           // bulk
+                    wrapped = RsaLite.encryptSmall(aesKey + iv, pub) // wrap key+iv
+                }
+                val decNs = measureNanoTime {
+                    val unwrapped = RsaLite.decryptSmall(wrapped, priv)
+                    val recKey = unwrapped.copyOfRange(0, 32)
+                    val recIv  = unwrapped.copyOfRange(32, 48)
+                    @Suppress("UNUSED_VARIABLE")
+                    val back = AES.decrypt(ctB64, recKey, recIv)
+                }
+                encNs to decNs
+            }
         }
-        return logger.file().absolutePath
+        return BenchmarkRunner.runRangeAndLog(context, minPow, maxPow, rounds, factory, fileName)
     }
 }

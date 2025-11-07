@@ -1,55 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+<!-- res/layout/activity_main.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="16dp"
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btVar1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="AES"
-        android:textSize="24sp" />
+    <Button android:id="@+id/btAesCbc" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="Run AES-CBC (BC)"/>
 
-    <Button
-        android:id="@+id/btVar2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:text="CHACHA20"
-        android:textSize="24sp" />
-    <Button
-        android:id="@+id/btVar3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:text="ELGAMAL"
-        android:textSize="24sp" />
-    <Button
-        android:id="@+id/btVar4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:text="AES-GCM"
-        android:textSize="24sp" />
+    <Button android:id="@+id/btAesGcm" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="Run AES-GCM" android:layout_marginTop="8dp"/>
 
-    <Button
-        android:id="@+id/btVar5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:text="RSA (hybrid)"
-        android:textSize="24sp" />
+    <Button android:id="@+id/btChaCha20" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="Run ChaCha20" android:layout_marginTop="8dp"/>
 
+    <Button android:id="@+id/btRsaHybrid" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="Run RSA Hybrid" android:layout_marginTop="8dp"/>
 
+    <Button android:id="@+id/btElGamal" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="Run ElGamal Hybrid" android:layout_marginTop="8dp"/>
+
+    <TextView android:id="@+id/tvStatus" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:textSize="14sp"
+        android:layout_marginTop="16dp" android:text="Ready"/>
 </LinearLayout>

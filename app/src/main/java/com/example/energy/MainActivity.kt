@@ -1,99 +1,146 @@
 package com.example.energy
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import java.util.concurrent.Executors
+import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
-    private val executor by lazy { Executors.newSingleThreadExecutor() }
+    private lateinit var btAesCbc: Button
+    private lateinit var btAesGcm: Button
+    private lateinit var btChaCha20: Button
+    private lateinit var btRsaHybrid: Button
+    private lateinit var btElGamal: Button
+    private lateinit var tvStatus: TextView
+
+    private val minPow = 10
+    private val maxPow = 20
+    private val rounds = 15
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main) // <- use your layout file
 
-        val btAes  = findViewById<Button>(R.id.btVar1) // AES benchmark
-        val btCha  = findViewById<Button>(R.id.btVar2) // ChaCha20 benchmark
-        val btElg  = findViewById<Button>(R.id.btVar3) // ElGamal benchmark
-        val btGcm  = findViewById<Button>(R.id.btVar4) // AES-GCM benchmark
-        val btRsa  = findViewById<Button>(R.id.btVar5) // RSA (hybrid) benchmark
+        btAesCbc   = findViewById(R.id.btAesCbc)
+        btAesGcm   = findViewById(R.id.btAesGcm)
+        btChaCha20 = findViewById(R.id.btChaCha20)
+        btRsaHybrid= findViewById(R.id.btRsaHybrid)
+        btElGamal  = findViewById(R.id.btElGamal)
+        tvStatus   = findViewById(R.id.tvStatus)
 
-        btAes.setOnClickListener {
-            runWithUiLock(btAes, "Running AES benchmarks (2^10 → 2^20, 15 rounds)…") {
-                val path = AesBenchmark.runRangeAndLog(
+        btAesCbc.setOnClickListener {
+            runBenchmark("AES-CBC (BC)") {
+                AesBenchmark.runRangeAndLog(
                     context = this,
-                    minPow = 10,
-                    maxPow = 20,
-                    fileName = "aes_bench_2p10_2p20.csv"
+                    minPow = minPow,
+                    maxPow = maxPow,
+                    rounds = rounds,
+                    fileName = "aes_bench_2p${minPow}_2p${maxPow}.csv"
                 )
-                "AES done. CSV at:\n$path"
             }
         }
 
-        btCha.setOnClickListener {
-            runWithUiLock(btCha, "Running ChaCha20 benchmarks (2^10 → 2^20, 15 rounds)…") {
-                val path = ChaCha20Benchmark.runRangeAndLog(
+        btAesGcm.setOnClickListener {
+            runBenchmark("AES-GCM") {
+                AesGcmBenchmark.runRangeAndLog(
                     context = this,
-                    minPow = 10,
-                    maxPow = 20,
-                    fileName = "chacha_bench_2p10_2p20.csv"
+                    minPow = minPow,
+                    maxPow = maxPow,
+                    rounds = rounds,
+                    fileName = "aesgcm_bench_2p${minPow}_2p${maxPow}.csv"
                 )
-                "ChaCha20 done. CSV at:\n$path"
             }
         }
 
-        btElg.setOnClickListener {
-            runWithUiLock(btElg, "Running ElGamal benchmarks (2^10 → 2^20, 15 rounds)…") {
-                val path = ElGamalBenchmark.runRangeAndLog(
+        btChaCha20.setOnClickListener {
+            runBenchmark("ChaCha20") {
+                ChaCha20Benchmark.runRangeAndLog(
                     context = this,
-                    minPow = 10,
-                    maxPow = 20,
-                    fileName = "elgamal_bench_2p10_2p20.csv"
+                    minPow = minPow,
+                    maxPow = maxPow,
+                    rounds = rounds,
+                    fileName = "chacha20_bench_2p${minPow}_2p${maxPow}.csv"
                 )
-                "ElGamal done. CSV at:\n$path"
             }
         }
 
-        btGcm.setOnClickListener {
-            runWithUiLock(btGcm, "Running AES-GCM benchmarks (2^10 → 2^20, 15 rounds)…") {
-                val path = AesGcmBenchmark.runRangeAndLog(
-                    this, 10, 20, "aesgcm_bench_2p10_2p20.csv"
+        btRsaHybrid.setOnClickListener {
+            runBenchmark("RSA Hybrid") {
+                RsaHybridBenchmark.runRangeAndLog(
+                    context = this,
+                    minPow = minPow,
+                    maxPow = maxPow,
+                    rounds = rounds,
+                    fileName = "rsa_hybrid_bench_2p${minPow}_2p${maxPow}.csv"
                 )
-                "AES-GCM done. CSV at:\n$path"
             }
         }
 
-        btRsa.setOnClickListener {
-            runWithUiLock(btRsa, "Running RSA (hybrid) benchmarks (2^10 → 2^20, 15 rounds)…") {
-                val path = RsaHybridBenchmark.runRangeAndLog(
-                    this, 10, 20, "rsa_bench_2p10_2p20.csv"
+        btElGamal.setOnClickListener {
+            runBenchmark("ElGamal Hybrid") {
+                ElGamalBenchmark.runRangeAndLog(
+                    context = this,
+                    minPow = minPow,
+                    maxPow = maxPow,
+                    rounds = rounds,
+                    fileName = "elgamal_bench_2p${minPow}_2p${maxPow}.csv"
                 )
-                "RSA (hybrid) done. CSV at:\n$path"
             }
         }
     }
 
-    private fun runWithUiLock(button: Button, startMsg: String, task: () -> String) {
-        Toast.makeText(this, startMsg, Toast.LENGTH_SHORT).show()
-        button.isEnabled = false
-        executor.execute {
+    private fun setButtonsEnabled(enabled: Boolean) {
+        btAesCbc.isEnabled = enabled
+        btAesGcm.isEnabled = enabled
+        btChaCha20.isEnabled = enabled
+        btRsaHybrid.isEnabled = enabled
+        btElGamal.isEnabled = enabled
+    }
+
+    private fun runBenchmark(name: String, task: suspend () -> String) {
+        lifecycleScope.launch {
+            setButtonsEnabled(false)
+            tvStatus.text = "Running $name …"
             try {
-                val doneMsg = task()
-                runOnUiThread { Toast.makeText(this, doneMsg, Toast.LENGTH_LONG).show() }
+                val path = withContext(Dispatchers.IO) { task() }
+                tvStatus.text = "$name done.\nCSV: $path"
+                Toast.makeText(this@MainActivity, "Saved: $path", Toast.LENGTH_LONG).show()
+                // Optional: tap status to open/share
+                tvStatus.setOnClickListener { openCsv(path) }
             } catch (t: Throwable) {
-                runOnUiThread {
-                    Toast.makeText(this, "Error: ${t.message ?: "unknown"}", Toast.LENGTH_LONG).show()
-                }
+                tvStatus.text = "$name failed: ${t.message}"
+                Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
             } finally {
-                runOnUiThread { button.isEnabled = true }
+                setButtonsEnabled(true)
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        executor.shutdown()
+    private fun openCsv(path: String) {
+        val csv = File(path)
+        if (!csv.exists()) {
+            Toast.makeText(this, "File not found", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val uri: Uri = FileProvider.getUriForFile(
+            this,
+            "${packageName}.fileprovider",
+            csv
+        )
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "text/csv")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        startActivity(Intent.createChooser(intent, "Open CSV"))
     }
 }
