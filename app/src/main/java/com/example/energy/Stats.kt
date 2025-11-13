@@ -1,6 +1,5 @@
 package com.example.energy
 
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 fun computeStatsNs(samples: List<Long>): TimingStats {
@@ -8,6 +7,7 @@ fun computeStatsNs(samples: List<Long>): TimingStats {
     val sorted = samples.sorted()
     val min = sorted.first()
     val max = sorted.last()
+
     val median = if (sorted.size % 2 == 1) {
         sorted[sorted.size / 2]
     } else {
@@ -15,14 +15,21 @@ fun computeStatsNs(samples: List<Long>): TimingStats {
         val b = sorted[sorted.size / 2]
         (a + b) / 2
     }
-    // 样本标准差（n-1）
+
     val mean = sorted.average()
     val variance = if (sorted.size > 1) {
-        sorted.sumOf { (it - mean).pow2() } / (sorted.size - 1)
+        val acc = sorted.sumOf { (it - mean) * (it - mean) }
+        acc / (sorted.size - 1)
     } else 0.0
     val std = sqrt(variance)
-    return TimingStats(min, median, max, std)
-}
+    val stdPercent = if (mean != 0.0) std / mean * 100.0 else 0.0
 
-private fun Double.pow2() = (this * this)
-private fun Long.pow2() = (this.toDouble() * this.toDouble())
+    return TimingStats(
+        min = min,
+        median = median,
+        max = max,
+        mean = mean,
+        stddev = std,
+        stdPercent = stdPercent
+    )
+}
