@@ -11,12 +11,12 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.example.energy.enums.Bright;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-
-import pt.ulisboa.ciencias.userenergy.enums.Bright;
 
 /**
  * This class provides UI-based methods for modifying system settings manually as a safeguard

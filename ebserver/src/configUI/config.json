@@ -1,0 +1,59 @@
+{
+    "config":{
+        "app_name": "JAVA",
+        "package_name": "com.example.energy",
+        "suffix": "test",
+        "exec_start": 1,
+        "exec_end": 1
+    },
+    "general_parameters": {
+        "brightness": {
+            "zero": { "command": "zero" },
+            "quart": { "command": "quarter" },
+            "half": { "command": "half" },
+            "threeq": { "command": "threeq" },
+            "full": { "command": "full" }
+        },
+        "theme": {
+            "light": { "command": "light" },
+            "dark": { "command": "dark" }
+        },
+        "airplane": {
+            "on": { "command": "on" },
+            "off": { "command": "off" }
+        },
+        "saving": {
+            "on": { "command": "on" },
+            "off": { "command": "off" }
+        },
+        "refresh": {
+            "fps_30": { "command": "fps30" },
+            "fps_60": { "command": "fps60" },
+            "fps_120": { "command": "fps120" }
+        }
+        
+    },
+
+    "tests": [
+         {
+            "class_name": "AesCbcBCBenchmarkInstrumentedTestJava",
+            "short_form": "AES",
+            "skip_general": [
+                { "command": "brightness" },
+                { "command": "refresh" },
+                { "command": "airplane" },
+                { "command": "saving" },
+                { "command": "theme" }
+            ],
+            "functions": [
+                {
+                    "name": "run_aes_range_and_validate_csv",
+                    "parameters": {
+                        "titlesize":[{ "command": "title" }],
+                        "contentsize":[ { "command": "content" }]
+                    }
+                }
+            ]
+        }
+    ]
+}
