@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ElGamalBenchmarkInstrumentedTest {
     @Test
-    fun run_elgamal_range_and_validate_csv() {
+    fun runELGAMALRangeAndValidateCsv() {
         val path = ElGamalBenchmark.runRangeAndLog(
             context = BenchmarkTestUtils.ctx(),
             minPow = BenchmarkTestUtils.MIN_POW,

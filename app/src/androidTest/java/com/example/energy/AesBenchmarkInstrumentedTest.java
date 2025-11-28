@@ -10,10 +10,9 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class AesCbcBCBenchmarkInstrumentedTestJava {
+public class AesBenchmarkInstrumentedTest {
     @Test
-    public void run_aes_range_and_validate_csv() {
-
+    public void runAESRangeAndValidateCsv() {
         var context = BenchmarkTestUtils.INSTANCE.ctx();
         var minPow = BenchmarkTestUtils.MIN_POW;
         var maxPow = BenchmarkTestUtils.MAX_POW;

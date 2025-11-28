@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ChaCha20BenchmarkInstrumentedTest {
     @Test
-    fun run_chacha20_range_and_validate_csv() {
+    fun runCHACHA20RangeAndValidateCsv() {
         val path = ChaCha20Benchmark.runRangeAndLog(
             context = BenchmarkTestUtils.ctx(),
             minPow = BenchmarkTestUtils.MIN_POW,

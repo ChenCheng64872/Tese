@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class AesGcmBenchmarkInstrumentedTest {
     @Test
-    fun run_aesgcm_range_and_validate_csv() {
+    fun runAESGCMRangeAndValidateCsv() {
         val path = AesGcmBenchmark.runRangeAndLog(
             context = BenchmarkTestUtils.ctx(),
             minPow = BenchmarkTestUtils.MIN_POW,

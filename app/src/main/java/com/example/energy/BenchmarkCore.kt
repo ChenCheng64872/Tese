@@ -48,7 +48,7 @@ private fun median(values: LongArray): Long =
         if (s.size % 2 == 0) (s[m - 1] + s[m]) / 2 else s[m]
     }
 
-/** Full stats helper */
+/** Full stats helper (no longer used for CSV, but kept if you want stats in code) */
 private fun computeStats(values: LongArray): TimingStats {
     val sorted = values.sorted()
     val min = sorted.first()
@@ -72,7 +72,7 @@ private fun computeStats(values: LongArray): TimingStats {
     return TimingStats(min, median, max, mean, std, stdPercent)
 }
 
-/** CSV header for summary per size */
+/** CSV header for summary per size (kept for reference, not used now) */
 const val BENCH_CSV_HEADER =
     "size_bytes," +
             "enc_min_ns,enc_median_ns,enc_max_ns,enc_mean_ns,enc_std_ns,enc_std_percent," +
@@ -83,9 +83,11 @@ const val BENCH_CSV_HEADER =
 const val BENCH_EXEC_CSV_HEADER =
     "size_bytes,round_index,enc_ns,dec_ns,energy_mWh"
 
-/** Generic runner: handles sizes, rounds, energy, stats, and CSV writing */
+/** Generic runner: handles sizes, rounds, energy, and CSV writing (per execution only) */
 object BenchmarkRunner {
 
+    // ResultRow & BENCH_CSV_HEADER kept in case you later want summary CSV again,
+    // but they are no longer used by runRangeAndLog.
     data class ResultRow(
         val sizeBytes: Int,
         val encStats: TimingStats,
@@ -124,24 +126,17 @@ object BenchmarkRunner {
         factory: SizeRunnerFactory,
         fileName: String
     ): String {
-        // Summary CSV (one row per size)
-        val logger = CsvLogger(context, fileName, BENCH_CSV_HEADER)
+        // Single CSV (one row per execution/round), as you requested
+        val logger = CsvLogger(context, fileName, BENCH_EXEC_CSV_HEADER)
         logger.startFresh()
-
-        // Per-execution CSV (one row per round)
-        val perExecFileName = if (fileName.endsWith(".csv"))
-            fileName.removeSuffix(".csv") + "_per_exec.csv"
-        else
-            fileName + "_per_exec.csv"
-
-        val perExecLogger = CsvLogger(context, perExecFileName, BENCH_EXEC_CSV_HEADER)
-        perExecLogger.startFresh()
 
         val meter = EnergyMeter(context)
 
+        // Loop over plaintext sizes 2^minPow .. 2^maxPow
         for (p in minPow..maxPow) {
             val size = 2.0.pow(p).toInt()
-            // Make sure plaintext is prepared before measuring energy
+
+            // Prepare plaintext once (for consistency; not timed as part of energy)
             BenchmarkPlain.build(size)
 
             val encTimes = LongArray(rounds)
@@ -158,14 +153,6 @@ object BenchmarkRunner {
                 }
             }
 
-            val encStats = computeStats(encTimes)
-            val decStats = computeStats(decTimes)
-
-            // Write summary row
-            logger.appendLine(
-                ResultRow(size, encStats, decStats, energy.energyMilliWattHour).toCsv()
-            )
-
             // Approximate per-round energy as total/rounds
             val energyPerRound = energy.energyMilliWattHour / rounds.toDouble()
 
@@ -178,12 +165,11 @@ object BenchmarkRunner {
                     decTimes[i],
                     String.format("%.6f", energyPerRound)
                 ).joinToString(",")
-                perExecLogger.appendLine(line)
+                logger.appendLine(line)
             }
         }
 
-        // We keep returning the summary CSV path (old behaviour),
-        // but the per-execution CSV is also saved next to it.
+        // We now only have one CSV: the per-execution one.
         return logger.path()
     }
 }

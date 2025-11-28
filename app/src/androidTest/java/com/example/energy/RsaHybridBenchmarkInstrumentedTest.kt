@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class RsaHybridBenchmarkInstrumentedTest {
     @Test
-    fun run_rsa_hybrid_range_and_validate_csv() {
+    fun runRSAHybridRangeAndValidateCsv() {
         val path = RsaHybridBenchmark.runRangeAndLog(
             context = BenchmarkTestUtils.ctx(),
             minPow = BenchmarkTestUtils.MIN_POW,

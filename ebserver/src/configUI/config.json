@@ -4,7 +4,7 @@
         "package_name": "com.example.energy",
         "suffix": "test",
         "exec_start": 1,
-        "exec_end": 1
+        "exec_end": 15
     },
     "general_parameters": {
         "brightness": {
@@ -36,7 +36,7 @@
 
     "tests": [
          {
-            "class_name": "AesCbcBCBenchmarkInstrumentedTestJava",
+            "class_name": "AesBenchmarkInstrumentedTest",
             "short_form": "AES",
             "skip_general": [
                 { "command": "brightness" },
@@ -47,7 +47,87 @@
             ],
             "functions": [
                 {
-                    "name": "run_aes_range_and_validate_csv",
+                    "name": "runAESRangeAndValidateCsv",
+                    "parameters": {
+                        "titlesize":[{ "command": "title" }],
+                        "contentsize":[ { "command": "content" }]
+                    }
+                }
+            ]
+        },
+                 {
+            "class_name": "AesGcmBenchmarkInstrumentedTest",
+            "short_form": "AESGCM",
+            "skip_general": [
+                { "command": "brightness" },
+                { "command": "refresh" },
+                { "command": "airplane" },
+                { "command": "saving" },
+                { "command": "theme" }
+            ],
+            "functions": [
+                {
+                    "name": "runAESGCMRangeAndValidateCsv",
+                    "parameters": {
+                        "titlesize":[{ "command": "title" }],
+                        "contentsize":[ { "command": "content" }]
+                    }
+                }
+            ]
+        },
+                 {
+            "class_name": "ChaCha20BenchmarkInstrumentedTest",
+            "short_form": "ChaCha",
+            "skip_general": [
+                { "command": "brightness" },
+                { "command": "refresh" },
+                { "command": "airplane" },
+                { "command": "saving" },
+                { "command": "theme" }
+            ],
+            "functions": [
+                {
+                    "name": "runCHACHA20RangeAndValidateCsv",
+                    "parameters": {
+                        "titlesize":[{ "command": "title" }],
+                        "contentsize":[ { "command": "content" }]
+                    }
+                }
+            ]
+        },
+                 {
+            "class_name": "ElGamalBenchmarkInstrumentedTest",
+            "short_form": "Elgamal",
+            "skip_general": [
+                { "command": "brightness" },
+                { "command": "refresh" },
+                { "command": "airplane" },
+                { "command": "saving" },
+                { "command": "theme" }
+            ],
+            "functions": [
+                {
+                    "name": "runELGAMALRangeAndValidateCsv",
+                    "parameters": {
+                        "titlesize":[{ "command": "title" }],
+                        "contentsize":[ { "command": "content" }]
+                    }
+                }
+            ]
+        },
+                 {
+            "class_name": "RsaHybridBenchmarkInstrumentedTest",
+            "short_form": "AES",
+            "skip_general": [
+                { "command": "brightness" },
+                { "command": "refresh" },
+                { "command": "airplane" },
+                { "command": "saving" },
+                { "command": "theme" }
+            ],
+            "functions": [
+                {
+                    "name": "runRSAHybridRangeAndValidateCsv",
                     "parameters": {
                         "titlesize":[{ "command": "title" }],
                         "contentsize":[ { "command": "content" }]
