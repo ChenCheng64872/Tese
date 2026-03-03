@@ -148,7 +148,7 @@ async function readInput() {
 
         // Install the main debug APK
         console.log(`\n-- Running: ${gradlew} installDebug`);
-        execSync(`${gradlew} installDebug`, gradleOptions);
+        execSync(`${gradlew} installDebug --info`,gradleOptions );
         console.log(">> Main app installed successfully.");
 
         // Install the test APK
