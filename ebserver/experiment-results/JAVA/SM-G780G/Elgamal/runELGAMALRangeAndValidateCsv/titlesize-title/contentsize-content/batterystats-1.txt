@@ -1,0 +1,1459 @@
+Battery History (0% used, 1960 used of 4096KB, 11 strings using 256):
+                    0 (19) RESET:TIME: 2025-12-05-14-19-32
+                    0 (1) 092 status=discharging health=good plug=none temp=269 volt=4057 current=-496 ap_temp=29 skin_temp=30 -wifi_ap -otg -high_speaker_volume -sub_screen -sub_screen_doze txshare_event=0x0 online=1 current_event=0x40000000 misc_event=0x10000 charge=3768 modemRailChargemAh=0 wifiRailChargemAh=0 +running +sensor +wifi_radio phone_signal_strength=great +wifi wifi_signal_strength=4 wifi_suppl=completed +ble_scan
+                    0 (2) 092 top=1000:"com.android.settings"
+                    0 (2) 092 user=0:"0"
+                    0 (2) 092 userfg=0:"0"
+                +32ms (2) 092 +wake_lock=1001:"*telephony-radio*"
+                +34ms (1) 092 -wake_lock
+                +35ms (2) 092 +wake_lock=1000:"*telephony-radio*"
+                +73ms (1) 092 -wake_lock
+                +73ms (2) 092 +wake_lock=1001:"*telephony-radio*"
+                +76ms (2) 092 stats=0:"reset"
+                +75ms (3) 092 -wake_lock
+             +1s423ms (1) 092 -running
+             +2s533ms (2) 092 +running wake_reason=0:"132"
+             +2s558ms (2) 092 volt=4117
+             +2s992ms (1) 092 -running
+             +3s800ms (2) 092 +running wake_reason=0:"132"
+             +4s120ms (2) 092 wake_reason=0:"Abort: 0000:01:00.0 device failed to suspend, or early wake event detected"
+             +4s134ms (2) 092 volt=4089
+             +4s566ms (1) 092 -running
+             +5s256ms (2) 092 +running wake_reason=0:"132"
+             +5s610ms (1) 092 -running
+             +6s093ms (2) 092 +running wake_reason=0:"132"
+             +6s107ms (2) 092 volt=4115
+             +6s428ms (1) 092 -running
+             +7s553ms (2) 092 +running wake_reason=0:"132"
+             +7s881ms (1) 092 -running
+             +8s692ms (2) 092 +running wake_reason=0:"132"
+             +9s022ms (1) 092 -running
+             +9s841ms (2) 092 +running wake_reason=0:"132"
+            +10s206ms (1) 092 -running
+            +10s999ms (2) 092 +running wake_reason=0:"132"
+            +11s198ms (2) 092 wake_reason=0:"Abort: Pending Wakeup Sources: qcom_rx_wakelock"
+            +11s655ms (1) 092 -running
+            +12s669ms (2) 092 +running wake_reason=0:"132"
+            +12s984ms (2) 092 wake_reason=0:"Abort: noirq suspend of 0000:01:00.0 device failed"
+            +12s991ms (2) 092 volt=4092
+            +13s446ms (1) 092 -running
+            +13s614ms (2) 092 +running wake_reason=0:"132"
+            +13s949ms (1) 092 -running
+            +15s067ms (2) 092 +running wake_reason=0:"132"
+            +15s414ms (1) 092 -running
+            +16s215ms (2) 092 +running wake_reason=0:"132"
+            +16s223ms (2) 092 volt=4120
+            +16s577ms (1) 092 -running
+            +17s368ms (2) 092 +running wake_reason=0:"132"
+            +17s646ms (2) 092 volt=4094
+            +17s647ms (2) 092 wake_reason=0:"Abort: 0000:01:00.0 device failed to suspend, or early wake event detected"
+            +17s893ms (2) 092 wake_reason=0:"unknown"
+            +18s178ms (2) 092 +wake_lock=1001:"*telephony-radio*"
+            +18s179ms (1) 092 -wake_lock
+            +18s179ms (2) 092 +wake_lock=1000:"*telephony-radio*"
+            +18s230ms (1) 092 -wake_lock
+            +18s230ms (2) 092 +wake_lock=1001:"*telephony-radio*"
+            +18s232ms (2) 092 stats=0:"dump"
+            +18s231ms (3) 092 -wake_lock
+            +18s232ms (1) 092
+
+Per-PID Stats:
+  PID 2504 wake time: +89ms
+  PID 2504 wake time: +6ms
+
+Daily stats:
+  Current start time: 2025-12-05-08-34-55
+  Next min deadline: 2025-12-06-01-00-00
+  Next max deadline: 2025-12-06-03-00-00
+  Current daily discharge step durations:
+    #0: +11m30s681ms to 94 (power-save-off, device-idle-off)
+    #1: +18m13s616ms to 95 (power-save-off, device-idle-off)
+    #2: +1h51m47s128ms to 98 (screen-off, power-save-off)
+      Discharge total time: 3d 6h 37m 27s 500ms  (from 3 steps)
+      Discharge screen off time: 7d 18h 18m 32s 800ms  (from 1 steps)
+  Current daily charge step durations:
+    #0: +56m12s824ms to 100 (power-save-off, device-idle-off)
+    #1: +1m33s344ms to 100 (power-save-off, device-idle-off)
+    #2: +2m1s986ms to 99 (power-save-off, device-idle-off)
+    #3: +2m1s976ms to 98 (power-save-off, device-idle-off)
+    #4: +1m30s6ms to 97 (power-save-off, device-idle-off)
+    #5: +1m33s10ms to 96 (power-save-off, device-idle-off)
+    #6: +1m29s991ms to 95 (power-save-off, device-idle-off)
+    #7: +1m0s998ms to 94 (power-save-off, device-idle-off)
+    #8: +1m0s694ms to 93 (power-save-off, device-idle-off)
+    #9: +1m1s319ms to 92 (power-save-off, device-idle-off)
+    #10: +1m1s5ms to 91 (power-save-off, device-idle-off)
+    #11: +32s67ms to 90 (power-save-off, device-idle-off)
+    #12: +1m29s917ms to 89 (power-save-off, device-idle-off)
+    #13: +1m1s26ms to 88 (power-save-off, device-idle-off)
+    #14: +31s975ms to 87 (power-save-off, device-idle-off)
+    #15: +1m1s13ms to 86 (power-save-off, device-idle-off)
+    #16: +28s990ms to 85 (power-save-off, device-idle-off)
+    #17: +1m1s11ms to 84 (power-save-off, device-idle-off)
+    #18: +47s363ms to 83 (power-save-off, device-idle-off)
+    #19: +45s626ms to 82 (power-save-off, device-idle-off)
+    #20: +29s25ms to 81 (power-save-off, device-idle-off)
+    #21: +54s999ms to 80 (power-save-off, device-idle-off)
+      Charge total time: 6h 1m 22s 500ms  (from 22 steps)
+    Package changes:
+      Update com.spotify.music vers=135274333
+      Update com.spotify.music vers=135274333
+      Update com.microsoft.skydrive vers=2027440202
+      Update com.microsoft.skydrive vers=2027440202
+      Update com.example.energy vers=0
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy.test vers=0
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy.test vers=0
+      Update com.example.energy.test vers=0
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy.test vers=0
+      Update com.example.energy.test vers=0
+      Update com.example.energy.test vers=0
+      Update com.example.energy.test vers=0
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy.test vers=0
+      Update com.example.energy.test vers=0
+  Daily from 2025-12-02-03-17-59 to 2025-12-05-08-34-55:
+    Discharge step durations:
+      #0: +2h41m26s158ms to 0 (screen-off, power-save-off, device-idle-on)
+      #1: +2h59m25s399ms to 1 (screen-off, power-save-off, device-idle-on)
+      #2: +4h33m6s631ms to 2 (screen-off, power-save-off, device-idle-on)
+        Discharge total time: 14d 5h 5m 39s 600ms  (from 3 steps)
+        Discharge screen off time: 14d 5h 5m 39s 600ms  (from 3 steps)
+        Discharge screen off device idle time: 14d 5h 5m 39s 600ms  (from 3 steps)
+  Daily from 2025-12-01-04-35-49 to 2025-12-02-03-17-59:
+    Discharge step durations:
+      #0: +3h21m15s354ms to 4 (power-save-off, device-idle-on)
+      #1: +2h54m43s208ms to 5 (screen-off, power-save-off, device-idle-on)
+      #2: +3h24m25s928ms to 6 (screen-off, power-save-off, device-idle-on)
+      #3: +2h51m46s882ms to 7 (screen-off, power-save-off, device-idle-on)
+      #4: +3h23m10s916ms to 8 (screen-off, power-save-off, device-idle-on)
+      #5: +3h25m30s869ms to 9 (screen-off, power-save-off, device-idle-on)
+        Discharge total time: 13d 10h 28m 5s 900ms  (from 6 steps)
+        Discharge screen off time: 13d 7h 52m 36s 0ms  (from 5 steps)
+        Discharge screen off device idle time: 13d 7h 52m 36s 0ms  (from 5 steps)
+  Daily from 2025-11-30-03-51-46 to 2025-12-01-04-35-49:
+    Discharge step durations:
+      #0: +3h9m50s126ms to 11 (screen-off, power-save-off, device-idle-on)
+      #1: +2h51m22s476ms to 12 (screen-off, power-save-off, device-idle-on)
+      #2: +3h25m1s29ms to 13 (screen-off, power-save-off, device-idle-on)
+      #3: +2h50m6s907ms to 14 (power-save-off, device-idle-on)
+      #4: +3h3m13s714ms to 15 (screen-off, power-save-off, device-idle-on)
+      #5: +3h22m33s208ms to 16 (screen-off, power-save-off, device-idle-on)
+      #6: +2h53m47s770ms to 17 (screen-off, power-save-off)
+        Discharge total time: 12d 20h 33m 9s 0ms  (from 7 steps)
+        Discharge screen off time: 13d 0h 43m 25s 300ms  (from 6 steps)
+        Discharge screen off device idle time: 13d 5h 20m 11s 0ms  (from 5 steps)
+  Daily from 2025-11-29-03-55-39 to 2025-11-30-03-51-46:
+    Discharge step durations:
+      #0: +3h2m15s953ms to 19 (screen-off, power-save-off)
+      #1: +2h25m25s91ms to 20 (screen-off, power-save-off)
+      #2: +2h15m19s566ms to 21 (screen-off, power-save-off, device-idle-on)
+      #3: +1h49m57s359ms to 22 (screen-off, power-save-off, device-idle-on)
+      #4: +2h16m50s682ms to 23 (screen-off, power-save-off, device-idle-on)
+      #5: +2h11m45s715ms to 24 (screen-off, power-save-off, device-idle-on)
+      #6: +2h24m12s850ms to 25 (screen-off, power-save-off, device-idle-on)
+      #7: +2h25m3s421ms to 26 (screen-off, power-save-off, device-idle-on)
+      #8: +2h3m53s231ms to 27 (screen-off, power-save-off, device-idle-on)
+        Discharge total time: 9d 16h 21m 27s 400ms  (from 9 steps)
+        Discharge screen off time: 9d 16h 21m 27s 400ms  (from 9 steps)
+        Discharge screen off device idle time: 9d 4h 43m 31s 700ms  (from 7 steps)
+  Daily from 2025-11-28-03-15-31 to 2025-11-29-03-55-39:
+    Discharge step durations:
+      #0: +2h25m26s382ms to 29 (screen-off, power-save-off, device-idle-on)
+      #1: +2h13m33s368ms to 30 (screen-off, power-save-off, device-idle-on)
+      #2: +2h25m23s405ms to 31 (screen-off, power-save-off, device-idle-on)
+      #3: +2h23m37s320ms to 32 (screen-off, power-save-off)
+      #4: +1h35m5s490ms to 33 (power-save-off, device-idle-off)
+      #5: +5m24s971ms to 34 (power-save-off, device-idle-off)
+      #6: +2h7m28s566ms to 33 (power-save-off)
+      #7: +2h20m47s119ms to 34 (screen-off, power-save-off, device-idle-on)
+      #8: +2h41m21s143ms to 35 (screen-off, power-save-off, device-idle-on)
+      #9: +2h8m59s544ms to 36 (screen-off, power-save-off, device-idle-on)
+        Discharge total time: 8d 12h 31m 13s 0ms  (from 10 steps)
+        Discharge screen off time: 9d 21h 53m 24s 0ms  (from 7 steps)
+        Discharge screen off device idle time: 9d 21h 38m 36s 0ms  (from 6 steps)
+    Charge step durations:
+      #0: +21m18s705ms to 36 (power-save-off, device-idle-off)
+      #1: +12m36s310ms to 36 (power-save-off, device-idle-off)
+      #2: +5m29s332ms to 35 (power-save-off, device-idle-off)
+        Charge total time: 21h 53m 31s 500ms  (from 3 steps)
+    Package changes:
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=0
+      Update com.woj.idosocorredor vers=0
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy vers=0
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy.test vers=0
+      Update com.example.energy vers=1
+      Update com.example.energy vers=1
+      Update com.example.energy.test vers=0
+      Update com.example.energy.test vers=0
+  Daily from 2025-11-27-05-50-45 to 2025-11-28-03-15-31:
+    Discharge step durations:
+      #0: +2h17m30s530ms to 38 (screen-off, power-save-off, device-idle-on)
+      #1: +2h30m7s730ms to 39 (screen-off, power-save-off, device-idle-on)
+      #2: +2h10m47s163ms to 40 (screen-off, power-save-off, device-idle-on)
+      #3: +2h42m59s629ms to 41 (screen-off, power-save-off, device-idle-on)
+      #4: +2h5m15s902ms to 42 (screen-off, power-save-off, device-idle-on)
+      #5: +2h37m42s503ms to 43 (screen-off, power-save-off, device-idle-on)
+      #6: +3h16m20s587ms to 44 (screen-off, power-save-off, device-idle-on)
+      #7: +2h31m20s637ms to 45 (screen-off, power-save-off, device-idle-on)
+        Discharge total time: 10d 12h 30m 58s 500ms  (from 8 steps)
+        Discharge screen off time: 10d 12h 30m 58s 500ms  (from 8 steps)
+        Discharge screen off device idle time: 10d 12h 30m 58s 500ms  (from 8 steps)
+    Package changes:
+      Update com.netflix.mediaclient vers=63680
+      Update com.netflix.mediaclient vers=63680
+      Update com.microsoft.office.outlook vers=42546816
+      Update com.microsoft.office.outlook vers=42546816
+      Update com.spotify.music vers=135012469
+      Update com.spotify.music vers=135012469
+      Update com.android.vending vers=84893030
+      Update com.android.vending vers=84893030
+      Update com.google.android.youtube vers=1558197696
+      Update com.google.android.youtube vers=1558197696
+  Daily from 2025-11-26-03-17-02 to 2025-11-27-05-50-45:
+    Discharge step durations:
+      #0: +44m49s539ms to 47 (screen-off, power-save-off, device-idle-on)
+      #1: +2h16m28s951ms to 48 (screen-off, power-save-off)
+      #2: +2h34m33s186ms to 49 (screen-off, power-save-off)
+      #3: +3h4m8s141ms to 50 (screen-off, power-save-off, device-idle-on)
+      #4: +1h17m23s330ms to 51 (screen-off, power-save-off)
+      #5: +1h54m59s11ms to 52 (power-save-off)
+      #6: +2h33m10s959ms to 53 (screen-off, power-save-off, device-idle-on)
+      #7: +2h52m0s906ms to 54 (screen-off, power-save-off, device-idle-on)
+      #8: +3h6m6s519ms to 55 (screen-off, power-save-off, device-idle-on)
+      #9: +3h7m45s284ms to 56 (screen-off, power-save-off, device-idle-on)
+        Discharge total time: 9d 19h 14m 18s 200ms  (from 10 steps)
+        Discharge screen off time: 10d 0h 4m 57s 900ms  (from 9 steps)
+        Discharge screen off device idle time: 10d 17h 47m 2s 400ms  (from 6 steps)
+    Package changes:
+      Update com.google.android.safetycore vers=10390
+      Update com.google.android.safetycore vers=10390
+      Update com.linkedin.android vers=205101
+      Update com.linkedin.android vers=205101
+      Update com.spotify.music vers=134747798
+      Update com.spotify.music vers=134747798
+      Update com.microsoft.office.officehubrow vers=44879915
+      Update com.microsoft.office.officehubrow vers=44879915
+      Update com.microsoft.skydrive vers=2027430102
+      Update com.microsoft.skydrive vers=2027430102
+      Update com.android.chrome vers=744417133
+      Update com.android.chrome vers=744417133
+      Update com.google.android.apps.youtube.music vers=84655240
+      Update com.google.android.apps.youtube.music vers=84655240
+      Update com.google.android.videos vers=439536591
+      Update com.google.android.videos vers=439536591
+      Update com.microsoft.appmanager vers=7300556
+      Update com.microsoft.appmanager vers=7300556
+      Update com.google.android.apps.maps vers=1068326445
+      Update com.google.android.apps.maps vers=1068326445
+      Update com.google.android.googlequicksearchbox vers=301639434
+      Update com.google.android.googlequicksearchbox vers=301639434
+      Update com.google.android.projection.gearhead vers=156654484
+      Update com.google.android.projection.gearhead vers=156654484
+      Update com.samsung.android.lool vers=1387005000
+      Update com.samsung.android.lool vers=1387005000
+      Update com.google.android.apps.photos vers=50989980
+      Update com.google.android.apps.photos vers=50989980
+      Update com.google.android.apps.docs vers=214241133
+      Update com.google.android.apps.docs vers=214241133
+  Daily from 2025-11-25-04-31-50 to 2025-11-26-03-17-02:
+    Discharge step durations:
+      #0: +2h50m26s784ms to 58 (screen-off, power-save-off)
+      #1: +3h2m0s415ms to 59 (screen-off, power-save-off, device-idle-on)
+      #2: +2h39m26s612ms to 60 (power-save-off)
+      #3: +3h0m29s627ms to 61 (screen-off, power-save-off, device-idle-on)
+      #4: +3h0m1s924ms to 62 (screen-off, power-save-off, device-idle-on)
+      #5: +2h32m25s191ms to 63 (screen-off, power-save-off, device-idle-on)
+      #6: +2h31m54s569ms to 64 (screen-off, power-save-off, device-idle-on)
+        Discharge total time: 11d 16h 10m 44s 600ms  (from 7 steps)
+        Discharge screen off time: 11d 18h 35m 8s 500ms  (from 6 steps)
+        Discharge screen off device idle time: 11d 18h 17m 14s 500ms  (from 5 steps)
+  Daily from 2025-11-24-03-00-14 to 2025-11-25-04-31-50:
+    Discharge step durations:
+      #0: +2h8m32s79ms to 66 (screen-off, power-save-off, device-idle-on)
+      #1: +2h40m55s906ms to 67 (screen-off, power-save-off, device-idle-on)
+      #2: +2h15m50s894ms to 68 (screen-off, power-save-off, device-idle-on)
+      #3: +2h32m54s958ms to 69 (screen-off, power-save-off, device-idle-on)
+      #4: +2h42m50s893ms to 70 (screen-off, power-save-off, device-idle-on)
+      #5: +3h18m10s868ms to 71 (screen-off, power-save-off, device-idle-on)
+      #6: +1h34m54s873ms to 72 (screen-off, power-save-off)
+      #7: +3h2m7s957ms to 73 (screen-off, power-save-off)
+      #8: +2h51m59s926ms to 74 (screen-off, power-save-off, device-idle-on)
+        Discharge total time: 10d 17h 5m 37s 200ms  (from 9 steps)
+        Discharge screen off time: 10d 17h 5m 37s 200ms  (from 9 steps)
+        Discharge screen off device idle time: 11d 0h 35m 7s 400ms  (from 7 steps)
+  Daily from 2025-11-23-05-28-24 to 2025-11-24-03-00-14:
+    Discharge step durations:
+      #0: +2h48m22s898ms to 76 (screen-off, power-save-off, device-idle-on)
+      #1: +2h47m51s921ms to 77 (screen-off, power-save-off, device-idle-on)
+      #2: +2h52m27s901ms to 78 (screen-off, power-save-off, device-idle-on)
+      #3: +3h30m52s515ms to 79 (screen-off, power-save-off, device-idle-on)
+      #4: +3h30m30s499ms to 80 (screen-off, power-save-off, device-idle-on)
+      #5: +3h9m13s924ms to 81 (screen-off, power-save-off, device-idle-on)
+        Discharge total time: 12d 22h 55m 27s 600ms  (from 6 steps)
+        Discharge screen off time: 12d 22h 55m 27s 600ms  (from 6 steps)
+        Discharge screen off device idle time: 12d 22h 55m 27s 600ms  (from 6 steps)
+
+Statistics since last charge:
+  System starts: 0, currently on battery: true
+  Estimated battery capacity: 4370 mAh
+  Last learned battery capacity: 4500 mAh
+  Min learned battery capacity: 4500 mAh
+  Max learned battery capacity: 4500 mAh
+  Time on battery: 18s 340ms (100,0%) realtime, 7s 809ms (42,6%) uptime
+  Time on battery screen off: 18s 340ms (100,0%) realtime, 7s 809ms (42,6%) uptime
+  Time on battery screen doze: 0ms (0,0%)
+  Total run time: 18s 340ms realtime, 7s 809ms uptime
+  Discharge: 0 mAh
+  Screen off discharge: 0 mAh
+  Screen doze discharge: 0 mAh
+  Screen on discharge: 0 mAh
+  Device light doze discharge: 0 mAh
+  Device deep doze discharge: 0 mAh
+  Start clock time: 2025-12-05-14-19-32
+  Screen on: 0ms (0,0%) 0x, Interactive: 0ms (0,0%)
+  Screen brightnesses: (no activity)
+  Screen refresh rate: (disabled)
+  Total partial wakelock time: 95ms
+
+  Mobile active info
+     Mobile active time: 0ms 
+     Mobile active 5G time: 0ms 
+
+  CONNECTIVITY POWER SUMMARY START
+  Logging duration for connectivity statistics: 18s 340ms 
+  Cellular Statistics:
+     Cellular kernel active time: 0ms (0,0%)
+     Cellular Sleep time:  17s 92ms (93,2%)
+     Cellular Idle time:   0ms (0,0%)
+     Cellular Rx time:     0ms (0,0%)
+     Cellular Tx time:     
+       less than 0dBm:  0ms (0,0%)
+       0dBm to 8dBm:  0ms (0,0%)
+       8dBm to 15dBm:  0ms (0,0%)
+       15dBm to 20dBm:  0ms (0,0%)
+       above 20dBm:  0ms (0,0%)
+     Active Cellular Radio Access Technology Breakdown:
+       (no activity)
+     Cellular data received: 0B
+     Cellular data sent: 0B
+     Cellular packets received: 0
+     Cellular packets sent: 0
+     Cellular Radio Access Technology: (no activity)
+     Cellular Rx signal strength (RSRP):
+       great (greater than -98dBm):  18s 340ms (100,0%) 
+  Wifi Statistics:
+     Wifi kernel active time: 18s 340ms (100,0%)
+     WiFi Scan time:  0ms (0,0%)
+     WiFi Sleep time:  18s 341ms (100,0%)
+     WiFi Idle time:   0ms (0,0%)
+     WiFi Rx time:     0ms (0,0%)
+     WiFi Tx time:     0ms (0,0%)
+     WiFi Battery drain: 0.00460mAh
+     Wifi data received: 7,79KB
+     Wifi data sent: 15,67KB
+     Wifi packets received: 139
+     Wifi packets sent: 175
+     Wifi states:
+       sta 18s 340ms (100,0%) 
+     Wifi supplicant states:
+       completed 18s 340ms (100,0%) 
+     Wifi Rx signal strength (RSSI):
+         great (greater than -55dBm): 18s 340ms (100,0%) 
+  GPS Statistics:
+     GPS signal quality (Top 4 Average CN0):
+      poor (less than 20 dBHz): 0ms (0,0%) 
+      good (greater than 20 dBHz): 0ms (0,0%) 
+  CONNECTIVITY POWER SUMMARY END
+
+  Bluetooth total received: 0B, sent: 0B
+  Bluetooth scan time: 18s 340ms 
+     Bluetooth Idle time:   0ms (0,0%)
+     Bluetooth Rx time:     0ms (0,0%)
+     Bluetooth Tx time:     0ms (0,0%)
+     Bluetooth Battery drain: 0.00652mAh
+
+  Speaker Statistics: (no activity)
+
+  Device battery use since last full charge
+    Amount discharged (lower bound): 0
+    Amount discharged (upper bound): 0
+    Amount discharged while screen on: 0
+    Amount discharged permil while screen on: 0
+    Amount discharged while screen off: 0
+    Amount discharged permil while screen off: 0
+    Amount discharged while screen doze: 0
+
+  Estimated power use (mAh):
+    Capacity: 4500, Rated: 4370, Typical: 4500, Computed drain: 0, actual drain: 0
+    Global
+      cpu: 0.371 apps: 0.371
+      bluetooth: 0.00652 apps: 0
+      system_services: 0.0211 apps: 0.0211
+      mobile_radio: 0.0112 apps: 0
+      sensors: 0.00817 apps: 0.00817
+      wifi: 0.00460 apps: 0
+      wakelock: 0.0477 apps: 0.000581 duration: 7s 812ms 
+      idle: 0.0849 apps: 0 duration: 18s 343ms 
+    UID u0a341: 0.204 fgs: 0.175 cached: 0.00948 ( cpu=0.187 (1s 111ms) cpu:fgs=0.175 cpu:cached=0.00948 system_services=0.0163 ) 
+    UID 0: 0.0903 ( cpu=0.0432 (1s 433ms) wakelock=0.0472 (7s 717ms) ) 
+    UID 2000: 0.0695 ( cpu=0.0695 (767ms) ) 
+    UID 1000: 0.0497 ( cpu=0.0620 (2s 94ms) sensors=0.00817 (1m 40s 886ms) wakelock=0.000544 (89ms) reattributed=-0.02107803 ) 
+    UID u0a40: 0.00401 fg: 0.000554 ( cpu=0.000554 (20ms) cpu:fg=0.000554 system_services=0.00345 ) 
+    UID 1001: 0.00302 fg: 0.00291 ( cpu=0.00298 (5s 931ms) cpu:fg=0.00291 wakelock=0.0000367 (6ms) ) 
+    UID 1066: 0.00102 ( cpu=0.00102 (39ms) ) 
+    UID 1010: 0.000845 ( cpu=0.000845 (37ms) ) 
+    UID 1036: 0.000559 ( cpu=0.000559 (23ms) ) 
+    UID 1002: 0.000468 fg: 0.000413 ( cpu=0.000468 (28ms) cpu:fg=0.000413 ) 
+    UID u0a127: 0.000313 fg: 0.0000744 ( cpu=0.0000744 (3ms) cpu:fg=0.0000744 system_services=0.000238 ) 
+    UID u0a147: 0.000304 bg: 0.0000521 ( cpu=0.0000658 (2ms) cpu:bg=0.0000521 system_services=0.000238 ) 
+    UID u0a209: 0.000297 fg: 0.0000591 ( cpu=0.0000591 (2ms) cpu:fg=0.0000591 system_services=0.000238 ) 
+    UID u0a328: 0.000287 bg: 0.0000492 ( cpu=0.0000492 (1ms) cpu:bg=0.0000492 system_services=0.000238 ) 
+    UID u0a226: 0.000284 fg: 0.000281 ( cpu=0.000281 (11ms) cpu:fg=0.000281 sensors=0.00000255 (9s 171ms) ) 
+    UID u0a49: 0.000279 bg: 0.0000413 ( cpu=0.0000413 (1ms) cpu:bg=0.0000413 system_services=0.000238 ) 
+    UID 1047: 0.000212 ( cpu=0.000212 (9ms) ) 
+    UID 5009: 0.000173 bg: 0.000173 ( cpu=0.000173 (6ms) cpu:bg=0.000173 ) 
+    UID u0a254: 0.000169 cached: 0.0000502 ( cpu=0.0000502 (1ms) cpu:cached=0.0000502 system_services=0.000119 ) 
+    UID 1021: 0.000153 ( cpu=0.000153 (5ms) ) 
+    UID u0a228: 0.000134 fg: 0.000134 ( cpu=0.000134 (4ms) cpu:fg=0.000134 ) 
+    UID 1041: 0.000106 ( cpu=0.000106 (4ms) ) 
+    UID 5013: 0.0000959 fg: 0.0000959 ( cpu=0.0000959 (3ms) cpu:fg=0.0000959 ) 
+    UID 9999: 0.0000956 ( cpu=0.0000956 (4ms) ) 
+    UID u0a227: 0.0000678 cached: 0.0000678 ( cpu=0.0000678 (2ms) cpu:cached=0.0000678 ) 
+    UID 1073: 0.0000662 fg: 0.0000387 ( cpu=0.0000662 (3ms) cpu:fg=0.0000387 ) 
+    UID 2903: 0.0000648 ( cpu=0.0000648 (1ms) ) 
+    UID 1027: 0.0000612 fg: 0.0000612 ( cpu=0.0000612 (2ms) cpu:fg=0.0000612 ) 
+    UID 5004: 0.0000511 cached: 0.0000511 ( cpu=0.0000511 (1ms) cpu:cached=0.0000511 ) 
+    UID 1020: 0.0000383 ( cpu=0.0000383 (1ms) ) 
+    UID u0a225: 0.0000383 fg: 0.0000383 ( cpu=0.0000383 (1ms) cpu:fg=0.0000383 ) 
+    UID u0a212: 0.0000379 fg: 0.0000379 ( cpu=0.0000379 (2ms) cpu:fg=0.0000379 ) 
+    UID 1069: 0.0000359 ( cpu=0.0000359 (1ms) ) 
+    UID 1053: 0.0000279 ( cpu=0.0000279 (1ms) ) 
+    UID 1068: 0.0000279 fg: 0.0000279 ( cpu=0.0000279 (1ms) cpu:fg=0.0000279 ) 
+    UID 1013: 0.0000275 ( cpu=0.0000275 (2ms) ) 
+    UID 5006: 0.0000275 bg: 0.0000275 ( cpu=0.0000275 cpu:bg=0.0000275 ) 
+    UID u0a106: 0.0000275 fg: 0.0000275 ( cpu=0.0000275 (1ms) cpu:fg=0.0000275 ) 
+    UID u0a135: 0.0000275 fg: 0.0000275 ( cpu=0.0000275 (1ms) cpu:fg=0.0000275 ) 
+    UID u0a203: 0.0000275 cached: 0.0000275 ( cpu=0.0000275 (1ms) cpu:cached=0.0000275 ) 
+    UID u0a221: 0.0000275 cached: 0.0000275 ( cpu=0.0000275 (1ms) cpu:cached=0.0000275 ) 
+    UID u0a316: 0.0000275 cached: 0.0000275 ( cpu=0.0000275 (1ms) cpu:cached=0.0000275 ) 
+    UID 5010: 0.0000265 cached: 0.0000265 ( cpu=0.0000265 cpu:cached=0.0000265 ) 
+    UID 2906: 0.0000246 ( cpu=0.0000246 ) 
+    UID u0a44: 0.0000246 cached: 0.0000246 ( cpu=0.0000246 (1ms) cpu:cached=0.0000246 ) 
+    UID u0a56: 0.0000246 cached: 0.0000246 ( cpu=0.0000246 cpu:cached=0.0000246 ) 
+    UID u0a236: 0.0000246 cached: 0.0000246 ( cpu=0.0000246 cpu:cached=0.0000246 ) 
+    UID 5021: 0.0000242 fg: 0.0000242 ( cpu=0.0000242 cpu:fg=0.0000242 ) 
+    UID u0a100: 0.0000221 cached: 0.0000221 ( cpu=0.0000221 (1ms) cpu:cached=0.0000221 ) 
+    UID 5012: 0.0000138 cached: 0.0000138 ( cpu=0.0000138 cpu:cached=0.0000138 ) 
+    UID 7502: 0.0000138 ( cpu=0.0000138 ) 
+    UID u0a52: 0.0000138 cached: 0.0000138 ( cpu=0.0000138 cpu:cached=0.0000138 ) 
+    UID u0a65: 0.0000138 cached: 0.0000138 ( cpu=0.0000138 cpu:cached=0.0000138 ) 
+    UID u0a97: 0.0000138 bg: 0.0000138 ( cpu=0.0000138 cpu:bg=0.0000138 ) 
+    UID u0a102: 0.0000138 fg: 0.0000138 ( cpu=0.0000138 cpu:fg=0.0000138 ) 
+    UID u0a200: 0.0000138 cached: 0.0000138 ( cpu=0.0000138 cpu:cached=0.0000138 ) 
+    UID u0a220: 0.0000138 cached: 0.0000138 ( cpu=0.0000138 cpu:cached=0.0000138 ) 
+    UID u0a224: 0.0000138 cached: 0.0000138 ( cpu=0.0000138 cpu:cached=0.0000138 ) 
+    UID u0a258: 0.0000138 fg: 0.0000138 ( cpu=0.0000138 cpu:fg=0.0000138 ) 
+    UID u0a262: 0.0000138 fg: 0.0000138 ( cpu=0.0000138 (1ms) cpu:fg=0.0000138 ) 
+
+  All kernel wake locks:
+  Kernel Wake lock qcom_rx_wakelock: 2s 181ms (30 times) realtime
+  Kernel Wake lock hal_bluetooth_lock: 1s 199ms (1 times) realtime
+  Kernel Wake lock 998000.qcom,qup_uart: 1s 198ms (1 times) realtime
+  Kernel Wake lock [timerfd]: 1s 44ms (26 times) realtime
+  Kernel Wake lock sec-battery-monitor: 634ms (16 times) realtime
+  Kernel Wake lock smp2p-sleepstate: 198ms (1 times) realtime
+  Kernel Wake lock PowerManagerService.WakeLocks: 56ms (1 times) realtime
+  Kernel Wake lock battery: 35ms (16 times) realtime
+  Kernel Wake lock mmc0_detect: 1ms (18 times) realtime
+
+  All partial wake locks:
+  Wake lock 1000 *telephony-radio*: 89ms (2 times) max=51 realtime
+  Wake lock 1001 *telephony-radio*: 6ms (4 times) max=2 realtime
+
+  All wakeup reasons:
+  Wakeup reason 132: 3s 870ms (12 times) realtime
+  Wakeup reason Abort: 0000:01:00.0 device failed to suspend, or early wake event detected: 246ms (1 times) realtime
+  Wakeup reason Abort: Pending Wakeup Sources: qcom_rx_wakelock realtime
+  Wakeup reason unknown realtime
+  Wakeup reason Abort: noirq suspend of 0000:01:00.0 device failed realtime
+
+  All screen wake reasons:
+  1000:android.policy:POWER: 5 times
+  1000:android.server.power:PLUGGED:false: 0 times
+  1000:android.policy:KEY: 5 times
+
+  CPU freqs: 300000 403200 518400 614400 691200 787200 883200 979200 1075200 1171200 1248000 1344000 1420800 1516800 1612800 1708800 1804800 710400 825600 940800 1056000 1171200 1286400 1382400 1478400 1574400 1670400 1766400 1862400 1958400 2054400 2150400 2246400 2342400 2419200 844800 960000 1075200 1190400 1305600 1401600 1516800 1632000 1747200 1862400 1977600 2073600 2169600 2265600 2361600 2457600 2553600 2649600 2745600 2841600
+
+  0:
+    Total cpu time: u=332ms s=1s 101ms 
+    Total cpu time per freq: 0 0 0 0 447 63 93 44 29 38 20 38 98 71 74 17 1352 103 0 0 0 1 100 8 1 131 2 1 1 1 0 0 0 0 56 13 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 13
+    Total screen-off cpu time per freq: 0 0 0 0 447 63 93 44 29 38 20 38 98 71 74 17 1352 103 0 0 0 1 100 8 1 131 2 1 1 1 0 0 0 0 56 13 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 13
+    Proc kworker/u16:13-memlat_wq:
+      CPU: 0ms usr + 140ms krn ; 0ms fg
+    Proc kworker/u16:12-events_unbound:
+      CPU: 0ms usr + 90ms krn ; 0ms fg
+    Proc kworker/5:0-events:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/u16:1+ufs_pm_qos_0:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc migration/7:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc migration/6:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc migration/5:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc migration/4:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc migration/3:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc migration/2:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc migration/1:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc migration/0:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc ksoftirqd/3:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc ksoftirqd/0:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc kworker/2:2-events:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc msm_watchdog:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/u16:0-devfreq_wq:
+      CPU: 0ms usr + 50ms krn ; 0ms fg
+    Proc android.hardware.usb@1.3-service.coral:
+      CPU: 20ms usr + 10ms krn ; 0ms fg
+    Proc kworker/7:0-events:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc crtc_event:178:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc crtc_event:174:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/4:2-events:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc rcuos/4:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc rcuos/2:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc rcuos/0:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc rcuop/6:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc rcuop/5:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc rcuop/4:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc rcuop/3:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc rcuop/2:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc rcuop/1:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc rcuop/0:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc cpuhp/6:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc cpuhp/5:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc cpuhp/4:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc cpuhp/3:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc cpuhp/2:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc cpuhp/1:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc kworker/2:4-rcu_gp:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc zygote64:
+      CPU: 0ms usr + 50ms krn ; 0ms fg
+    Proc kworker/u16:4-events_unbound:
+      CPU: 0ms usr + 60ms krn ; 0ms fg
+    Proc kworker/1:4-events:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc wlan_logging_th:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/u16:18-devfreq_wq:
+      CPU: 0ms usr + 80ms krn ; 0ms fg
+    Proc qmp_aop:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc jbd2/sda34-8:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc jbd2/sda32-8:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/0:3-mm_percpu_wq:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc kworker/u16:16-dwc3_wq:
+      CPU: 0ms usr + 70ms krn ; 0ms fg
+    Proc rcu_sched:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/0:1-events:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc kworker/u16:10-ufs_pm_qos_0:
+      CPU: 0ms usr + 80ms krn ; 0ms fg
+    Proc rcu_preempt:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc kworker/u16:3-ufs_pm_qos_0:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc vold:
+      CPU: 10ms usr + 10ms krn ; 0ms fg
+    Proc netd:
+      CPU: 10ms usr + 20ms krn ; 0ms fg
+    Proc iod:
+      CPU: 10ms usr + 0ms krn ; 0ms fg
+    Proc irq/15-90b6400.:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc kworker/u16:6-events_unbound:
+      CPU: 0ms usr + 80ms krn ; 0ms fg
+    Proc kworker/u16:19-ufs_pm_qos_0:
+      CPU: 0ms usr + 50ms krn ; 0ms fg
+    Proc kworker/u16:11-rq_stats:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc kworker/u17:7-hal_register_write_wq:
+      CPU: 0ms usr + 40ms krn ; 0ms fg
+    Proc kswapd0:0:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc ueventd:
+      CPU: 610ms usr + 90ms krn ; 0ms fg
+    Proc crtc_commit:174:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc crtc_commit:136:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/u16:7-events_unbound:
+      CPU: 0ms usr + 50ms krn ; 0ms fg
+    Proc kworker/u16:17-events_unbound:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc kauditd:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kcompactd0:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/u17:3-hal_register_write_wq:
+      CPU: 0ms usr + 50ms krn ; 0ms fg
+    Proc kworker/6:1-events:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc kzerod:
+      CPU: 0ms usr + 200ms krn ; 0ms fg
+    Proc irq/16-9091000.:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc kworker/u16:9-events_unbound:
+      CPU: 0ms usr + 60ms krn ; 0ms fg
+    Proc dp_rx_thread_0:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc thermal-engine:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc kworker/u16:5-dwc3_wq:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc kworker/3:5-events:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  1000:
+    Bluetooth Duty Scan (total actual realtime with duty): 183ms  (currently running)
+    Bluetooth Scan (total blamed realtime): 6s 113ms  (0 times) (currently running)
+    Bluetooth Scan (total actual realtime): 18s 340ms  (0 times) (currently running)
+    Bluetooth Scan (background realtime): 18s 340ms  (0 times) (currently running in background)
+    Bluetooth Scan Results: 0 (0 in background)
+    Wake lock *telephony-radio*: 89ms partial (2 times) max=51, 89ms background partial (2 times) max=51 realtime
+    Sensor 172: 9s 170ms blamed realtime, 18s 340ms realtime (0 times), 18s 340ms background (0 times)
+    Sensor 1501: 18s 340ms realtime (0 times), 18s 340ms background (0 times)
+    Sensor 2072: 18s 340ms realtime (0 times), 18s 340ms background (0 times)
+    Sensor 16777232: 18s 340ms realtime (0 times), 18s 340ms background (0 times)
+    Sensor 16777238: 18s 340ms realtime (0 times), 18s 340ms background (0 times)
+    Sensor 1600351347: 18s 340ms realtime (0 times), 18s 340ms background (0 times)
+    Total cpu time: u=485ms s=1s 609ms 
+    Total cpu time per freq: 0 0 0 0 248 66 91 34 42 53 40 30 223 97 120 78 2979 87 10 2 0 2 10 16 0 14 0 3 5 54 2 0 0 0 34 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 9
+    Total screen-off cpu time per freq: 0 0 0 0 248 66 91 34 42 53 40 30 223 97 120 78 2979 87 10 2 0 2 10 16 0 14 0 3 5 54 2 0 0 0 34 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 9
+    Proc pd-mapper:
+      CPU: 10ms usr + 0ms krn ; 0ms fg
+    Proc android.hardware.health@2.1-service-samsung:
+      CPU: 0ms usr + 60ms krn ; 0ms fg
+    Proc android.hardware.memtrack@1.0-service:
+      CPU: 10ms usr + 60ms krn ; 0ms fg
+    Proc sec_nvm:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc servicemanager:
+      CPU: 20ms usr + 0ms krn ; 0ms fg
+    Proc qseecomd:
+      CPU: 0ms usr + 30ms krn ; 0ms fg
+    Proc android.hardware.gnss@2.1-service-qti:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc com.sec.android.sdhms:
+      CPU: 10ms usr + 10ms krn ; 0ms fg
+    Proc com.android.settings:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc android.system.suspend@1.0-service:
+      CPU: 10ms usr + 1s 460ms krn ; 0ms fg
+    Proc vendor.samsung.hardware.thermal@1.0-service:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc perfsdkserver:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc ddexe:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc factory.ssc:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc android.hardware.sensors@2.0-service.multihal:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+    Proc com.sec.imsservice:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc surfaceflinger:
+      CPU: 10ms usr + 20ms krn ; 0ms fg
+    Proc connfwexe:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc adsprpcd:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc system:
+      CPU: 590ms usr + 1s 260ms krn ; 0ms fg
+    Proc ssgtzd:
+      CPU: 0ms usr + 60ms krn ; 0ms fg
+    Proc smdexe:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc argosd:
+      CPU: 10ms usr + 10ms krn ; 0ms fg
+    Proc cdsprpcd:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc cnss_diag:
+      CPU: 270ms usr + 60ms krn ; 0ms fg
+    Proc com.samsung.android.provider.filterprovider:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  1001:
+    Wake lock *telephony-radio*: 6ms partial (4 times) max=2 realtime
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=2s 194ms s=3s 736ms 
+    Total cpu time per freq: 0 0 0 0 7 5 2 4 3 9 20 9 29 13 7 2 111 19 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 7 5 2 4 3 9 20 9 29 13 7 2 111 19 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 7 5 2 4 3 9 20 9 29 13 7 2 106 19 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 7 5 2 4 3 9 20 9 29 13 7 2 106 19 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.android.phone:
+      CPU: 10ms usr + 10ms krn ; 0ms fg
+    Proc *wakelock*:
+      CPU: 2s 187ms usr + 3s 611ms krn ; 0ms fg
+    Proc ipacm:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc rild:
+      CPU: 0ms usr + 220ms krn ; 0ms fg
+  1002:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=5ms s=22ms 
+    Total cpu time per freq: 0 0 0 0 7 4 0 2 0 0 0 1 1 1 1 1 17 3 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 7 4 0 2 0 0 0 1 1 1 1 1 17 3 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 7 4 0 2 0 0 0 1 1 1 1 1 13 3 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 7 4 0 2 0 0 0 1 1 1 1 1 13 3 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.android.bluetooth:
+      CPU: 20ms usr + 30ms krn ; 0ms fg
+  1003:
+    (nothing executed)
+  1010:
+    Total cpu time: u=14ms s=22ms 
+    Total cpu time per freq: 0 0 0 0 14 2 1 0 3 1 4 7 5 3 2 1 30 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 14 2 1 0 3 1 4 7 5 3 2 1 30 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc android.hardware.wifi@1.0-service:
+      CPU: 30ms usr + 30ms krn ; 0ms fg
+  1013:
+    Total cpu time: u=0ms s=2ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    (nothing executed)
+  1017:
+    (nothing executed)
+  1019:
+    (nothing executed)
+  1020:
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    (nothing executed)
+  1021:
+    Total cpu time: u=0ms s=5ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 7 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 7 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc lowi-server:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  1027:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  1036:
+    Total cpu time: u=3ms s=19ms 
+    Total cpu time per freq: 0 0 0 0 13 2 3 1 1 1 1 0 1 0 0 1 25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 13 2 3 1 1 1 1 0 1 0 0 1 25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc logd:
+      CPU: 0ms usr + 40ms krn ; 0ms fg
+  1040:
+    (nothing executed)
+  1041:
+    Total cpu time: u=1ms s=3ms 
+    Total cpu time per freq: 0 0 0 0 1 0 0 1 1 0 0 1 0 0 0 0 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 1 0 0 1 1 0 0 1 0 0 0 0 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    (nothing executed)
+  1046:
+    (nothing executed)
+  1047:
+    Total cpu time: u=0ms s=9ms 
+    Total cpu time per freq: 0 0 0 0 0 1 0 1 0 1 0 1 1 1 0 0 10 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 1 0 1 0 1 0 1 1 1 0 0 10 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc vendor.samsung.hardware.camera.provider@4.0-service_64:
+      CPU: 0ms usr + 20ms krn ; 0ms fg
+  1053:
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    (nothing executed)
+  1066:
+    Total cpu time: u=21ms s=18ms 
+    Total cpu time per freq: 0 0 0 0 10 0 0 3 0 3 4 1 0 2 1 1 57 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 10 0 0 3 0 3 4 1 0 2 1 1 57 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc statsd:
+      CPU: 40ms usr + 50ms krn ; 0ms fg
+  1068:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  1069:
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    (nothing executed)
+  1072:
+    (nothing executed)
+  1073:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=2ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.android.networkstack.process:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  1076:
+    (nothing executed)
+  2000:
+    Wi-Fi network: 7,79KB received, 15,67KB sent (packets 139 received, 175 sent)
+    Total cpu time: u=341ms s=426ms 
+    Total cpu time per freq: 0 0 0 0 138 3 34 1 10 13 4 12 24 16 38 11 707 33 0 0 0 19 1 0 1 17 0 2 0 0 1 0 2 0 206 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 18 2 340
+    Total screen-off cpu time per freq: 0 0 0 0 138 3 34 1 10 13 4 12 24 16 38 11 707 33 0 0 0 19 1 0 1 17 0 2 0 0 1 0 2 0 206 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 18 2 340
+    Proc process-tracker:
+      CPU: 20ms usr + 40ms krn ; 0ms fg
+    Proc adbd:
+      CPU: 10ms usr + 130ms krn ; 0ms fg
+  2903:
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 1 0 0 0 0 1 1 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 1 0 0 0 0 1 1 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    (nothing executed)
+  2906:
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    (nothing executed)
+  5003:
+    (nothing executed)
+  5004:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  5006:
+    Background for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Background: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Background: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  5009:
+    Top Sleeping for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=1ms s=4ms 
+    Total cpu time per freq: 0 0 0 0 4 1 3 0 0 0 0 1 1 0 0 0 6 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 4 1 3 0 0 0 0 1 1 0 0 0 6 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Top Sleeping: 0 0 0 0 4 1 3 0 0 0 0 1 1 0 0 0 6 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Top Sleeping: 0 0 0 0 4 1 3 0 0 0 0 1 1 0 0 0 6 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.samsung.android.scpm:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+    Proc com.samsung.android.scloud:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  5010:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  5012:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  5013:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=2ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 1 0 1 0 0 0 0 0 1 0 0 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 1 0 1 0 0 0 0 0 1 0 0 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 1 0 1 0 0 0 0 0 1 0 0 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 1 0 1 0 0 0 0 0 1 0 0 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.sec.location.nsflp2:
+      CPU: 10ms usr + 0ms krn ; 0ms fg
+  5021:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  5022:
+    (nothing executed)
+  5023:
+    (nothing executed)
+  5025:
+    (nothing executed)
+  5026:
+    (nothing executed)
+  7502:
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    (nothing executed)
+  9999:
+    Total cpu time: u=0ms s=4ms 
+    Total cpu time per freq: 0 0 0 0 0 1 0 0 0 0 1 0 1 1 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 1 0 0 0 0 1 0 1 1 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    (nothing executed)
+  u0a36:
+    (nothing executed)
+  u0a37:
+    (nothing executed)
+  u0a40:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=10ms s=10ms 
+    Total cpu time per freq: 0 0 0 0 2 0 0 0 0 0 1 2 2 2 1 3 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 2 0 0 0 0 0 1 2 2 2 1 3 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 2 0 0 0 0 0 1 2 2 2 1 3 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 2 0 0 0 0 0 1 2 2 2 1 3 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.android.systemui:
+      CPU: 10ms usr + 30ms krn ; 0ms fg
+    Proc com.samsung.android.app.routines:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  u0a42:
+    (nothing executed)
+  u0a44:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc android.process.acore:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  u0a45:
+    (nothing executed)
+  u0a46:
+    (nothing executed)
+  u0a49:
+    Background for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Background: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Background: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a50:
+    (nothing executed)
+  u0a51:
+    (nothing executed)
+  u0a52:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc android.process.media:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  u0a54:
+    (nothing executed)
+  u0a56:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a57:
+    (nothing executed)
+  u0a58:
+    (nothing executed)
+  u0a59:
+    (nothing executed)
+  u0a61:
+    (nothing executed)
+  u0a62:
+    (nothing executed)
+  u0a65:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a66:
+    (nothing executed)
+  u0a67:
+    (nothing executed)
+  u0a68:
+    (nothing executed)
+  u0a69:
+    (nothing executed)
+  u0a70:
+    (nothing executed)
+  u0a71:
+    (nothing executed)
+  u0a72:
+    (nothing executed)
+  u0a74:
+    (nothing executed)
+  u0a76:
+    (nothing executed)
+  u0a77:
+    (nothing executed)
+  u0a78:
+    (nothing executed)
+  u0a79:
+    (nothing executed)
+  u0a80:
+    (nothing executed)
+  u0a83:
+    (nothing executed)
+  u0a85:
+    (nothing executed)
+  u0a87:
+    (nothing executed)
+  u0a90:
+    (nothing executed)
+  u0a91:
+    (nothing executed)
+  u0a93:
+    (nothing executed)
+  u0a94:
+    (nothing executed)
+  u0a95:
+    (nothing executed)
+  u0a96:
+    (nothing executed)
+  u0a97:
+    Top Sleeping for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Top Sleeping: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Top Sleeping: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a98:
+    (nothing executed)
+  u0a99:
+    (nothing executed)
+  u0a100:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=1ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a102:
+    Bluetooth Duty Scan (total actual realtime with duty): 0ms 
+    Bluetooth Scan (total blamed realtime): 6s 113ms  (0 times) (currently running)
+    Bluetooth Scan (total actual realtime): 18s 340ms  (0 times) (currently running)
+    Bluetooth Scan Results: 0 (0 in background)
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a103:
+    (nothing executed)
+  u0a104:
+    (nothing executed)
+  u0a105:
+    (nothing executed)
+  u0a106:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a110:
+    (nothing executed)
+  u0a113:
+    (nothing executed)
+  u0a117:
+    (nothing executed)
+  u0a118:
+    (nothing executed)
+  u0a120:
+    (nothing executed)
+  u0a125:
+    (nothing executed)
+  u0a127:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=3ms 
+    Total cpu time per freq: 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a130:
+    (nothing executed)
+  u0a135:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.qualcomm.embms:remote:
+      CPU: 10ms usr + 0ms krn ; 0ms fg
+  u0a146:
+    (nothing executed)
+  u0a147:
+    Background for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=1ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Background: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Background: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a148:
+    (nothing executed)
+  u0a152:
+    (nothing executed)
+  u0a173:
+    (nothing executed)
+  u0a179:
+    (nothing executed)
+  u0a182:
+    (nothing executed)
+  u0a183:
+    (nothing executed)
+  u0a184:
+    (nothing executed)
+  u0a187:
+    (nothing executed)
+  u0a188:
+    (nothing executed)
+  u0a191:
+    (nothing executed)
+  u0a194:
+    (nothing executed)
+  u0a199:
+    (nothing executed)
+  u0a200:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a202:
+    (nothing executed)
+  u0a203:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a204:
+    (nothing executed)
+  u0a206:
+    (nothing executed)
+  u0a207:
+    (nothing executed)
+  u0a208:
+    (nothing executed)
+  u0a209:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=2ms 
+    Total cpu time per freq: 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a211:
+    (nothing executed)
+  u0a212:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=2ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a214:
+    (nothing executed)
+  u0a215:
+    (nothing executed)
+  u0a216:
+    (nothing executed)
+  u0a217:
+    (nothing executed)
+  u0a218:
+    (nothing executed)
+  u0a219:
+    (nothing executed)
+  u0a220:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a221:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a222:
+    (nothing executed)
+  u0a224:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a225:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a226:
+    Bluetooth Duty Scan (total actual realtime with duty): 0ms 
+    Bluetooth Scan (total blamed realtime): 6s 113ms  (0 times) (currently running)
+    Bluetooth Scan (total actual realtime): 18s 340ms  (0 times) (currently running)
+    Bluetooth Scan Results: 0 (0 in background)
+    Sensor 172: 9s 170ms blamed realtime, 18s 340ms realtime (0 times)
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=3ms s=7ms 
+    Total cpu time per freq: 0 0 0 0 9 0 0 0 0 0 0 1 2 1 1 1 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 9 0 0 0 0 0 0 1 2 1 1 1 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 9 0 0 0 0 0 0 1 2 1 1 1 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 9 0 0 0 0 0 0 1 2 1 1 1 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.google.android.gms.persistent:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  u0a227:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=1ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a228:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=2ms s=2ms 
+    Total cpu time per freq: 0 0 0 0 2 0 1 0 0 0 0 0 0 0 1 0 7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 2 0 1 0 0 0 0 0 0 0 1 0 7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 2 0 1 0 0 0 0 0 0 0 1 0 7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 2 0 1 0 0 0 0 0 0 0 1 0 7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a230:
+    (nothing executed)
+  u0a233:
+    (nothing executed)
+  u0a235:
+    (nothing executed)
+  u0a236:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a237:
+    (nothing executed)
+  u0a238:
+    (nothing executed)
+  u0a243:
+    (nothing executed)
+  u0a244:
+    (nothing executed)
+  u0a248:
+    (nothing executed)
+  u0a249:
+    (nothing executed)
+  u0a254:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a256:
+    (nothing executed)
+  u0a258:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=0ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a262:
+    Foreground for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Foreground: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.google.android.providers.media.module:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  u0a266:
+    (nothing executed)
+  u0a268:
+    (nothing executed)
+  u0a313:
+    (nothing executed)
+  u0a315:
+    (nothing executed)
+  u0a316:
+    Cached for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  u0a317:
+    (nothing executed)
+  u0a321:
+    (nothing executed)
+  u0a326:
+    (nothing executed)
+  u0a327:
+    (nothing executed)
+  u0a328:
+    Background for: 18s 340ms 
+    Total running: 18s 340ms 
+    Total cpu time: u=0ms s=1ms 
+    Total cpu time per freq: 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Total screen-off cpu time per freq: 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Cpu times per freq at state Background: 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Background: 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.samsung.android.spay:
+      CPU: 0ms usr + 10ms krn ; 0ms fg
+  u0a329:
+    (nothing executed)
+  u0a330:
+    (nothing executed)
+  u0a341:
+    Foreground services: 13s 487ms realtime (3 times)
+    Fg Service for: 13s 487ms 
+    Cached for: 1s 347ms 
+    Total running: 14s 834ms 
+    Total cpu time: u=948ms s=163ms 
+    Total cpu time per freq: 0 0 0 0 91 7 46 0 0 14 3 0 0 0 1 2 228 19 3 0 3 0 6 7 0 0 1 47 1 31 14 0 0 0 318 3 0 9 0 0 0 0 28 18 0 6 0 0 0 0 0 1 32 1 1352
+    Total screen-off cpu time per freq: 0 0 0 0 91 7 46 0 0 14 3 0 0 0 1 2 228 19 3 0 3 0 6 7 0 0 1 47 1 31 14 0 0 0 318 3 0 9 0 0 0 0 28 18 0 6 0 0 0 0 0 1 32 1 1352
+    Cpu times per freq at state Fg Service: 0 0 0 0 69 7 46 0 0 14 3 0 0 0 1 2 147 16 3 0 3 0 6 6 0 0 1 2 0 28 14 0 0 0 211 3 0 9 0 0 0 0 28 18 0 6 0 0 0 0 0 1 32 1 1352
+   Screen-off cpu times per freq at state Fg Service: 0 0 0 0 69 7 46 0 0 14 3 0 0 0 1 2 147 16 3 0 3 0 6 6 0 0 1 2 0 28 14 0 0 0 211 3 0 9 0 0 0 0 28 18 0 6 0 0 0 0 0 1 32 1 1352
+    Cpu times per freq at state Cached: 0 0 0 0 14 0 0 0 0 0 0 0 0 0 0 0 41 3 0 0 0 0 0 0 0 0 0 4 1 3 0 0 0 0 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   Screen-off cpu times per freq at state Cached: 0 0 0 0 14 0 0 0 0 0 0 0 0 0 0 0 41 3 0 0 0 0 0 0 0 0 0 4 1 3 0 0 0 0 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    Proc com.example.energy:
+      CPU: 0ms usr + 0ms krn ; 0ms fg
+      3 starts
+  u0a40091:
+    (nothing executed)
+  u0a40331:
+    (nothing executed)
+  u0a40340:
+    (nothing executed)
+  u0a40341:
+    (nothing executed)
+
+Per process state tracking available: true
+Total cpu time reads: 3721
+Batching Duration (min): 75
+All UID cpu time reads since the later of device start or stats reset: 8
+UIDs removed since the later of device start or stats reset: 0
+Currently mapped isolated uids:
+  1037->1000 (ref count = 1)
+
+BatteryStats constants:
+    track_cpu_active_cluster_time=true
+    kernel_uid_readers_throttle_time=1000
+    external_stats_collection_rate_limit_ms=600000
+    battery_level_collection_delay_ms=300000
+    procstate_change_collection_delay_ms=60000
+    max_history_files=32
+    max_history_buffer_kb=128
+    battery_charged_delay_ms=900000
+
+On battery measured charge stats (microcoulombs) 
+    Not supported on this device.
+
+Companion Device Baterry Infos: 
+    [ 000000_0, 2, 92, -1, -1, -1, 3 ]
+
