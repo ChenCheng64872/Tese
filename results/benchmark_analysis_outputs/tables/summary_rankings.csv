@@ -1,0 +1,14 @@
+device,best_algorithm,best_total_time_ms_mean,energy_J_mean,ranking_type,total_time_ms_mean,best_energy_J_mean,size_bytes
+D1,AES-GCM,6.330736688888889,0.00042993878400000005,fastest_per_device,,,
+D2,AES-GCM,6.299210400000001,0.000485960108,fastest_per_device,,,
+D1,ElGamal,,,lowest_energy_per_device,38.57264484444444,0.000173952812,
+D2,ElGamal,,,lowest_energy_per_device,38.42487462222222,0.00021201483200000002,
+,ChaCha20,2.8038623,0.00018460368,best_per_input_size,,,1024.0
+,ChaCha20,3.0397911,0.000114174882,best_per_input_size,,,2048.0
+,AES-GCM,3.1629563999999997,0.000122817456,best_per_input_size,,,4096.0
+,AES-GCM,4.0590388,0.000174877866,best_per_input_size,,,8192.0
+,AES-GCM,4.558573,0.00023123167199999998,best_per_input_size,,,16384.0
+,AES-GCM,5.2747233,0.000319257216,best_per_input_size,,,32768.0
+,AES-GCM,6.5561696,0.0005144731200000001,best_per_input_size,,,65536.0
+,AES-GCM,10.0832286,0.0008711406000000002,best_per_input_size,,,131072.0
+,AES-GCM,17.2153359,0.0015863167799999999,best_per_input_size,,,262144.0
