@@ -4,9 +4,16 @@ import android.content.Context
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-/** One round = encrypt once + decrypt once; return (encNs, decNs) */
+data class RoundResult(
+    val encNs: Long,
+    val decNs: Long,
+    val encMemBytes: Long,
+    val decMemBytes: Long
+)
+
+/** One round = encrypt once + decrypt once; return RoundResult */
 fun interface RoundRunner {
-    fun run(roundIndex: Int): Pair<Long, Long>
+    fun run(roundIndex: Int): RoundResult
 }
 
 /** Hook to prepare for a given plaintext size; returns a per-round runner */
@@ -81,41 +88,23 @@ const val BENCH_CSV_HEADER =
 
 /** CSV header for each execution (per round) */
 const val BENCH_EXEC_CSV_HEADER =
-    "size_bytes,round_index,enc_ns,dec_ns,energy_mWh"
+    "size_bytes,round_index,enc_ns,dec_ns,enc_mem_bytes,dec_mem_bytes,energy_mWh,method"
 
 /** Generic runner: handles sizes, rounds, energy, and CSV writing (per execution only) */
 object BenchmarkRunner {
 
-    // ResultRow & BENCH_CSV_HEADER kept in case you later want summary CSV again,
-    // but they are no longer used by runRangeAndLog.
-    data class ResultRow(
-        val sizeBytes: Int,
-        val encStats: TimingStats,
-        val decStats: TimingStats,
-        val energyMWh: Double
-    ) {
-        fun toCsv(): String = listOf(
-            sizeBytes,
+    private fun getUsedMemory(): Long {
+        val runtime = Runtime.getRuntime()
+        return runtime.totalMemory() - runtime.freeMemory()
+    }
 
-            // ENC
-            encStats.min,
-            encStats.median,
-            encStats.max,
-            encStats.mean.toLong(),
-            encStats.stddev.toLong(),
-            String.format("%.2f", encStats.stdPercent),
-
-            // DEC
-            decStats.min,
-            decStats.median,
-            decStats.max,
-            decStats.mean.toLong(),
-            decStats.stddev.toLong(),
-            String.format("%.2f", decStats.stdPercent),
-
-            // ENERGY (total for all rounds for this size)
-            String.format("%.6f", energyMWh)
-        ).joinToString(",")
+    fun measureMemory(block: () -> Unit): Long {
+        System.gc()
+        Thread.sleep(100) // Give GC some time
+        val before = getUsedMemory()
+        block()
+        val after = getUsedMemory()
+        return (after - before).coerceAtLeast(0L)
     }
 
     fun runRangeAndLog(
@@ -124,10 +113,11 @@ object BenchmarkRunner {
         maxPow: Int,
         rounds: Int,
         factory: SizeRunnerFactory,
-        fileName: String
+        fileName: String,
+        subDir: String? = null
     ): String {
         // Single CSV (one row per execution/round), as you requested
-        val logger = CsvLogger(context, fileName, BENCH_EXEC_CSV_HEADER)
+        val logger = CsvLogger(context, fileName, BENCH_EXEC_CSV_HEADER, subDir)
         logger.startFresh()
 
         val meter = EnergyMeter(context)
@@ -141,20 +131,24 @@ object BenchmarkRunner {
 
             val encTimes = LongArray(rounds)
             val decTimes = LongArray(rounds)
+            val encMem = LongArray(rounds)
+            val decMem = LongArray(rounds)
 
             val sizeRunner = factory.prepare(size)
 
             // Measure energy for ALL rounds of this size together
-            val energy = meter.measure {
+            val result = meter.measure {
                 repeat(rounds) { i ->
-                    val (encNs, decNs) = sizeRunner.run(i)
-                    encTimes[i] = encNs
-                    decTimes[i] = decNs
+                    val r = sizeRunner.run(i)
+                    encTimes[i] = r.encNs
+                    decTimes[i] = r.decNs
+                    encMem[i] = r.encMemBytes
+                    decMem[i] = r.decMemBytes
                 }
             }
 
             // Approximate per-round energy as total/rounds
-            val energyPerRound = energy.energyMilliWattHour / rounds.toDouble()
+            val energyPerRound = result.energyMilliWattHour / rounds.toDouble()
 
             // Write one row per execution
             for (i in 0 until rounds) {
@@ -163,7 +157,10 @@ object BenchmarkRunner {
                     i + 1, // round_index starting at 1
                     encTimes[i],
                     decTimes[i],
-                    String.format("%.6f", energyPerRound)
+                    encMem[i],
+                    decMem[i],
+                    String.format("%.6e", energyPerRound), // Use scientific notation
+                    result.method
                 ).joinToString(",")
                 logger.appendLine(line)
             }

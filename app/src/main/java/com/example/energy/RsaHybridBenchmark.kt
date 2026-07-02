@@ -11,39 +11,73 @@ object RsaHybridBenchmark {
         context: Context,
         minPow: Int = 10,
         maxPow: Int = 20,
-        rounds: Int = 15,
-        fileName: String = "rsa_hybrid_bench_2p${minPow}_2p${maxPow}.csv"
+        rounds: Int = 20,
+        innerIterations: Int = 10,
+        warmupRounds: Int = 1,
+        fileName: String = "rsa_hybrid_bench_2p${minPow}_2p${maxPow}.csv",
+        subDir: String? = null
     ): String {
         val rnd = SecureRandom()
 
         val factory = SizeRunnerFactory { sizeBytes ->
             val plain = BenchmarkPlain.build(sizeBytes)
-            // one keypair per size to avoid keygen dominating timings
+
             val kp = RsaLite.generateKeyPair(2048)
             val pub = kp.public as RSAKeyParameters
             val priv = kp.private as RSAKeyParameters
 
-            RoundRunner {
+            repeat(warmupRounds) {
                 val aesKey = ByteArray(32).apply { rnd.nextBytes(this) }
-                val iv     = ByteArray(16).apply { rnd.nextBytes(this) }
+                val iv = ByteArray(16).apply { rnd.nextBytes(this) }
+                val ct = AES.encrypt(plain, aesKey, iv)
+                val wrapped = RsaLite.encryptSmall(aesKey + iv, pub)
+                val unwrapped = RsaLite.decryptSmall(wrapped, priv)
+                val recKey = unwrapped.copyOfRange(0, 32)
+                val recIv = unwrapped.copyOfRange(32, 48)
+                AES.decrypt(ct, recKey, recIv)
+            }
 
-                lateinit var ctB64: String
-                lateinit var wrapped: ByteArray
+            RoundRunner {
+                lateinit var lastCtB64: String
+                lateinit var lastWrapped: ByteArray
+                lateinit var lastAesKey: ByteArray
+                lateinit var lastIv: ByteArray
+                var encMem = 0L
+                var decMem = 0L
 
-                val encNs = measureNanoTime {
-                    ctB64 = AES.encrypt(plain, aesKey, iv)           // bulk
-                    wrapped = RsaLite.encryptSmall(aesKey + iv, pub) // wrap key+iv
+                val encNsTotal = measureNanoTime {
+                    encMem = BenchmarkRunner.measureMemory {
+                        repeat(innerIterations) {
+                            val aesKey = ByteArray(32).apply { rnd.nextBytes(this) }
+                            val iv = ByteArray(16).apply { rnd.nextBytes(this) }
+                            lastAesKey = aesKey
+                            lastIv = iv
+                            lastCtB64 = AES.encrypt(plain, aesKey, iv)
+                            lastWrapped = RsaLite.encryptSmall(aesKey + iv, pub)
+                        }
+                    }
                 }
-                val decNs = measureNanoTime {
-                    val unwrapped = RsaLite.decryptSmall(wrapped, priv)
-                    val recKey = unwrapped.copyOfRange(0, 32)
-                    val recIv  = unwrapped.copyOfRange(32, 48)
-                    @Suppress("UNUSED_VARIABLE")
-                    val back = AES.decrypt(ctB64, recKey, recIv)
+
+                val decNsTotal = measureNanoTime {
+                    decMem = BenchmarkRunner.measureMemory {
+                        repeat(innerIterations) {
+                            val unwrapped = RsaLite.decryptSmall(lastWrapped, priv)
+                            val recKey = unwrapped.copyOfRange(0, 32)
+                            val recIv = unwrapped.copyOfRange(32, 48)
+                            AES.decrypt(lastCtB64, recKey, recIv)
+                        }
+                    }
                 }
-                encNs to decNs
+
+                RoundResult(
+                    encNs = encNsTotal / innerIterations,
+                    decNs = decNsTotal / innerIterations,
+                    encMemBytes = encMem / innerIterations,
+                    decMemBytes = decMem / innerIterations
+                )
             }
         }
-        return BenchmarkRunner.runRangeAndLog(context, minPow, maxPow, rounds, factory, fileName)
+
+        return BenchmarkRunner.runRangeAndLog(context, minPow, maxPow, rounds, factory, fileName, subDir)
     }
 }

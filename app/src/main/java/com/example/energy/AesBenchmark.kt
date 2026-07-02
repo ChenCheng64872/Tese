@@ -8,8 +8,11 @@ object AesBenchmark {
         context: Context,
         minPow: Int = 10,
         maxPow: Int = 20,
-        rounds: Int = 15,
-        fileName: String = "aes_bench_2p${minPow}_2p${maxPow}.csv"
+        rounds: Int = 10,
+        innerIterations: Int = 1,
+        warmupRounds: Int = 1,
+        fileName: String = "aes_bench_2p${minPow}_2p${maxPow}.csv",
+        subDir: String? = null
     ): String {
         // Fixed, repeatable key for benchmarking (PBKDF2 from password+salt).
         val password = "test-password"
@@ -21,11 +24,39 @@ object AesBenchmark {
 
         val factory = SizeRunnerFactory { sizeBytes ->
             val plain = BenchmarkPlain.build(sizeBytes)
+
+            repeat(warmupRounds) {
+                val tmp = AES.encrypt(plain, key, blankIv)
+                AES.decrypt(tmp, key, blankIv)
+            }
+
             RoundRunner {
                 lateinit var ctB64: String
-                val encNs = measureNanoTime { ctB64 = AES.encrypt(plain, key, blankIv) }
-                val decNs = measureNanoTime { AES.decrypt(ctB64, key, blankIv) }
-                encNs to decNs
+                var encMem = 0L
+                var decMem = 0L
+
+                val encNsTotal = measureNanoTime {
+                    encMem = BenchmarkRunner.measureMemory {
+                        repeat(innerIterations) {
+                            ctB64 = AES.encrypt(plain, key, blankIv)
+                        }
+                    }
+                }
+
+                val decNsTotal = measureNanoTime {
+                    decMem = BenchmarkRunner.measureMemory {
+                        repeat(innerIterations) {
+                            AES.decrypt(ctB64, key, blankIv)
+                        }
+                    }
+                }
+
+                RoundResult(
+                    encNs = encNsTotal / innerIterations,
+                    decNs = decNsTotal / innerIterations,
+                    encMemBytes = encMem / innerIterations,
+                    decMemBytes = decMem / innerIterations
+                )
             }
         }
 
@@ -35,7 +66,8 @@ object AesBenchmark {
             maxPow = maxPow,
             rounds = rounds,
             factory = factory,
-            fileName = fileName
+            fileName = fileName,
+            subDir = subDir
         )
     }
 }

@@ -6,11 +6,14 @@ import java.io.File
 class CsvLogger(
     private val context: Context,
     private val fileName: String,
-    private val header: String
+    private val header: String,
+    private val subDir: String? = null
 ) {
     private val file: File by lazy {
-        val dir = context.getExternalFilesDir(null) ?: context.filesDir
-        File(dir, fileName)
+        val baseDir = context.getExternalFilesDir(null) ?: context.filesDir
+        val finalDir = if (subDir != null) File(baseDir, subDir) else baseDir
+        if (!finalDir.exists()) finalDir.mkdirs()
+        File(finalDir, fileName)
     }
 
     fun path(): String = file.absolutePath

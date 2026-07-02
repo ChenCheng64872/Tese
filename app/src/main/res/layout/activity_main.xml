@@ -17,8 +17,57 @@
 
     <Button android:id="@+id/btElGamal" android:layout_width="match_parent"
         android:layout_height="wrap_content" android:text="Run ElGamal Hybrid" android:layout_marginTop="8dp"/>
+    <Button
+        android:id="@+id/btAscon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run Ascon-128" />
+    <Button
+        android:id="@+id/btElephant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run Elephant" />
+    <Button
+        android:id="@+id/btGiftCofb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run GiftCofb" />
+    <Button
+        android:id="@+id/btGrain128"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run Grain-128" />
+    <Button
+        android:id="@+id/btXoodyak"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run Xoodyak-128" />
 
-    <TextView android:id="@+id/tvStatus" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:textSize="14sp"
-        android:layout_marginTop="16dp" android:text="Ready"/>
+    <Button
+        android:id="@+id/btRunAll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#FF5722"
+        android:text="RUN ALL BENCHMARKS"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btShareAll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Share All Results (ZIP)"
+        android:visibility="gone"
+        android:backgroundTint="#4CAF50" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp">
+        <TextView android:id="@+id/tvStatus" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:textSize="14sp"
+            android:text="Ready"/>
+    </ScrollView>
 </LinearLayout>

@@ -16,17 +16,49 @@ object AsconLwcBenchmark {
         minPow: Int,
         maxPow: Int,
         rounds: Int,
-        fileName: String = "ascon_bench_2p${minPow}_2p${maxPow}.csv"
+        innerIterations: Int = 1,
+        warmupRounds: Int = 5,
+        fileName: String = "ascon_bench_2p${minPow}_2p${maxPow}.csv",
+        subDir: String? = null
     ): String {
         val factory = SizeRunnerFactory { sizeBytes ->
             val plain = BenchmarkPlain.build(sizeBytes)
+
+            repeat(warmupRounds) {
+                val tmp = BcLwcAead.encryptUtf8(AsconAEAD128(), SPEC, plain, KEY, NONCE)
+                BcLwcAead.decryptUtf8(AsconAEAD128(), SPEC, tmp, KEY)
+            }
+
             RoundRunner {
                 lateinit var ct: String
-                val encNs = measureNanoTime { ct = BcLwcAead.encryptUtf8(AsconAEAD128(), SPEC, plain, KEY, NONCE) }
-                val decNs = measureNanoTime { BcLwcAead.decryptUtf8(AsconAEAD128(), SPEC, ct, KEY) }
-                encNs to decNs
+                var encMem = 0L
+                var decMem = 0L
+
+                val encNsTotal = measureNanoTime {
+                    encMem = BenchmarkRunner.measureMemory {
+                        repeat(innerIterations) {
+                            ct = BcLwcAead.encryptUtf8(AsconAEAD128(), SPEC, plain, KEY, NONCE)
+                        }
+                    }
+                }
+
+                val decNsTotal = measureNanoTime {
+                    decMem = BenchmarkRunner.measureMemory {
+                        repeat(innerIterations) {
+                            BcLwcAead.decryptUtf8(AsconAEAD128(), SPEC, ct, KEY)
+                        }
+                    }
+                }
+
+                RoundResult(
+                    encNs = encNsTotal / innerIterations,
+                    decNs = decNsTotal / innerIterations,
+                    encMemBytes = encMem / innerIterations,
+                    decMemBytes = decMem / innerIterations
+                )
             }
         }
-        return BenchmarkRunner.runRangeAndLog(context, minPow, maxPow, rounds, factory, fileName)
+
+        return BenchmarkRunner.runRangeAndLog(context, minPow, maxPow, rounds, factory, fileName, subDir)
     }
 }
