@@ -208,7 +208,8 @@ class MainActivity : AppCompatActivity() {
             setButtonsEnabled(false)
             val startTime = System.currentTimeMillis()
             val results = mutableListOf<String>()
-            
+            val meter = EnergyMeter(this@MainActivity)
+
             val benchmarks = listOf(
                 "AES-CBC" to { AesBenchmark.runRangeAndLog(this@MainActivity, minPow, maxPow, roundsFast, innerFast, warmupFast, subDir = subDir) },
                 "Ascon-128" to { AsconLwcBenchmark.runRangeAndLog(this@MainActivity, minPow, maxPow, roundsFast, 50, warmupFast, subDir = subDir) },
@@ -223,14 +224,51 @@ class MainActivity : AppCompatActivity() {
             )
 
             try {
+                // Snapshot BEFORE the full batch
+                val batteryBefore = withContext(Dispatchers.IO) { meter.readBatterySnapshot() }
+                tvStatus.text = "Starting benchmarks…\n" +
+                    "Battery: ${batteryBefore.levelPercent}% | ${batteryBefore.status} | " +
+                    "${batteryBefore.temperatureCelsius}°C | ${batteryBefore.voltageMilliV}mV"
+
                 for ((name, task) in benchmarks) {
-                    tvStatus.text = "Running All: $name ..."
+                    tvStatus.text = "Running All: $name …\n" +
+                        "Battery at start: ${batteryBefore.levelPercent}% | ${batteryBefore.status}"
                     val path = withContext(Dispatchers.IO) { task() }
                     results.add("$name: $path")
                 }
+
+                // Snapshot AFTER the full batch
+                val batteryAfter = withContext(Dispatchers.IO) { meter.readBatterySnapshot() }
+
                 val duration = (System.currentTimeMillis() - startTime) / 1000
-                tvStatus.text = "All Done! (${duration}s)\nFiles saved in: $subDir\n\n" + results.joinToString("\n")
-                
+                val levelDelta = batteryAfter.levelPercent - batteryBefore.levelPercent
+                val tempDelta  = batteryAfter.temperatureCelsius - batteryBefore.temperatureCelsius
+
+                tvStatus.text = buildString {
+                    appendLine("✅ All Done! (${duration}s)")
+                    appendLine()
+                    appendLine("── Battery Before ──────────────────")
+                    appendLine("  Time:        ${batteryBefore.timestamp}")
+                    appendLine("  Level:       ${batteryBefore.levelPercent}%")
+                    appendLine("  Status:      ${batteryBefore.status}")
+                    appendLine("  Temperature: ${batteryBefore.temperatureCelsius}°C")
+                    appendLine("  Voltage:     ${batteryBefore.voltageMilliV}mV")
+                    appendLine()
+                    appendLine("── Battery After ───────────────────")
+                    appendLine("  Time:        ${batteryAfter.timestamp}")
+                    appendLine("  Level:       ${batteryAfter.levelPercent}%")
+                    appendLine("  Status:      ${batteryAfter.status}")
+                    appendLine("  Temperature: ${batteryAfter.temperatureCelsius}°C")
+                    appendLine("  Voltage:     ${batteryAfter.voltageMilliV}mV")
+                    appendLine()
+                    appendLine("── Delta ───────────────────────────")
+                    appendLine("  Level Δ:     ${if (levelDelta >= 0) "+$levelDelta" else "$levelDelta"}%")
+                    appendLine("  Temp  Δ:     ${String.format("%+.1f", tempDelta)}°C")
+                    appendLine()
+                    appendLine("── Files in: $subDir ───────────────")
+                    results.forEach { appendLine("  $it") }
+                }
+
                 btShareAll.visibility = android.view.View.VISIBLE
                 btShareAll.setOnClickListener {
                     shareDirectory(subDir)

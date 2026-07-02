@@ -88,7 +88,9 @@ const val BENCH_CSV_HEADER =
 
 /** CSV header for each execution (per round) */
 const val BENCH_EXEC_CSV_HEADER =
-    "size_bytes,round_index,enc_ns,dec_ns,enc_mem_bytes,dec_mem_bytes,energy_mWh,method"
+    "size_bytes,round_index,enc_ns,dec_ns,enc_mem_bytes,dec_mem_bytes,energy_mWh,method," +
+    "timestamp_before,battery_level_before,battery_status_before,battery_temp_c_before,battery_mv_before," +
+    "timestamp_after,battery_level_after,battery_status_after,battery_temp_c_after,battery_mv_after"
 
 /** Generic runner: handles sizes, rounds, energy, and CSV writing (per execution only) */
 object BenchmarkRunner {
@@ -151,6 +153,8 @@ object BenchmarkRunner {
             val energyPerRound = result.energyMilliWattHour / rounds.toDouble()
 
             // Write one row per execution
+            val bb = result.batteryBefore
+            val ba = result.batteryAfter
             for (i in 0 until rounds) {
                 val line = listOf(
                     size,
@@ -159,8 +163,20 @@ object BenchmarkRunner {
                     decTimes[i],
                     encMem[i],
                     decMem[i],
-                    String.format("%.6e", energyPerRound), // Use scientific notation
-                    result.method
+                    String.format("%.6e", energyPerRound),
+                    result.method,
+                    // battery snapshot before
+                    bb.timestamp,
+                    bb.levelPercent,
+                    bb.status,
+                    String.format("%.1f", bb.temperatureCelsius),
+                    bb.voltageMilliV,
+                    // battery snapshot after
+                    ba.timestamp,
+                    ba.levelPercent,
+                    ba.status,
+                    String.format("%.1f", ba.temperatureCelsius),
+                    ba.voltageMilliV
                 ).joinToString(",")
                 logger.appendLine(line)
             }

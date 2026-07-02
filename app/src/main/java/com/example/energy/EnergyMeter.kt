@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.SystemClock
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import kotlin.math.max
@@ -13,14 +15,57 @@ class EnergyMeter(
     private val context: Context,
     private val sampleMs: Long = 10L
 ) {
+    data class BatterySnapshot(
+        val timestamp: String,        // ISO-8601 local date-time
+        val levelPercent: Int,        // 0-100, -1 if unavailable
+        val status: String,           // e.g. "DISCHARGING", "CHARGING", "FULL", "UNKNOWN"
+        val temperatureCelsius: Float,// degrees C (tenths-of-degree / 10), -1 if unavailable
+        val voltageMilliV: Int        // mV, -1 if unavailable
+    )
+
     data class Result(
         val durationMs: Long,
         val samples: Int,
         val energyMilliWattHour: Double,
-        val method: String
+        val method: String,
+        val batteryBefore: BatterySnapshot,
+        val batteryAfter: BatterySnapshot
     )
 
     private val bm = context.getSystemService(BatteryManager::class.java)
+
+    private val isoFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+
+    fun readBatterySnapshot(): BatterySnapshot {
+        val sticky: Intent? = context.registerReceiver(
+            null, IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+        )
+        val rawLevel = sticky?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+        val rawScale = sticky?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
+        val levelPercent = if (rawLevel >= 0 && rawScale > 0) (rawLevel * 100 / rawScale) else -1
+
+        val rawStatus = sticky?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+        val status = when (rawStatus) {
+            BatteryManager.BATTERY_STATUS_CHARGING    -> "CHARGING"
+            BatteryManager.BATTERY_STATUS_DISCHARGING -> "DISCHARGING"
+            BatteryManager.BATTERY_STATUS_FULL        -> "FULL"
+            BatteryManager.BATTERY_STATUS_NOT_CHARGING -> "NOT_CHARGING"
+            else -> "UNKNOWN"
+        }
+
+        val rawTemp = sticky?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -10) ?: -10
+        val tempC = if (rawTemp != -10) rawTemp / 10f else -1f
+
+        val voltageMilliV = sticky?.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1) ?: -1
+
+        return BatterySnapshot(
+            timestamp = LocalDateTime.now().format(isoFmt),
+            levelPercent = levelPercent,
+            status = status,
+            temperatureCelsius = tempC,
+            voltageMilliV = voltageMilliV
+        )
+    }
 
     private fun readEnergyCounterNWh(): Long? {
         val v = bm.getLongProperty(BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER)
@@ -41,6 +86,8 @@ class EnergyMeter(
 
     fun measure(block: () -> Unit): Result {
         android.util.Log.d("EnergyMeter", "Starting measurement...")
+        val batteryBefore = readBatterySnapshot()
+
         val startNWh = readEnergyCounterNWh()
         val startV = readVoltageMilliV()
         val startI = readCurrentMicroA()
@@ -96,11 +143,13 @@ class EnergyMeter(
         val t1 = SystemClock.elapsedRealtime()
 
         val endNWh = readEnergyCounterNWh()
+        val batteryAfter = readBatterySnapshot()
+
         if (startNWh != null && endNWh != null && endNWh != startNWh) {
             val deltaNWh = endNWh - startNWh
             val mWh = abs(deltaNWh).toDouble() / 1_000_000.0
             android.util.Log.d("EnergyMeter", "Method: ENERGY_COUNTER, Energy: $mWh mWh")
-            return Result((t1 - t0), 2, mWh, "ENERGY_COUNTER")
+            return Result((t1 - t0), 2, mWh, "ENERGY_COUNTER", batteryBefore, batteryAfter)
         }
 
         val mWh = energyJ / 3.6
@@ -109,7 +158,9 @@ class EnergyMeter(
             durationMs = (t1 - t0),
             samples = samples,
             energyMilliWattHour = mWh,
-            method = "INTEGRATION"
+            method = "INTEGRATION",
+            batteryBefore = batteryBefore,
+            batteryAfter = batteryAfter
         )
     }
 }
