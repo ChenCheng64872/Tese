@@ -1,0 +1,31 @@
+[
+  {
+    "meta": {
+      "shortForm": "YT",
+      "functionName": "play_video"
+    },
+    "env": {
+      "packageName": "pt.ulisboa.ciencias.userenergy",
+      "appName": "JAVA",
+      "suffix": "test"
+    },
+    "execution": {
+      "className": "YouTubeTest",
+      "functionName": "play_video",
+      "runRange": {
+        "start": 1,
+        "end": 1
+      }
+    },
+    "params": {
+      "generalArgsString": "-e brightness full -e theme dark -e airplane on -e saving off -e refresh fps60",
+      "specificArgsString": "-e duration s15 -e resolution highest"
+    },
+    "setup": {
+      "specific": []
+    },
+    "output": {
+      "fileName": "YT_play_video_duration-s15_resolution-highest_brightness-full_theme-dark_airplane-on_saving-off_refresh-fps60"
+    }
+  }
+]

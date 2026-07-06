@@ -1,0 +1,76 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    namespace = "pt.ulisboa.ciencias.userenergy"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId "pt.ulisboa.ciencias.userenergy"
+        minSdk = 21 // Updated to support more devices (if possible, adjust based on project needs)
+        targetSdk = 34
+        versionCode 1
+        versionName "1.0"
+
+        multiDexEnabled = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    lint {
+        abortOnError = false // Keeps the behavior, though consider addressing actual issues instead
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+        managedDevices {
+            devices {
+                nexusOneApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
+                    device = "Nexus One"
+                    apiLevel = 30
+                    systemImageSource = "aosp-atd"
+                }
+            }
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    // Core App dependencies
+    implementation "androidx.annotation:annotation:${rootProject.androidxAnnotationVersion}"
+    implementation "com.google.guava:guava:${rootProject.guavaVersion}"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "com.google.android.material:material:1.9.0"
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation "androidx.test.uiautomator:uiautomator:2.2.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Testing dependencies
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    androidTestImplementation "androidx.test:core:${rootProject.coreVersion}"
+    androidTestImplementation "androidx.test:core-ktx:${rootProject.coreVersion}"
+    androidTestImplementation "androidx.test.ext:junit:${rootProject.extJUnitVersion}"
+    androidTestImplementation "androidx.test.ext:junit-ktx:${rootProject.extJUnitVersion}"
+    androidTestImplementation "androidx.test:runner:${rootProject.runnerVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.espressoVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:${rootProject.espressoVersion}"
+
+    testImplementation "androidx.test:core:${rootProject.coreVersion}"
+    testImplementation "androidx.test.ext:junit:${rootProject.extJUnitVersion}"
+    testImplementation "junit:junit:4.13.2" // Updated to the latest compatible version
+    testImplementation "org.robolectric:robolectric:${rootProject.robolectricVersion}"
+    testImplementation "androidx.test.espresso:espresso-core:${rootProject.espressoVersion}"
+    testImplementation "androidx.test.espresso:espresso-intents:${rootProject.espressoVersion}"
+    testImplementation "androidx.test.ext:truth:${rootProject.extTruthVersion}"
+}

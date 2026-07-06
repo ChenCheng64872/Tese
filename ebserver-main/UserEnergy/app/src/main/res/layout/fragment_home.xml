@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@android:color/background_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Project Description -->
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:text="This project automates experiments and tests across various mobile applications using Ebserver. The application must be launched via the Ebserver UI Executions mode."
+            android:textColor="@android:color/black"
+            android:textSize="19sp" />
+
+        <!-- Current State -->
+        <TextView
+            android:id="@+id/current_state_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="Current State of the Project:"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/current_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:text="✔️ ChangeTextBehavior\n✔️ Flashlight\n✔️ GoogleKeep\n❌ Instagram (in progress)\n❌ TikTok (in progress)\n✔️ WhatsApp\n✔️ YouTube"
+            android:textColor="@android:color/black"
+            android:textSize="19sp" />
+
+        <!-- Steps -->
+        <TextView
+            android:id="@+id/steps_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="Steps to Set Up and Run Ebserver:"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/steps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:text="1. Connect your device via USB and enable USB debugging.\n2. Run the command: adb tcpip 5555.\n3. Run Ebserver in the desired mode (UI or Individual Executions).\n4. Configure the application to reflect the Ebserver IP.\n5. Start the application via Ebserver."
+            android:textColor="@android:color/black"
+            android:textSize="19sp" />
+
+        <!-- Additional Info -->
+        <TextView
+            android:id="@+id/additional_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:text="For more details on setup and configuration, refer to the README file or the Configuration Guide in the project repository."
+            android:textColor="@android:color/black"
+            android:textSize="19sp" />
+
+        <TextView
+            android:id="@+id/repository_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:paddingBottom="16dp"
+            android:text="https://github.com/wellington-oj/userenergy"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="20sp" />
+    </LinearLayout>
+</ScrollView>

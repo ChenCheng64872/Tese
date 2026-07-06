@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Project Purpose -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This project was created for academic purposes. It aims to automate experiments and tests across various mobile applications using Ebserver."
+            android:textSize="19sp"
+            android:paddingBottom="16dp"
+            android:textColor="@android:color/black" />
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="About the Author"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingBottom="16dp" />
+
+        <!-- Author Name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wellington Oliveira"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@android:color/holo_blue_dark" />
+
+        <!-- Author Name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" Assistant professor at Liston Univeristy and researcher in Software Engineering with expertise in green computing, energy efficiency, and mobile security. With a rich academic background, he focuses on sustainable tech solutions and software quality, bridging theory and practice."
+            android:textSize="19sp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@android:color/black" />
+
+
+        <!-- Contact Information -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact Information:"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@android:color/holo_blue_dark" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="If you have suggestions or would like to contribute to this project, feel free to contact me via email:"
+            android:textSize="19sp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="wellington.oj@gmail.com"
+            android:textSize="20sp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:autoLink="email"
+            android:paddingLeft="8dp"
+            android:paddingBottom="16dp" />
+    </LinearLayout>
+</ScrollView>

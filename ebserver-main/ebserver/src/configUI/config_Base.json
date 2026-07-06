@@ -1,0 +1,150 @@
+{
+    "config":{
+        "app_name": "JAVA",
+        "package_name": "pt.ulisboa.ciencias.userenergy",
+        "suffix": "test",
+        "exec_start": 1,
+        "exec_end": 15
+    },
+    "general_parameters": {
+        "brightness": {
+            "zero": { "command": "zero" },            
+            "half": { "command": "half" },
+            "full": { "command": "full" }
+        },
+        "theme": {
+            "light": { "command": "light" },
+            "dark": { "command": "dark" }
+        },
+        "airplane": {
+            "on": { "command": "on" },
+            "off": { "command": "off" }
+        },
+        "saving": {
+            "on": { "command": "on" },
+            "off": { "command": "off" }
+        },
+        "refresh": {
+            "fps_30": { "command": "fps30" },
+            "fps_60": { "command": "fps60" },
+            "fps_120": { "command": "fps120" }
+        }
+        
+    },
+
+    "tests": [
+            {
+                "class_name": "FlashlightTest",
+                "short_form": "LIGHT",
+                "skip_general": [
+                    { "command": "brightness" },
+                    { "command": "refresh" },
+                    { "command": "airplane" },
+                    { "command": "saving" },
+                    { "command": "theme" }
+                ],
+                "functions": [
+                    {
+                    "name": "runtest",
+                    "parameters": {
+                            "duration": { 
+                                "half_min": { "command": "s30" },
+                                "quart_min": { "command": "s15" },
+                                "minute": { "command": "s60" }
+                            },
+                            "flashpower": {
+                                "max": { "command": "max" },
+                                "half": { "command": "half" },
+                                "quarter": { "command": "quarter" },
+                                "min": { "command": "min" },
+                                "off": { "command": "off"}
+                                
+                            }
+                        }
+                    }
+                ]
+            },    
+            {
+                "class_name": "YouTubeTest",
+                "short_form": "YT",
+                "functions" : [
+                    {
+                        "name": "play_video",
+                        "parameters": {
+                             "duration": {
+                                "quart_min": { "command": "s15" },
+                                "half_min": { "command": "s30" }
+                             },
+                             "resolution": {
+                                "highest": { "command": "highest" },
+                                "medium": { "command": "medium" },
+                                "low" : { "command": "low"}
+                             }
+                        }
+                    }
+                ]
+            },
+            {
+            "class_name": "InstagramTest",
+            "short_form": "IG",
+            "functions": [
+                {
+                "name": "runTest",
+                    "parameters": {
+                        "duration_ms": {
+                            "short":  { "command": "15000" },
+                            "medium":  { "command": "30000" }
+                            },
+                            "scroll_interval_ms": {
+                                "s3": { "command": "5000" }
+                            
+                            },
+                            "like_interval_ms": {
+                            
+                                "s15": { "command": "20000" }
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "class_name": "WhatsAppTest",
+                "short_form": "WPP",
+                "functions": [
+                    {
+                        "name": "SENDMESSAGE",
+                        "parameters": {
+                            "message": [
+                                { "command": "medium" },
+                                { "command": "short" }
+                                ]
+                        }
+                    }
+                ]
+            },
+            
+            {
+                "class_name": "TikTokTest",
+                "short_form": "TT",
+                "functions": [
+                    {
+                    "name": "runtest",
+                    "parameters": {
+                        "duration_ms": {
+                            "short":  { "command": "15000" },
+                            "medium":  { "command": "30000" }                            
+                            },
+                        "autoscroll": {
+                            "on":  { "command": "true" }
+                            
+                            },
+                            "autoscroll_interval_ms": {
+                            "s10": { "command": "5000" }
+                        
+                            }
+                        }
+                    }
+                ]
+            }
+    ]
+} 

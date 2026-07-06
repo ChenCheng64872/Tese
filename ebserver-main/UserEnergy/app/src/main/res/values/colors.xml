@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="windowBackground">#FFFFFF</color> <!-- or any color you prefer -->
+    <color name="textColor">#000000</color>
+    <color name="bottom_nav_item_color">#FFFFFF</color>
+    <color name="light_blue">@android:color/holo_blue_light</color>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="repository_link" type="id" />
+    <item name="additional_info" type="id" />
+    <item name="steps" type="id" />
+    <item name="steps_label" type="id" />
+    <item name="current_state" type="id" />
+    <item name="current_state_label" type="id" />
+    <item name="description" type="id" />
+</resources>

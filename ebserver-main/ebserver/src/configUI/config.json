@@ -1,0 +1,45 @@
+{
+    "config":{
+        "app_name": "JAVA",
+        "package_name": "pt.ulisboa.ciencias.userenergy",
+        "suffix": "test",
+        "exec_start": 1,
+        "exec_end": 1
+    },
+    "general_parameters": {
+        "brightness": {
+            "full": { "command": "full" }
+        },
+        "theme": {
+            "dark": { "command": "dark" }
+        },
+        "airplane": {
+            "on": { "command": "on" }
+        },
+        "saving": {
+            "off": { "command": "off" }
+        },
+        "refresh": {
+            "fps60": { "command": "fps60" }
+        }
+    },
+    "tests": [
+        {
+            "class_name": "YouTubeTest",
+            "short_form": "YT",
+            "functions": [
+                {
+                    "name": "play_video",
+                    "parameters": {
+                        "duration": {
+                            "s15": { "command": "s15" }
+                        },
+                        "resolution": {
+                            "highest": { "command": "highest" }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
