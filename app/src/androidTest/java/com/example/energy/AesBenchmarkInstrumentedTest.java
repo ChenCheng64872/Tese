@@ -28,8 +28,7 @@ public class AesBenchmarkInstrumentedTest {
                 context,
                 messageSize,
                 messageSize,   // 🔹 single size only
-                15,
-                fileName
+                15, 100, 3, fileName, null
         );
 
         // Optional strict validation

@@ -1,0 +1,31 @@
+{
+  "algorithms": [
+    "aes",
+    "aesgcm",
+    "chacha20",
+    "rsa",
+    "elgamal",
+    "ascon",
+    "elephant",
+    "giftcofb",
+    "grain128",
+    "xoodyak"
+  ],
+  "powers": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "repetitions": 10,
+  "inner_iterations": 100,
+  "warmup_rounds": 3,
+  "cooldown_ms": 2000,
+  "require_energy": true
+}

@@ -287,6 +287,8 @@ class MainActivity : AppCompatActivity() {
         btChaCha20.isEnabled = enabled
         btRsaHybrid.isEnabled = enabled
         btElGamal.isEnabled = enabled
+        btElephant.isEnabled = enabled
+        btGiftCofb.isEnabled = enabled
         btAscon.isEnabled = enabled
         btGrain128.isEnabled = enabled
         btXoodyak.isEnabled = enabled

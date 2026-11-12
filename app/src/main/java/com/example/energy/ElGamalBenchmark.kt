@@ -20,6 +20,7 @@ object ElGamalBenchmark {
     ): String {
         val rnd = SecureRandom()
 
+        require(innerIterations > 0 && warmupRounds >= 0)
         val factory = SizeRunnerFactory { sizeBytes ->
             val plain = BenchmarkPlain.build(sizeBytes)
             val kp = ElGamalLite.generateKeyPair()
@@ -34,42 +35,37 @@ object ElGamalBenchmark {
                 val unwrapped = ElGamalLite.decryptSmall(wrapped, priv)
                 val recKey = unwrapped.copyOfRange(0, 32)
                 val recIv = unwrapped.copyOfRange(32, 48)
-                AES.decrypt(ct, recKey, recIv)
+                check(AES.decrypt(ct, recKey, recIv) == plain) { "Round-trip mismatch" }
             }
 
             RoundRunner {
                 lateinit var lastCtB64: String
                 lateinit var lastWrapped: ByteArray
-                var encMem = 0L
-                var decMem = 0L
 
                 val encNsTotal = measureNanoTime {
-                    encMem = BenchmarkRunner.measureMemory {
-                        repeat(innerIterations) {
-                            val aesKey = ByteArray(32).apply { rnd.nextBytes(this) }
-                            val iv = ByteArray(16).apply { rnd.nextBytes(this) }
-                            lastCtB64 = AES.encrypt(plain, aesKey, iv)
-                            lastWrapped = ElGamalLite.encryptSmall(aesKey + iv, pub)
-                        }
+                    repeat(innerIterations) {
+                        val aesKey = ByteArray(32).apply { rnd.nextBytes(this) }
+                        val iv = ByteArray(16).apply { rnd.nextBytes(this) }
+                        lastCtB64 = AES.encrypt(plain, aesKey, iv)
+                        lastWrapped = ElGamalLite.encryptSmall(aesKey + iv, pub)
                     }
                 }
 
                 val decNsTotal = measureNanoTime {
-                    decMem = BenchmarkRunner.measureMemory {
-                        repeat(innerIterations) {
-                            val unwrapped = ElGamalLite.decryptSmall(lastWrapped, priv)
-                            val recKey = unwrapped.copyOfRange(0, 32)
-                            val recIv = unwrapped.copyOfRange(32, 48)
-                            AES.decrypt(lastCtB64, recKey, recIv)
-                        }
+                    repeat(innerIterations) {
+                        val unwrapped = ElGamalLite.decryptSmall(lastWrapped, priv)
+                        val recKey = unwrapped.copyOfRange(0, 32)
+                        val recIv = unwrapped.copyOfRange(32, 48)
+                        AES.decrypt(lastCtB64, recKey, recIv)
                     }
                 }
 
                 RoundResult(
                     encNs = encNsTotal / innerIterations,
                     decNs = decNsTotal / innerIterations,
-                    encMemBytes = encMem / innerIterations,
-                    decMemBytes = decMem / innerIterations
+                    encMemBytes = -1,
+                    decMemBytes = -1,
+                    innerIterations = innerIterations
                 )
             }
         }

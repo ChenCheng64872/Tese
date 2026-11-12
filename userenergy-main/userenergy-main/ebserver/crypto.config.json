@@ -1,0 +1,13 @@
+{
+  "algorithms": [
+    "aesgcm"
+  ],
+  "powers": [
+    10
+  ],
+  "repetitions": 1,
+  "inner_iterations": 100,
+  "warmup_rounds": 3,
+  "cooldown_ms": 2000,
+  "require_energy": false
+}

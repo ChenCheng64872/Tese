@@ -26,41 +26,37 @@ object Grain128AeadBenchmark {
         require(innerIterations > 0) { "innerIterations must be > 0" }
         require(warmupRounds >= 0) { "warmupRounds must be >= 0" }
 
+        require(innerIterations > 0 && warmupRounds >= 0)
         val factory = SizeRunnerFactory { sizeBytes ->
             val plain = BenchmarkPlain.build(sizeBytes)
 
             // Warmup
             repeat(warmupRounds) {
                 val tmp = BcLwcAead.encryptUtf8(engine(), SPEC, plain, KEY, NONCE)
-                BcLwcAead.decryptUtf8(engine(), SPEC, tmp, KEY)
+                check(BcLwcAead.decryptUtf8(engine(), SPEC, tmp, KEY) == plain) { "Round-trip mismatch" }
             }
 
             RoundRunner {
                 var ct = ""
-                var encMem = 0L
-                var decMem = 0L
 
                 val encNsTotal = measureNanoTime {
-                    encMem = BenchmarkRunner.measureMemory {
-                        repeat(innerIterations) {
-                            ct = BcLwcAead.encryptUtf8(engine(), SPEC, plain, KEY, NONCE)
-                        }
+                    repeat(innerIterations) {
+                        ct = BcLwcAead.encryptUtf8(engine(), SPEC, plain, KEY, NONCE)
                     }
                 }
 
                 val decNsTotal = measureNanoTime {
-                    decMem = BenchmarkRunner.measureMemory {
-                        repeat(innerIterations) {
-                            BcLwcAead.decryptUtf8(engine(), SPEC, ct, KEY)
-                        }
+                    repeat(innerIterations) {
+                        check(BcLwcAead.decryptUtf8(engine(), SPEC, ct, KEY) == plain) { "Round-trip mismatch" }
                     }
                 }
 
                 RoundResult(
                     encNs = encNsTotal / innerIterations,
                     decNs = decNsTotal / innerIterations,
-                    encMemBytes = encMem / innerIterations,
-                    decMemBytes = decMem / innerIterations
+                    encMemBytes = -1,
+                    decMemBytes = -1,
+                    innerIterations = innerIterations
                 )
             }
         }

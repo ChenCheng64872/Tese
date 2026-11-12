@@ -22,40 +22,36 @@ object AesBenchmark {
         val key = AES.createKey(password, salt, iterations, keyBits).key
         val blankIv = AES.IV_BLANK
 
+        require(innerIterations > 0 && warmupRounds >= 0)
         val factory = SizeRunnerFactory { sizeBytes ->
             val plain = BenchmarkPlain.build(sizeBytes)
 
             repeat(warmupRounds) {
                 val tmp = AES.encrypt(plain, key, blankIv)
-                AES.decrypt(tmp, key, blankIv)
+                check(AES.decrypt(tmp, key, blankIv) == plain) { "Round-trip mismatch" }
             }
 
             RoundRunner {
                 lateinit var ctB64: String
-                var encMem = 0L
-                var decMem = 0L
 
                 val encNsTotal = measureNanoTime {
-                    encMem = BenchmarkRunner.measureMemory {
-                        repeat(innerIterations) {
-                            ctB64 = AES.encrypt(plain, key, blankIv)
-                        }
+                    repeat(innerIterations) {
+                        ctB64 = AES.encrypt(plain, key, blankIv)
                     }
                 }
 
                 val decNsTotal = measureNanoTime {
-                    decMem = BenchmarkRunner.measureMemory {
-                        repeat(innerIterations) {
-                            AES.decrypt(ctB64, key, blankIv)
-                        }
+                    repeat(innerIterations) {
+                        AES.decrypt(ctB64, key, blankIv)
                     }
                 }
 
                 RoundResult(
                     encNs = encNsTotal / innerIterations,
                     decNs = decNsTotal / innerIterations,
-                    encMemBytes = encMem / innerIterations,
-                    decMemBytes = decMem / innerIterations
+                    encMemBytes = -1,
+                    decMemBytes = -1,
+                    innerIterations = innerIterations
                 )
             }
         }

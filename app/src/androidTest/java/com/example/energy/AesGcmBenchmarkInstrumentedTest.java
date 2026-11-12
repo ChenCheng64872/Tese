@@ -24,7 +24,7 @@ public class AesGcmBenchmarkInstrumentedTest {
         var fileName = "test_aes_2p10_2p20.csv";
 
         var path = AesGcmBenchmark.INSTANCE.runRangeAndLog(
-             context, messageSize, messageSize,15, fileName
+             context, messageSize, messageSize, 15, 100, 3, fileName, null
         );
         assert(true);
         //BenchmarkTestUtils.INSTANCE.assertCsv(path);

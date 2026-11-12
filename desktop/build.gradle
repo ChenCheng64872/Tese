@@ -1,0 +1,13 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '2.2.10'
+    id 'application'
+}
+repositories { mavenCentral() }
+dependencies { implementation 'org.bouncycastle:bcprov-jdk15to18:1.82' }
+kotlin { jvmToolchain(21) }
+sourceSets.main.kotlin {
+    srcDirs 'src/main/kotlin', '../app/src/main/java'
+    include 'DesktopMain.kt', 'com/example/energy/AES.kt', 'com/example/energy/AESGcm.kt',
+        'com/example/energy/ChaCha20.kt', 'com/example/energy/RsaLite.kt', 'com/example/energy/ElGamalLite.kt', 'com/example/energy/BcLwcAead.kt', 'com/example/energy/LwcSpecs.kt'
+}
+application { mainClass = 'DesktopMainKt' }

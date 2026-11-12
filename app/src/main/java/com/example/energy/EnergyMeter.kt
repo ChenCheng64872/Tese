@@ -29,7 +29,8 @@ class EnergyMeter(
         val energyMilliWattHour: Double,
         val method: String,
         val batteryBefore: BatterySnapshot,
-        val batteryAfter: BatterySnapshot
+        val batteryAfter: BatterySnapshot,
+        val status: String = "VALID"
     )
 
     private val bm = context.getSystemService(BatteryManager::class.java)
@@ -69,12 +70,12 @@ class EnergyMeter(
 
     private fun readEnergyCounterNWh(): Long? {
         val v = bm.getLongProperty(BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER)
-        return if (v == Long.MIN_VALUE || v == 0L) null else v 
+        return if (v <= 0L) null else v
     }
 
     private fun readCurrentMicroA(): Int? {
         val v = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
-        return if (v == Int.MIN_VALUE) null else v 
+        return if (v == Int.MIN_VALUE) null else v
     }
 
     private fun readVoltageMilliV(): Int? {
@@ -85,82 +86,71 @@ class EnergyMeter(
     }
 
     fun measure(block: () -> Unit): Result {
-        android.util.Log.d("EnergyMeter", "Starting measurement...")
-        val batteryBefore = readBatterySnapshot()
-
-        val startNWh = readEnergyCounterNWh()
-        val startV = readVoltageMilliV()
-        val startI = readCurrentMicroA()
-        
+        val before = readBatterySnapshot()
+        val startCounter = readEnergyCounterNWh()
         val running = AtomicBoolean(true)
+        val ready = java.util.concurrent.CountDownLatch(1)
         var samples = 0
         var energyJ = 0.0
-
-        val voltageMvInitial = startV ?: 4000
-        var lastT = SystemClock.elapsedRealtimeNanos()
-        var lastI = startI ?: 0
-
+        var invalid = false
+        var started = 0L
+        var ended = 0L
         val sampler = Thread {
+            var previousT = SystemClock.elapsedRealtimeNanos()
+            var previousI = readCurrentMicroA()
+            var previousV = readVoltageMilliV()
+            started = SystemClock.elapsedRealtimeNanos()
+            previousT = started
+            ready.countDown()
             while (running.get()) {
-                val nowT = SystemClock.elapsedRealtimeNanos()
-                val rawI = readCurrentMicroA() ?: lastI
-                val nowV = readVoltageMilliV() ?: voltageMvInitial
-                
-                // Detection: If rawI is small (e.g. < 5000), it's likely mA, not uA.
-                // Standard phones with screen on consume > 100mA (100,000 uA).
-                // If it's mA, rawI would be ~200. If it's uA, rawI would be ~200,000.
-                val iAmps = if (abs(rawI) > 0 && abs(rawI) < 5000) {
-                    abs(rawI).toDouble() / 1000.0 // mA -> A
+                try { Thread.sleep(sampleMs) } catch (_: InterruptedException) { }
+                val t = if (running.get()) SystemClock.elapsedRealtimeNanos() else ended
+                val current = readCurrentMicroA()
+                val voltage = readVoltageMilliV()
+                // Android API contract: CURRENT_NOW is microamperes; negative means discharge.
+                val oldI=previousI; val oldV=previousV
+                if (oldI == null || current == null || oldV == null || voltage == null || oldI >= 0 || current >= 0) {
+                    invalid = true
                 } else {
-                    abs(rawI).toDouble() / 1000000.0 // uA -> A
+                    val oldPower = -oldI.toDouble()*oldV/1e9
+                    val power = -current.toDouble()*voltage/1e9
+                    energyJ += (oldPower+power)*0.5*(t-previousT).coerceAtLeast(0)/1e9
+                    samples++
                 }
-
-                val dt = (nowT - lastT) / 1e9 // seconds
-                val vV = nowV / 1000.0
-                val deltaJ = vV * iAmps * max(dt, 0.0)
-                energyJ += deltaJ
-                samples += 1
-                
-                lastT = nowT
-                lastI = rawI
-                try {
-                    Thread.sleep(sampleMs)
-                } catch (_: InterruptedException) {
-                    break
-                }
+                previousT=t; previousI=current; previousV=voltage
             }
         }
-
-        val t0 = SystemClock.elapsedRealtime()
+        sampler.isDaemon = true
         sampler.start()
-        try {
-            block()
-        } finally {
+        if (!ready.await(2, java.util.concurrent.TimeUnit.SECONDS)) {
             running.set(false)
             sampler.interrupt()
-            sampler.join(500)
+            val fallbackStart = SystemClock.elapsedRealtimeNanos()
+            block()
+            return Result((SystemClock.elapsedRealtimeNanos() - fallbackStart) / 1_000_000,
+                0, Double.NaN, "CURRENT_INTEGRATION", before, before, "SAMPLER_START_TIMEOUT")
         }
-        val t1 = SystemClock.elapsedRealtime()
-
-        val endNWh = readEnergyCounterNWh()
-        val batteryAfter = readBatterySnapshot()
-
-        if (startNWh != null && endNWh != null && endNWh != startNWh) {
-            val deltaNWh = endNWh - startNWh
-            val mWh = abs(deltaNWh).toDouble() / 1_000_000.0
-            android.util.Log.d("EnergyMeter", "Method: ENERGY_COUNTER, Energy: $mWh mWh")
-            return Result((t1 - t0), 2, mWh, "ENERGY_COUNTER", batteryBefore, batteryAfter)
+        try { block() } finally {
+            ended=SystemClock.elapsedRealtimeNanos()
+            running.set(false)
+            sampler.interrupt()
+            sampler.join(1000)
         }
-
-        val mWh = energyJ / 3.6
-        android.util.Log.d("EnergyMeter", "Method: INTEGRATION, Energy: $mWh mWh, Samples: $samples")
-        return Result(
-            durationMs = (t1 - t0),
-            samples = samples,
-            energyMilliWattHour = mWh,
-            method = "INTEGRATION",
-            batteryBefore = batteryBefore,
-            batteryAfter = batteryAfter
-        )
+        if (sampler.isAlive) {
+            return Result((ended - started) / 1_000_000, 0, Double.NaN,
+                "CURRENT_INTEGRATION", before, before, "SAMPLER_STOP_TIMEOUT")
+        }
+        val endCounter=readEnergyCounterNWh()
+        val after=readBatterySnapshot()
+        val duration=(ended-started)/1_000_000
+        val discharging=before.status == "DISCHARGING" && after.status == "DISCHARGING"
+        if (discharging && startCounter != null && endCounter != null && startCounter > endCounter) {
+            return Result(duration, 2, (startCounter-endCounter)/1_000_000.0,
+                "ENERGY_COUNTER", before, after)
+        }
+        val valid=discharging && !invalid && samples >= 3 && duration >= sampleMs*3
+        return Result(duration, samples, if(valid) energyJ/3.6 else Double.NaN,
+            "CURRENT_INTEGRATION", before, after,
+            if(valid) "VALID_DEVICE_ESTIMATE" else if(!discharging) "NOT_DISCHARGING" else "INSUFFICIENT_OR_INVALID_SAMPLES")
     }
 }

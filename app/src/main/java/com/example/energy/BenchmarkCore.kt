@@ -8,7 +8,8 @@ data class RoundResult(
     val encNs: Long,
     val decNs: Long,
     val encMemBytes: Long,
-    val decMemBytes: Long
+    val decMemBytes: Long,
+    val innerIterations: Int = 1
 )
 
 /** One round = encrypt once + decrypt once; return RoundResult */
@@ -86,103 +87,44 @@ const val BENCH_CSV_HEADER =
             "dec_min_ns,dec_median_ns,dec_max_ns,dec_mean_ns,dec_std_ns,dec_std_percent," +
             "energy_mWh"
 
-/** CSV header for each execution (per round) */
-const val BENCH_EXEC_CSV_HEADER =
-    "size_bytes,round_index,enc_ns,dec_ns,enc_mem_bytes,dec_mem_bytes,energy_mWh,method," +
-    "timestamp_before,battery_level_before,battery_status_before,battery_temp_c_before,battery_mv_before," +
-    "timestamp_after,battery_level_after,battery_status_after,battery_temp_c_after,battery_mv_after"
+/** Each row is one measured batch of N encryptions and N decryptions. */
+const val BENCH_EXEC_CSV_HEADER = "schema_version,algorithm,size_bytes,round_index,inner_iterations,enc_ns,dec_ns,batch_energy_j,energy_per_pair_j,method,energy_status,batch_duration_ms,samples,timestamp_before,battery_level_before,battery_status_before,battery_temp_c_before,battery_mv_before,timestamp_after,battery_level_after,battery_status_after,battery_temp_c_after,battery_mv_after"
 
-/** Generic runner: handles sizes, rounds, energy, and CSV writing (per execution only) */
 object BenchmarkRunner {
+    val externalEnergyProbe = ThreadLocal<Boolean>()
 
-    private fun getUsedMemory(): Long {
-        val runtime = Runtime.getRuntime()
-        return runtime.totalMemory() - runtime.freeMemory()
-    }
-
-    fun measureMemory(block: () -> Unit): Long {
-        System.gc()
-        Thread.sleep(100) // Give GC some time
-        val before = getUsedMemory()
+    private fun timingOnly(block: () -> Unit): EnergyMeter.Result {
+        val start = android.os.SystemClock.elapsedRealtimeNanos()
         block()
-        val after = getUsedMemory()
-        return (after - before).coerceAtLeast(0L)
+        val duration = (android.os.SystemClock.elapsedRealtimeNanos() - start) / 1_000_000
+        val unavailable = EnergyMeter.BatterySnapshot("", -1, "EXTERNAL_PROBE", -1f, -1)
+        return EnergyMeter.Result(duration, 0, Double.NaN, "EXTERNAL_PROBE",
+            unavailable, unavailable, "EXTERNAL_PROBE")
     }
-
-    fun runRangeAndLog(
-        context: Context,
-        minPow: Int,
-        maxPow: Int,
-        rounds: Int,
-        factory: SizeRunnerFactory,
-        fileName: String,
-        subDir: String? = null
-    ): String {
-        // Single CSV (one row per execution/round), as you requested
+    fun runRangeAndLog(context: Context, minPow: Int, maxPow: Int, rounds: Int,
+        factory: SizeRunnerFactory, fileName: String, subDir: String? = null): String {
+        require(minPow in 0..24 && maxPow in minPow..24 && rounds > 0)
         val logger = CsvLogger(context, fileName, BENCH_EXEC_CSV_HEADER, subDir)
         logger.startFresh()
-
         val meter = EnergyMeter(context)
-
-        // Loop over plaintext sizes 2^minPow .. 2^maxPow
+        fun number(v: Double) = if (v.isFinite()) String.format(java.util.Locale.US, "%.9e", v) else ""
         for (p in minPow..maxPow) {
-            val size = 2.0.pow(p).toInt()
-
-            // Prepare plaintext once (for consistency; not timed as part of energy)
-            BenchmarkPlain.build(size)
-
-            val encTimes = LongArray(rounds)
-            val decTimes = LongArray(rounds)
-            val encMem = LongArray(rounds)
-            val decMem = LongArray(rounds)
-
-            val sizeRunner = factory.prepare(size)
-
-            // Measure energy for ALL rounds of this size together
-            val result = meter.measure {
-                repeat(rounds) { i ->
-                    val r = sizeRunner.run(i)
-                    encTimes[i] = r.encNs
-                    decTimes[i] = r.decNs
-                    encMem[i] = r.encMemBytes
-                    decMem[i] = r.decMemBytes
-                }
-            }
-
-            // Approximate per-round energy as total/rounds
-            val energyPerRound = result.energyMilliWattHour / rounds.toDouble()
-
-            // Write one row per execution
-            val bb = result.batteryBefore
-            val ba = result.batteryAfter
-            for (i in 0 until rounds) {
-                val line = listOf(
-                    size,
-                    i + 1, // round_index starting at 1
-                    encTimes[i],
-                    decTimes[i],
-                    encMem[i],
-                    decMem[i],
-                    String.format("%.6e", energyPerRound),
-                    result.method,
-                    // battery snapshot before
-                    bb.timestamp,
-                    bb.levelPercent,
-                    bb.status,
-                    String.format("%.1f", bb.temperatureCelsius),
-                    bb.voltageMilliV,
-                    // battery snapshot after
-                    ba.timestamp,
-                    ba.levelPercent,
-                    ba.status,
-                    String.format("%.1f", ba.temperatureCelsius),
-                    ba.voltageMilliV
-                ).joinToString(",")
-                logger.appendLine(line)
+            val runner = factory.prepare(1 shl p)
+            repeat(rounds) { i ->
+                lateinit var r: RoundResult
+                val measured = { r = runner.run(i) }
+                val e = if (externalEnergyProbe.get() == true) timingOnly(measured)
+                    else meter.measure(measured)
+                val bb=e.batteryBefore; val ba=e.batteryAfter
+                logger.appendLine(listOf(2, fileName.substringBefore("_"), 1 shl p, i+1,
+                    r.innerIterations, r.encNs, r.decNs, number(e.energyMilliWattHour*3.6),
+                    number(e.energyMilliWattHour*3.6/r.innerIterations), e.method, e.status,
+                    e.durationMs, e.samples, bb.timestamp, bb.levelPercent, bb.status,
+                    number(bb.temperatureCelsius.toDouble()), bb.voltageMilliV,
+                    ba.timestamp, ba.levelPercent, ba.status,
+                    number(ba.temperatureCelsius.toDouble()), ba.voltageMilliV).joinToString(","))
             }
         }
-
-        // We now only have one CSV: the per-execution one.
         return logger.path()
     }
 }
