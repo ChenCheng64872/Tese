@@ -3,12 +3,12 @@
 #   one process per case, idle window, warm-up (5 s on 4 KiB + 5 s at the size), 5 batches of ~3 s.
 #   full = 11 algorithms x 2^11..2^20 B; keysizes = RSA 1024-4096, ElGamal 768-4096, AES/GCM 128-256 at 2/16/128/1024 KiB.
 # -Profile legacy-smoke|legacy-full: the old protocol (crypto.config.json / crypto.full.json).
-# -BuildType benchmark (default): non-debuggable build for measurements; debug: the debuggable build.
+# -BuildType release (default): the release build, used for measurements; debug: the debuggable build.
 # The phone must be unplugged (Wi-Fi ADB) for formal energy runs.
 param(
     [Parameter(Mandatory=$true)][string]$Serial,
     [ValidateSet('smoke','full','keysizes','legacy-smoke','legacy-full')][string]$Profile='smoke',
-    [ValidateSet('benchmark','debug')][string]$BuildType='benchmark',
+    [ValidateSet('release','debug')][string]$BuildType='release',
     [switch]$SkipBuild
 )
 $ErrorActionPreference='Stop'

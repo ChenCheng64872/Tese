@@ -21,21 +21,16 @@ android {
     }
 
     buildTypes {
+        // Measurements run on the release build (not debuggable, as an installed app would be).
+        // Signed with the debug key so it installs without a release keystore.
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        // Non-debuggable build for measurements (debuggable apps run with ART debug restrictions).
-        // Signed with the debug key so it installs without a release keystore.
-        benchmark {
-            initWith release
-            debuggable false
             signingConfig signingConfigs.debug
-            matchingFallbacks = ['release']
         }
     }
-    // Instrumented tests (the benchmark runner) use this build type: -PtestBuildType=benchmark
-    testBuildType = project.findProperty('testBuildType') ?: 'debug'
+    // Instrumented tests (the benchmark runner) use the release build; -PtestBuildType=debug for debugging.
+    testBuildType = project.findProperty('testBuildType') ?: 'release'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
