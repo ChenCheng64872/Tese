@@ -1,0 +1,17 @@
+{
+  "algorithms": ["rsa1024", "rsa2048", "rsa3072", "rsa4096", "elgamal768", "elgamal1024", "elgamal2048", "elgamal3072", "elgamal4096",
+                 "aes128", "aes192", "aes256", "aesgcm128", "aesgcm192", "aesgcm256", "aesgcmbc128", "aesgcmbc192", "aesgcmbc256"],
+  "powers": [11, 14, 17, 20],
+  "repetitions": 1,
+  "inner_iterations": 1,
+  "cooldown_ms": 2000,
+  "require_energy": true,
+  "batches": 5,
+  "target_batch_ms": 3000,
+  "warmup_ms": 5000,
+  "warmup_small_power": 12,
+  "idle_ms": 5000,
+  "block_cooldown_ms": 30000,
+  "max_battery_temp_c": 40,
+  "shuffle_seed": 20261122
+}

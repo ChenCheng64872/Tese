@@ -8,6 +8,7 @@ kotlin { jvmToolchain(21) }
 sourceSets.main.kotlin {
     srcDirs 'src/main/kotlin', '../app/src/main/java'
     include 'DesktopMain.kt', 'com/example/energy/AES.kt', 'com/example/energy/AESGcm.kt',
-        'com/example/energy/ChaCha20.kt', 'com/example/energy/RsaLite.kt', 'com/example/energy/ElGamalLite.kt', 'com/example/energy/BcLwcAead.kt', 'com/example/energy/LwcSpecs.kt'
+        'com/example/energy/ChaCha20.kt', 'com/example/energy/RsaLite.kt', 'com/example/energy/ElGamalLite.kt', 'com/example/energy/BcLwcAead.kt', 'com/example/energy/LwcSpecs.kt',
+        'com/example/energy/CryptoCase.kt'
 }
 application { mainClass = 'DesktopMainKt' }

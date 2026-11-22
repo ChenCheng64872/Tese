@@ -6,27 +6,43 @@ const {promisify}=require('node:util');
 const exec=promisify(execFile);
 const adbModule=require('./adbCommands');
 const iv2201Probe=require('./iv2201-probe');
-const allowed=new Set(['aes','aesgcm','chacha20','rsa','elgamal','ascon','elephant','giftcofb','grain128','xoodyak']);
+// Names as in app CryptoCase.kt: optional key size for aes/aesgcm/aesgcmbc (128/192/256), rsa (1024-4096), elgamal (768-4096).
+const allowedRe=/^(?:(?:aes|aesgcm|aesgcmbc)(?:128|192|256)?|rsa(?:1024|2048|3072|4096)?|elgamal(?:768|1024|2048|3072|4096)?|chacha20|ascon|elephant|giftcofb|grain128|xoodyak)$/;
+const allowed={has:x=>typeof x==='string'&&allowedRe.test(x)};
+// Batched protocol (same as the desktop/Pi runs): one process per case, idle window, time-based warm-up,
+// `batches` batches of ~target_batch_ms. It is used when target_batch_ms is set. Optional keys: [default,min,max]
+const BATCHED={batches:[5,1,100],target_batch_ms:[3000,0,600000],warmup_ms:[5000,0,600000],
+ warmup_small_power:[12,0,20],idle_ms:[5000,0,600000],block_cooldown_ms:[30000,0,600000],max_battery_temp_c:[40,20,60]};
+function rng(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};}
+function shuffled(list,seed,power){const r=rng(seed*1000+power),a=[...list];for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function validate(c) {
  if(!Array.isArray(c.algorithms)||!c.algorithms.length||c.algorithms.some(x=>!allowed.has(x)))throw Error('Invalid algorithms');
  if(!Array.isArray(c.powers)||!c.powers.length||c.powers.some(x=>!Number.isInteger(x)||x<10||x>20))throw Error('Invalid powers');
- for(const [key,min,max] of [['repetitions',1,100],['inner_iterations',1,100000],['warmup_rounds',1,100],['cooldown_ms',0,60000]])
+ for(const [key,min,max] of [['repetitions',1,100],['inner_iterations',1,100000],['cooldown_ms',0,60000]])
   if(!Number.isInteger(c[key])||c[key]<min||c[key]>max)throw Error('Invalid '+key);
+ if(c.target_batch_ms===undefined && (!Number.isInteger(c.warmup_rounds)||c.warmup_rounds<1||c.warmup_rounds>100))throw Error('Invalid warmup_rounds');
+ for(const [key,[,min,max]] of Object.entries(BATCHED))
+  if(c[key]!==undefined && (!Number.isInteger(c[key])||c[key]<min||c[key]>max))throw Error('Invalid '+key);
+ if(c.warmup_small_power!==undefined && c.warmup_small_power!==0 && c.warmup_small_power<6)throw Error('Invalid warmup_small_power');
+ if(c.shuffle_seed!==undefined && !Number.isInteger(c.shuffle_seed))throw Error('Invalid shuffle_seed');
  if(c.probe_interval_ms!==undefined && (!Number.isInteger(c.probe_interval_ms) || c.probe_interval_ms<100 || c.probe_interval_ms>1000))throw Error('Invalid probe interval');
  if(typeof c.require_energy!=='boolean')throw Error('require_energy must be boolean');
  if(c.energy_probe!==undefined && (c.energy_probe!=='iv2201' || c.require_energy))throw Error('IV2201 probe is provisional and requires require_energy=false');
  if(new Set(c.algorithms).size!==c.algorithms.length||new Set(c.powers).size!==c.powers.length)throw Error('Duplicate configurations');
  return c;
 }
-function csv(text, requireEnergy) {
+function csv(text, requireEnergy, batches=1) {
  const lines=text.trim().split(/\r?\n/), header=lines[0].split(',');
- if(lines.length!==2)throw Error('Expected exactly one batch row');
- const values=lines[1].split(',');
- if(values.length!==header.length)throw Error('CSV width mismatch');
- const row=Object.fromEntries(header.map((k,i)=>[k,values[i]]));
- if(row.schema_version!=='2'||!(Number(row.enc_ns)>0)||!(Number(row.dec_ns)>0))throw Error('Invalid timings/schema');
- if(requireEnergy && (!['VALID','VALID_DEVICE_ESTIMATE'].includes(row.energy_status)||row.batch_energy_j===''||!Number.isFinite(Number(row.batch_energy_j))||Number(row.batch_energy_j)<0))throw Error('Energy unavailable: '+row.energy_status+'; lengthen batch or verify discharge/sensors');
- return row;
+ if(lines.length!==batches+1)throw Error(batches===1?'Expected exactly one batch row':'Expected exactly '+batches+' batch rows');
+ const rows=lines.slice(1).map(line=>{
+  const values=line.split(',');
+  if(values.length!==header.length)throw Error('CSV width mismatch');
+  const row=Object.fromEntries(header.map((k,i)=>[k,values[i]]));
+  if(!['2','3'].includes(row.schema_version)||!(Number(row.enc_ns)>0)||!(Number(row.dec_ns)>0))throw Error('Invalid timings/schema');
+  if(requireEnergy && (!['VALID','VALID_DEVICE_ESTIMATE'].includes(row.energy_status)||row.batch_energy_j===''||!Number.isFinite(Number(row.batch_energy_j))||Number(row.batch_energy_j)<0))throw Error('Energy unavailable: '+row.energy_status+'; lengthen batch or verify discharge/sensors');
+  return row;
+ });
+ return batches===1 ? rows[0] : rows;
 }
 async function main(args=process.argv.slice(2)) {
  const configPath=path.resolve(args[0]||path.join(__dirname,'../crypto.config.json'));
@@ -38,6 +54,8 @@ async function main(args=process.argv.slice(2)) {
  if(queue && (selectedCases.size!==queue.length || queue.some(r=>!config.algorithms.includes(r.algorithm) ||
     !config.powers.includes(r.power) || !Number.isInteger(r.repetition) || r.repetition<1 || r.repetition>config.repetitions)))
   throw Error('Invalid or duplicate case-list entries');
+ const batched=config.target_batch_ms!==undefined;
+ const opt=key=>config[key]!==undefined?config[key]:BATCHED[key][0];
  const count=queue ? queue.length : config.algorithms.length*config.powers.length*config.repetitions;
  if(args.includes('--dry-run')) {console.log(JSON.stringify({configPath,batches_per_device:count,config},null,2));return;}
  const runAdb=async(device,...a)=>(await exec('adb',device?['-s',device,...a]:a,{timeout:600000,maxBuffer:32*1024*1024})).stdout;
@@ -77,14 +95,23 @@ async function main(args=process.argv.slice(2)) {
  const metadata={started_utc:new Date().toISOString(),device:selected,config,configPath,
   model:(await runAdb(selected,'shell','getprop','ro.product.model')).trim(),
   android:(await runAdb(selected,'shell','getprop','ro.build.version.release')).trim(),
-  provider_note:'AES-CBC and ChaCha20 use BC lightweight API; AES-GCM uses Android default JCE provider. No provider-equivalence claim.'};
+  provider_note:'AES-CBC and ChaCha20 use BC lightweight API; AES-GCM uses Android default JCE provider. No provider-equivalence claim.',
+  protocol:batched?'batched (CryptoCase, one process per case)':'legacy (one batch per process)'};
  if(config.energy_probe==='iv2201' && metadata.model!=='IV2201')throw Error('IV2201 probe is restricted to model IV2201');
  if(!resume) fs.writeFileSync(path.join(out,'manifest.json'),JSON.stringify(metadata,null,2));
  const statusFile=path.join(out,'execution.csv');
  if(!resume) fs.writeFileSync(statusFile,'run_id,algorithm,power,repetition,status\n');
  console.log('Results: '+out);
  let index=completed.size;
- for(let repeat=1;repeat<=config.repetitions;repeat++) for(const power of config.powers) for(const algorithm of config.algorithms) {
+ const order=power=>config.shuffle_seed===undefined?config.algorithms:shuffled(config.algorithms,config.shuffle_seed,power);
+ const batteryTemp=text=>Number(text.match(/temperature:\s*(\d+)/)?.[1])/10;
+ let lastPower=null;
+ for(let repeat=1;repeat<=config.repetitions;repeat++) for(const power of config.powers) for(const algorithm of order(power)) {
+  if(batched && lastPower!==null && power!==lastPower && opt('block_cooldown_ms')>0){
+   console.log('Block cooldown '+opt('block_cooldown_ms')+' ms');
+   await new Promise(r=>setTimeout(r,opt('block_cooldown_ms')));
+  }
+  lastPower=power;
   if(selectedCases && !selectedCases.has(caseKey(algorithm,power,repeat)))continue;
   if(completed.has([algorithm,power,repeat].join(',')))continue;
   const id=stamp+'_'+String(++index).padStart(5,'0');
@@ -101,8 +128,20 @@ async function main(args=process.argv.slice(2)) {
    const level=Number(battery.match(/level:\s*(\d+)/)?.[1]);
    if(!Number.isFinite(level)||level<25)throw Error('Battery unavailable or below 25%; recharge before continuing');
    await new Promise(r=>setTimeout(r,config.cooldown_ms));
+   if(batched){ // thermal gate on the battery temperature (at most 10 min)
+    const limit=opt('max_battery_temp_c'), t0=Date.now();
+    let temp=batteryTemp(battery);
+    while(temp>limit && Date.now()-t0<600000){
+     await new Promise(r=>setTimeout(r,10000));
+     temp=batteryTemp(await runAdb(selected,'shell','dumpsys','battery'));
+    }
+    if(Date.now()-t0>=1000)console.log('  waited '+Math.round((Date.now()-t0)/1000)+' s for battery <= '+limit+' C (now '+temp+' C)');
+   }
    await adbModule.cleanBatteryStatus(selected);
-   const params={algorithm,contentsize:power,rounds:1,inner_iterations:config.inner_iterations,warmup_rounds:config.warmup_rounds,run_id:id};
+   const params=batched
+    ? {algorithm,contentsize:power,rounds:opt('batches'),inner_iterations:config.inner_iterations,target_ms:opt('target_batch_ms'),
+       warmup_ms:opt('warmup_ms'),warmup_small_power:opt('warmup_small_power'),idle_ms:opt('idle_ms'),run_id:id}
+    : {algorithm,contentsize:power,rounds:1,inner_iterations:config.inner_iterations,warmup_rounds:config.warmup_rounds,run_id:id};
    if(config.energy_probe==='iv2201')params.external_energy_probe='true';
    const opts=Object.entries(params).flatMap(([k,v])=>['-e',k,String(v)]);
    const execute=()=>runAdb(selected,'shell','am','instrument','-w',...opts,'-e','class','com.example.energy.CryptoBenchmarkInstrumentedTest#runbenchmark','com.example.energy.test/androidx.test.runner.AndroidJUnitRunner');
@@ -183,10 +222,12 @@ async function main(args=process.argv.slice(2)) {
    const remote='/sdcard/Android/data/com.example.energy/files/automated/'+id+'/'+algorithm+'_'+id+'.csv';
    const local=path.join(dir,'benchmark.csv');
    await runAdb(selected,'pull',remote,local);
-   const row=csv(fs.readFileSync(local,'utf8'),config.require_energy);
-   if(Number(row.size_bytes)!==2**power||Number(row.inner_iterations)!==config.inner_iterations||row.algorithm!==algorithm)throw Error('Result/config mismatch');
+   if(batched) await runAdb(selected,'pull',remote+'.json',local+'.json');
+   const rows=[].concat(csv(fs.readFileSync(local,'utf8'),config.require_energy,batched?opt('batches'):1));
+   for(const row of rows)
+    if(Number(row.size_bytes)!==2**power||(!batched&&Number(row.inner_iterations)!==config.inner_iterations)||row.algorithm!==algorithm)throw Error('Result/config mismatch');
    fs.appendFileSync(statusFile,[id,algorithm,power,repeat,'SUCCESS'].join(',')+'\n');
-   console.log(index+'/'+count+' '+algorithm+' 2^'+power+' '+row.energy_status);
+   console.log(index+'/'+count+' '+algorithm+' 2^'+power+' '+rows.map(r=>r.energy_status).join(' '));
   } catch(e) {
    fs.writeFileSync(path.join(dir,'failure.txt'),String(e.stack||e));
    fs.appendFileSync(statusFile,[id,algorithm,power,repeat,'FAILED'].join(',')+'\n');

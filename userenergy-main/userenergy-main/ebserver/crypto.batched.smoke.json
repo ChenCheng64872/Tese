@@ -1,0 +1,14 @@
+{
+  "algorithms": ["aes", "aesgcm", "rsa2048"],
+  "powers": [11],
+  "repetitions": 1,
+  "inner_iterations": 1,
+  "cooldown_ms": 2000,
+  "require_energy": false,
+  "batches": 2,
+  "target_batch_ms": 3000,
+  "warmup_ms": 1000,
+  "warmup_small_power": 12,
+  "idle_ms": 3000,
+  "block_cooldown_ms": 0
+}

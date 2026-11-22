@@ -11,7 +11,7 @@ It runs the same algorithms with the same parameters, the same command line, the
 | `aesgcm` | AES-256-GCM, random 96-bit IV per call, 128-bit tag | OpenSSL 3 EVP |
 | `chacha20` | ChaCha20 (RFC 7539, 96-bit nonce, counter 0, no MAC) | OpenSSL 3 EVP |
 | `rsa` | AES-256-CBC (fresh key + IV per call) + RSA-2048 OAEP (SHA-256, MGF1-SHA-256) wrap of key‖IV | OpenSSL 3 |
-| `elgamal` | AES-256-CBC (fresh key + IV per call) + ElGamal PKCS#1 v1.5 wrap of key‖IV, the `ElGamalLite` group: **768-bit** RFC 2409 group 1, g = 2 | `src/elgamal.c` on OpenSSL BIGNUM, following Bouncy Castle's `ElGamalEngine` + `PKCS1Encoding` |
+| `elgamal` | AES-256-CBC (fresh key + IV per call) + ElGamal PKCS#1 v1.5 wrap of key‖IV, the `ElGamalLite` groups: **2048-bit** RFC 3526 group 14 by default (768/1024 RFC 2409, 3072/4096 RFC 3526 selectable), g = 2 | `src/elgamal.c` on OpenSSL BIGNUM, following Bouncy Castle's `ElGamalEngine` + `PKCS1Encoding` |
 | `ascon` | Ascon-AEAD128 (NIST SP 800-232), 128-bit key/nonce/tag | [ascon/ascon-c](https://github.com/ascon/ascon-c) `asconaead128/opt64` (`opt32` on 32-bit CPUs), designers, CC0 |
 | `elephant` | Elephant v2 `elephant200` (Delirium), 128-bit key, 96-bit nonce, 128-bit tag | [rweather/lwc-finalists](https://github.com/rweather/lwc-finalists) `src/combined`, third-party, MIT |
 | `giftcofb` | GIFT-COFB v1.1, 128-bit key/nonce/tag | [aadomn/gift](https://github.com/aadomn/gift) `giftcofb128v1/opt32` (fixsliced; Adomnicai & Peyrin), CC0 |
@@ -37,6 +37,7 @@ Both modes keep the per-call IV/nonce/key generation of the Java harness. Buffer
 Needs a C compiler and OpenSSL 3 headers:
 - Debian / Raspberry Pi OS: `sudo apt-get install -y libssl-dev`
 - Windows: MinGW-w64 gcc + OpenSSL, for example Strawberry Perl. In Git Bash: `PATH=/c/Strawberry/c/bin:$PATH ./build.sh` (or set `OPENSSL_DIR`).
+- macOS: Xcode command line tools + `brew install openssl@3` (found automatically, or set `OPENSSL_DIR`).
 
 ## Run
 

@@ -32,6 +32,13 @@ if [[ "${OS:-}" == Windows_NT ]]; then
   # C99 printf (%zu, %lld) on MinGW
   OSSL_CFLAGS="-I$OPENSSL_DIR/include -D__USE_MINGW_ANSI_STDIO=1"
   OSSL_LIBS="$OPENSSL_DIR/lib/libcrypto.a -lws2_32 -lcrypt32 -ladvapi32 -luser32 -lbcrypt"
+elif [[ "$(uname -s)" == Darwin ]]; then
+  # macOS: Homebrew OpenSSL 3 (brew install openssl@3), or set OPENSSL_DIR
+  EXE=
+  OPENSSL_DIR=${OPENSSL_DIR:-$(brew --prefix openssl@3 2>/dev/null || true)}
+  [[ -f "$OPENSSL_DIR/include/openssl/evp.h" ]] || { echo "OpenSSL 3 not found: brew install openssl@3 (or set OPENSSL_DIR)" >&2; exit 1; }
+  OSSL_CFLAGS="-I$OPENSSL_DIR/include"
+  OSSL_LIBS="-L$OPENSSL_DIR/lib -lcrypto"
 else
   EXE=
   OSSL_CFLAGS=$(pkg-config --cflags libcrypto 2>/dev/null || true)
