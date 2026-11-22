@@ -1,6 +1,10 @@
 package com.example.energy
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.view.WindowManager
 import android.os.Build
+import android.os.SystemClock
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Test
@@ -16,7 +20,9 @@ import java.util.Locale
  *   3. `rounds` batches; each repeats inner_iterations encryptions + decryptions until target_ms has passed,
  *      and its energy is measured with EnergyMeter (battery current x voltage, or the energy counter).
  * Arguments (-e): algorithm (names/key sizes as in CryptoCase), contentsize (power of two),
- * rounds, target_ms, warmup_ms, warmup_small_power, idle_ms, inner_iterations, run_id.
+ * rounds, target_ms, warmup_ms, warmup_small_power, idle_ms, inner_iterations, run_id,
+ * foreground (default true: MainActivity is opened with FLAG_KEEP_SCREEN_ON before the idle window and
+ * kept open, so the benchmark process is the top app and the screen cannot time out during the case).
  */
 @RunWith(AndroidJUnit4::class)
 class CryptoBenchmarkInstrumentedTest {
@@ -34,17 +40,30 @@ class CryptoBenchmarkInstrumentedTest {
             warmupMs in 0..600000 && (smallPower == 0 || smallPower in 6..20) && idleMs in 0..600000)
         val context=InstrumentationRegistry.getInstrumentation().targetContext
         val external=a.getString("external_energy_probe") == "true"
+        val foreground=a.getString("foreground") != "false"
+        val instrumentation=InstrumentationRegistry.getInstrumentation()
+        var activity: Activity? = null
+        if (foreground) {
+            activity=instrumentation.startActivitySync(Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            instrumentation.runOnMainSync { activity!!.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
+            instrumentation.waitForIdleSync()
+        }
         val meter=EnergyMeter(context)
 
         val case=CryptoCase(algorithm)
         val plain="A".repeat(1 shl p)
         val (encrypt, decrypt) = case.build(plain)
 
-        // 1. idle baseline (before any crypto work in this process)
-        val idle=if (idleMs > 0 && !external) meter.measure { Thread.sleep(idleMs) } else null
+        // 1. idle baseline (before any crypto work in this process). Window times also go out in
+        // SystemClock.elapsedRealtime() ms (CLOCK_BOOTTIME), the clock of Perfetto/ODPM power-rail samples.
+        val idleStart=SystemClock.elapsedRealtime()
+        val idle=if (idleMs > 0 && !external) meter.measure { Thread.sleep(idleMs) } else { Thread.sleep(idleMs); null }
+        val idleEnd=SystemClock.elapsedRealtime()
         val idleW=idle?.let { if (it.energyMilliWattHour.isFinite() && it.durationMs > 0) it.energyMilliWattHour*3.6/(it.durationMs/1000.0) else Double.NaN } ?: Double.NaN
         // 2. warm-up
+        val warmStart=SystemClock.elapsedRealtime()
         val warm=case.warmUp(plain, encrypt, decrypt, warmupMs, smallPower)
+        val warmEnd=SystemClock.elapsedRealtime()
 
         val dir=File(context.getExternalFilesDir(null), "automated/$runId").apply { mkdirs() }
         val csv=File(dir, "${algorithm}_$runId.csv")
@@ -53,8 +72,10 @@ class CryptoBenchmarkInstrumentedTest {
         // 3. measured batches
         repeat(rounds) { i ->
             lateinit var b: Batch
-            val e=if (external) null else meter.measure { b=runBatch(encrypt, decrypt, inner, targetMs) }
-            if (external) b=runBatch(encrypt, decrypt, inner, targetMs)
+            var el0=0L; var el1=0L
+            val measured={ el0=SystemClock.elapsedRealtime(); b=runBatch(encrypt, decrypt, inner, targetMs); el1=SystemClock.elapsedRealtime() }
+            // external probe (e.g. ODPM via Perfetto): no in-app battery sampling thread during the batch
+            val e=if (external) { measured(); null } else meter.measure(measured)
             check(decrypt()==plain)
             val ej=e?.energyMilliWattHour?.times(3.6) ?: Double.NaN
             val durS=(b.endEpochMs-b.startEpochMs)/1000.0
@@ -65,18 +86,19 @@ class CryptoBenchmarkInstrumentedTest {
                 bb?.timestamp ?: "", bb?.levelPercent ?: "", bb?.status ?: "", bb?.let { num(it.temperatureCelsius.toDouble()) } ?: "", bb?.voltageMilliV ?: "",
                 ba?.timestamp ?: "", ba?.levelPercent ?: "", ba?.status ?: "", ba?.let { num(it.temperatureCelsius.toDouble()) } ?: "", ba?.voltageMilliV ?: "",
                 case.baseAlgorithm, case.keyBits, b.startEpochMs, b.endEpochMs, b.encNs, b.decNs,
-                num(idleW), num((ej-idleW*durS)/b.pairs)).joinToString(",")).append('\n')
+                num(idleW), num((ej-idleW*durS)/b.pairs), el0, el1).joinToString(",")).append('\n')
         }
         csv.writeText(rows.toString())
+        activity?.let { act -> instrumentation.runOnMainSync { act.finish() } }
         val debuggable=(context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
-        File(csv.path+".json").writeText("""{"algorithm":"$algorithm","algorithm_base":"${case.baseAlgorithm}","key_bits":${case.keyBits},"size_bytes":${1 shl p},"rounds":$rounds,"target_batch_ms":$targetMs,"inner_iterations":$inner,"warmup_ms":$warmupMs,"warmup_small_power":$smallPower,"warmup_pairs":${warm.pairs},"warmup_small_pairs":${warm.smallPairs},"warmup_start_epoch_ms":${warm.startEpochMs},"warmup_end_epoch_ms":${warm.endEpochMs},"idle_ms":$idleMs,"idle_power_w":${if (idleW.isFinite()) idleW else "null"},"idle_status":"${idle?.status ?: "NONE"}","aesgcm_provider":"${javax.crypto.Cipher.getInstance("AES/GCM/NoPadding").provider.name}","debuggable":$debuggable,"vm":"${System.getProperty("java.vm.name")} ${System.getProperty("java.vm.version")}","device":"${Build.MANUFACTURER} ${Build.MODEL}","soc":"${if (Build.VERSION.SDK_INT >= 31) Build.SOC_MODEL else ""}","android":"${Build.VERSION.RELEASE}"}""")
+        File(csv.path+".json").writeText("""{"algorithm":"$algorithm","algorithm_base":"${case.baseAlgorithm}","key_bits":${case.keyBits},"size_bytes":${1 shl p},"rounds":$rounds,"target_batch_ms":$targetMs,"inner_iterations":$inner,"warmup_ms":$warmupMs,"warmup_small_power":$smallPower,"warmup_pairs":${warm.pairs},"warmup_small_pairs":${warm.smallPairs},"warmup_start_epoch_ms":${warm.startEpochMs},"warmup_end_epoch_ms":${warm.endEpochMs},"idle_ms":$idleMs,"idle_start_elapsed_ms":$idleStart,"idle_end_elapsed_ms":$idleEnd,"warmup_start_elapsed_ms":$warmStart,"warmup_end_elapsed_ms":$warmEnd,"energy_probe":"${if (external) "external" else "in-app EnergyMeter"}","foreground_activity":$foreground,"idle_power_w":${if (idleW.isFinite()) idleW else "null"},"idle_status":"${idle?.status ?: "NONE"}","aesgcm_provider":"${javax.crypto.Cipher.getInstance("AES/GCM/NoPadding").provider.name}","debuggable":$debuggable,"vm":"${System.getProperty("java.vm.name")} ${System.getProperty("java.vm.version")}","device":"${Build.MANUFACTURER} ${Build.MODEL}","soc":"${if (Build.VERSION.SDK_INT >= 31) Build.SOC_MODEL else ""}","android":"${Build.VERSION.RELEASE}"}""")
         val lines=csv.readLines()
         check(lines.size==rounds+1 && lines.drop(1).all { it.split(',').size==HEADER.split(',').size })
         println("BENCHMARK_CSV="+csv.path)
     }
     companion object {
-        /** Schema 3: the schema-2 columns (enc_ns/dec_ns = mean per operation), then key size, batch window, totals, idle power and dynamic energy. */
+        /** Schema 3: the schema-2 columns (enc_ns/dec_ns = mean per operation), then key size, batch window (epoch ms), totals, idle power, dynamic energy and the batch window in elapsedRealtime ms. */
         val HEADER = BENCH_EXEC_CSV_HEADER +
-            ",algorithm_base,key_bits,batch_start_epoch_ms,batch_end_epoch_ms,enc_total_ns,dec_total_ns,idle_power_w,dynamic_energy_per_pair_j"
+            ",algorithm_base,key_bits,batch_start_epoch_ms,batch_end_epoch_ms,enc_total_ns,dec_total_ns,idle_power_w,dynamic_energy_per_pair_j,batch_start_elapsed_ms,batch_end_elapsed_ms"
     }
 }
