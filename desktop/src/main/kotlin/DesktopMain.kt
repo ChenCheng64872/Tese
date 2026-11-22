@@ -14,25 +14,65 @@ import com.example.energy.elgamal.ElGamalLite
 import org.bouncycastle.crypto.params.RSAKeyParameters
 import org.bouncycastle.crypto.params.ElGamalPublicKeyParameters
 import org.bouncycastle.crypto.params.ElGamalPrivateKeyParameters
+import org.bouncycastle.crypto.engines.AESEngine
+import org.bouncycastle.crypto.modes.GCMBlockCipher
+import org.bouncycastle.crypto.params.AEADParameters
+import org.bouncycastle.crypto.params.KeyParameter
+import org.bouncycastle.util.encoders.Base64
 import java.io.File
 import java.security.SecureRandom
 import java.util.Locale
 
 fun main(args:Array<String>) {
-    // algorithm, power, rounds, inner iterations, output path, optional batch target ms
-    require(args.size in 5..6) { "Usage: algorithm power rounds inner output.csv [target_batch_ms]" }
+    // algorithm, power, rounds, inner iterations, output path, optional batch target ms,
+    // optional warm-up ms, optional small warm-up power
+    require(args.size in 5..8) { "Usage: algorithm power rounds inner output.csv [target_batch_ms] [warmup_ms] [warmup_small_power]" }
     val algorithm=args[0]; val power=args[1].toInt(); val rounds=args[2].toInt(); val inner=args[3].toInt()
     val targetMs=args.getOrNull(5)?.toLong() ?: 0L
-    require(power in 10..20 && rounds in 1..100 && inner in 1..100000 && targetMs in 0..600000)
+    // Time-based warm-up before the first measured batch (0 = only the 3 checked round trips, as before).
+    val warmupMs=args.getOrNull(6)?.toLong() ?: 0L
+    // If > 0, the warm-up first runs warmup_ms on a 2^warmup_small_power-byte input, then warmup_ms on
+    // the measured size. Small inputs reach the JIT thresholds quickly (many calls), which matters for
+    // code whose fast path needs a C2-compiled caller (e.g. SunJCE AES-GCM intrinsics).
+    val warmupSmallPower=args.getOrNull(7)?.toInt() ?: 0
+    require(power in 10..20 && rounds in 1..100 && inner in 1..100000 && targetMs in 0..600000 && warmupMs in 0..600000)
+    require(warmupSmallPower == 0 || warmupSmallPower in 6..20)
     val output=File(args[4]); require(!output.exists()) { "Output exists; choose a new filename" }
-    val plain="A".repeat(1 shl power)
     val random=SecureRandom(); val key=ByteArray(32).also(random::nextBytes); val iv=ByteArray(16)
+    fun build(plain: String): Pair<() -> Unit, () -> String> {
     var ciphertext=""; var wrapped=ByteArray(0)
     val encrypt:()->Unit
     val decrypt:()->String
     when(algorithm) {
         "aes" -> { encrypt={ciphertext=AES.encrypt(plain,key,iv)}; decrypt={AES.decrypt(ciphertext,key,iv)} }
         "aesgcm" -> { encrypt={ciphertext=AESGcm.encrypt(plain,key)}; decrypt={AESGcm.decrypt(ciphertext,key)} }
+        // AES-256-GCM through Bouncy Castle (like every other algorithm here) instead of the JCA
+        // provider (SunJCE on desktop JVMs, Conscrypt on Android). Same envelope as AESGcm:
+        // Base64(IV(12) || CIPHERTEXT || TAG(16)), random IV per encryption.
+        "aesgcmbc" -> {
+            fun gcm(forEncryption: Boolean, nonce: ByteArray) =
+                GCMBlockCipher.newInstance(AESEngine.newInstance()).also {
+                    it.init(forEncryption, AEADParameters(KeyParameter(key), 128, nonce))
+                }
+            encrypt = {
+                val nonce = ByteArray(12).also(random::nextBytes)
+                val pt = plain.toByteArray(Charsets.UTF_8)
+                val c = gcm(true, nonce)
+                val out = ByteArray(12 + c.getOutputSize(pt.size))
+                System.arraycopy(nonce, 0, out, 0, 12)
+                var n = c.processBytes(pt, 0, pt.size, out, 12)
+                n += c.doFinal(out, 12 + n)
+                ciphertext = Base64.toBase64String(out, 0, 12 + n)
+            }
+            decrypt = {
+                val all = Base64.decode(ciphertext)
+                val c = gcm(false, all.copyOfRange(0, 12))
+                val out = ByteArray(c.getOutputSize(all.size - 12))
+                var n = c.processBytes(all, 12, all.size - 12, out, 0)
+                n += c.doFinal(out, n)
+                String(out, 0, n, Charsets.UTF_8)
+            }
+        }
         "chacha20" -> { val nonce=ByteArray(12).also(random::nextBytes)
             encrypt={ciphertext=ChaCha20Cipher.encrypt(plain,key,nonce)}
             decrypt={ChaCha20Cipher.decrypt(ciphertext,key,nonce)} }
@@ -61,11 +101,29 @@ fun main(args:Array<String>) {
         }
         else -> error("Unknown algorithm")
     }
+    return encrypt to decrypt
+    }
+    val warmupStartEpoch=System.currentTimeMillis()
+    var warmupSmallPairs=0
+    if (warmupSmallPower > 0) {
+        val smallPlain="A".repeat(1 shl warmupSmallPower)
+        val (enc, dec) = build(smallPlain)
+        repeat(3) { enc(); check(dec()==smallPlain) }
+        val t0=System.nanoTime()
+        while(System.nanoTime()-t0<warmupMs*1_000_000) { enc(); dec(); warmupSmallPairs++ }
+    }
+    val plain="A".repeat(1 shl power)
+    val (encrypt, decrypt) = build(plain)
     repeat(3) { encrypt();check(decrypt()==plain) }
+    // Time-based warm-up: same encrypt+decrypt loop as the measured batches, not recorded.
+    val warmupStart=System.nanoTime(); var warmupPairs=0
+    while(System.nanoTime()-warmupStart<warmupMs*1_000_000) { encrypt(); decrypt(); warmupPairs++ }
+    val warmupEndEpoch=System.currentTimeMillis()
+    check(decrypt()==plain)
     output.absoluteFile.parentFile.mkdirs()
     output.writeText("algorithm,size_bytes,round,inner_iterations,batch_start_epoch_ms,batch_end_epoch_ms,enc_total_ns,dec_total_ns,enc_mean_ns,dec_mean_ns,energy_j,energy_status\n")
     val manifest=File(output.path+".json")
-    manifest.writeText("""{"java_version":"${System.getProperty("java.version")}","os":"${System.getProperty("os.name")}","arch":"${System.getProperty("os.arch")}","aesgcm_provider":"${javax.crypto.Cipher.getInstance("AES/GCM/NoPadding").provider.name}","warmup_rounds":3,"energy_source":"external PowerJoular required"}""")
+    manifest.writeText("""{"java_version":"${System.getProperty("java.version")}","os":"${System.getProperty("os.name")}","arch":"${System.getProperty("os.arch")}","aesgcm_provider":"${javax.crypto.Cipher.getInstance("AES/GCM/NoPadding").provider.name}","warmup_rounds":3,"warmup_ms":$warmupMs,"warmup_pairs":$warmupPairs,"warmup_small_power":$warmupSmallPower,"warmup_small_pairs":$warmupSmallPairs,"warmup_start_epoch_ms":$warmupStartEpoch,"warmup_end_epoch_ms":$warmupEndEpoch,"jvm_args":"${java.lang.management.ManagementFactory.getRuntimeMXBean().inputArguments.joinToString(" ").replace("\\","/").replace("\"","'")}","energy_source":"external PowerJoular required"}""")
     repeat(rounds) { round ->
         var enc=0L;var dec=0L;var iterations=0
         val epochStart=System.currentTimeMillis();val start=System.nanoTime()
