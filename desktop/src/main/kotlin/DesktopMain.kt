@@ -39,20 +39,33 @@ fun main(args:Array<String>) {
     require(warmupSmallPower == 0 || warmupSmallPower in 6..20)
     val output=File(args[4]); require(!output.exists()) { "Output exists; choose a new filename" }
     val random=SecureRandom(); val key=ByteArray(32).also(random::nextBytes); val iv=ByteArray(16)
+    // Optional key size in the algorithm name: aes128/192/256, aesgcm128.., aesgcmbc128..,
+    // rsa1024/2048/3072/4096, elgamal768/1024/2048/3072/4096. Without a number: AES-256,
+    // RSA-2048, ElGamal-2048. The RSA/ElGamal hybrids always use AES-256 for the bulk data.
+    val sized=Regex("^(aesgcmbc|aesgcm|aes|rsa|elgamal)(\\d+)$").matchEntire(algorithm)
+    val baseAlgorithm=sized?.groupValues?.get(1) ?: algorithm
+    val keyBits=sized?.groupValues?.get(2)?.toInt() ?: when(baseAlgorithm) {
+        "aes", "aesgcm", "aesgcmbc" -> 256; "rsa" -> 2048; "elgamal" -> ElGamalLite.DEFAULT_BITS; else -> 0 }
+    when(baseAlgorithm) {
+        "aes", "aesgcm", "aesgcmbc" -> require(keyBits in setOf(128, 192, 256)) { "AES key size must be 128, 192 or 256" }
+        "rsa" -> require(keyBits in setOf(1024, 2048, 3072, 4096)) { "RSA size must be 1024, 2048, 3072 or 4096" }
+        "elgamal" -> require(keyBits in ElGamalLite.SUPPORTED_BITS) { "ElGamal group must be one of ${ElGamalLite.SUPPORTED_BITS}" }
+    }
+    val symKey=ByteArray(if (baseAlgorithm.startsWith("aes")) keyBits / 8 else 32).also(random::nextBytes)
     fun build(plain: String): Pair<() -> Unit, () -> String> {
     var ciphertext=""; var wrapped=ByteArray(0)
     val encrypt:()->Unit
     val decrypt:()->String
-    when(algorithm) {
-        "aes" -> { encrypt={ciphertext=AES.encrypt(plain,key,iv)}; decrypt={AES.decrypt(ciphertext,key,iv)} }
-        "aesgcm" -> { encrypt={ciphertext=AESGcm.encrypt(plain,key)}; decrypt={AESGcm.decrypt(ciphertext,key)} }
+    when(baseAlgorithm) {
+        "aes" -> { encrypt={ciphertext=AES.encrypt(plain,symKey,iv)}; decrypt={AES.decrypt(ciphertext,symKey,iv)} }
+        "aesgcm" -> { encrypt={ciphertext=AESGcm.encrypt(plain,symKey)}; decrypt={AESGcm.decrypt(ciphertext,symKey)} }
         // AES-256-GCM through Bouncy Castle (like every other algorithm here) instead of the JCA
         // provider (SunJCE on desktop JVMs, Conscrypt on Android). Same envelope as AESGcm:
         // Base64(IV(12) || CIPHERTEXT || TAG(16)), random IV per encryption.
         "aesgcmbc" -> {
             fun gcm(forEncryption: Boolean, nonce: ByteArray) =
                 GCMBlockCipher.newInstance(AESEngine.newInstance()).also {
-                    it.init(forEncryption, AEADParameters(KeyParameter(key), 128, nonce))
+                    it.init(forEncryption, AEADParameters(KeyParameter(symKey), 128, nonce))
                 }
             encrypt = {
                 val nonce = ByteArray(12).also(random::nextBytes)
@@ -76,10 +89,10 @@ fun main(args:Array<String>) {
         "chacha20" -> { val nonce=ByteArray(12).also(random::nextBytes)
             encrypt={ciphertext=ChaCha20Cipher.encrypt(plain,key,nonce)}
             decrypt={ChaCha20Cipher.decrypt(ciphertext,key,nonce)} }
-        "rsa" -> { val pair=RsaLite.generateKeyPair(2048)
+        "rsa" -> { val pair=RsaLite.generateKeyPair(keyBits)
             encrypt={random.nextBytes(key);random.nextBytes(iv);ciphertext=AES.encrypt(plain,key,iv);wrapped=RsaLite.encryptSmall(key+iv,pair.public as RSAKeyParameters)}
             decrypt={val b=RsaLite.decryptSmall(wrapped,pair.private as RSAKeyParameters);AES.decrypt(ciphertext,b.copyOfRange(0,32),b.copyOfRange(32,48))} }
-        "elgamal" -> { val pair=ElGamalLite.generateKeyPair()
+        "elgamal" -> { val pair=ElGamalLite.generateKeyPair(keyBits)
             encrypt={random.nextBytes(key);random.nextBytes(iv);ciphertext=AES.encrypt(plain,key,iv);wrapped=ElGamalLite.encryptSmall(key+iv,pair.public as ElGamalPublicKeyParameters)}
             decrypt={val b=ElGamalLite.decryptSmall(wrapped,pair.private as ElGamalPrivateKeyParameters);AES.decrypt(ciphertext,b.copyOfRange(0,32),b.copyOfRange(32,48))} }
         "ascon", "elephant", "giftcofb", "grain128", "xoodyak" -> {
@@ -123,7 +136,7 @@ fun main(args:Array<String>) {
     output.absoluteFile.parentFile.mkdirs()
     output.writeText("algorithm,size_bytes,round,inner_iterations,batch_start_epoch_ms,batch_end_epoch_ms,enc_total_ns,dec_total_ns,enc_mean_ns,dec_mean_ns,energy_j,energy_status\n")
     val manifest=File(output.path+".json")
-    manifest.writeText("""{"java_version":"${System.getProperty("java.version")}","os":"${System.getProperty("os.name")}","arch":"${System.getProperty("os.arch")}","aesgcm_provider":"${javax.crypto.Cipher.getInstance("AES/GCM/NoPadding").provider.name}","warmup_rounds":3,"warmup_ms":$warmupMs,"warmup_pairs":$warmupPairs,"warmup_small_power":$warmupSmallPower,"warmup_small_pairs":$warmupSmallPairs,"warmup_start_epoch_ms":$warmupStartEpoch,"warmup_end_epoch_ms":$warmupEndEpoch,"jvm_args":"${java.lang.management.ManagementFactory.getRuntimeMXBean().inputArguments.joinToString(" ").replace("\\","/").replace("\"","'")}","energy_source":"external PowerJoular required"}""")
+    manifest.writeText("""{"java_version":"${System.getProperty("java.version")}","os":"${System.getProperty("os.name")}","arch":"${System.getProperty("os.arch")}","aesgcm_provider":"${javax.crypto.Cipher.getInstance("AES/GCM/NoPadding").provider.name}","algorithm_base":"$baseAlgorithm","key_bits":$keyBits,"warmup_rounds":3,"warmup_ms":$warmupMs,"warmup_pairs":$warmupPairs,"warmup_small_power":$warmupSmallPower,"warmup_small_pairs":$warmupSmallPairs,"warmup_start_epoch_ms":$warmupStartEpoch,"warmup_end_epoch_ms":$warmupEndEpoch,"jvm_args":"${java.lang.management.ManagementFactory.getRuntimeMXBean().inputArguments.joinToString(" ").replace("\\","/").replace("\"","'")}","energy_source":"external PowerJoular required"}""")
     repeat(rounds) { round ->
         var enc=0L;var dec=0L;var iterations=0
         val epochStart=System.currentTimeMillis();val start=System.nanoTime()

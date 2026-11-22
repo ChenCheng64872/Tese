@@ -1,0 +1,6 @@
+build/
+third_party/
+tools/lib/
+tools/vectors.txt
+tools/c2java.txt
+tools/*.log

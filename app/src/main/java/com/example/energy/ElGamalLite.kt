@@ -3,6 +3,7 @@ package com.example.energy.elgamal
 import org.bouncycastle.crypto.AsymmetricBlockCipher
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair
 import org.bouncycastle.crypto.CipherParameters
+import org.bouncycastle.crypto.agreement.DHStandardGroups
 import org.bouncycastle.crypto.encodings.PKCS1Encoding
 import org.bouncycastle.crypto.engines.ElGamalEngine
 import org.bouncycastle.crypto.generators.ElGamalKeyPairGenerator
@@ -10,27 +11,38 @@ import org.bouncycastle.crypto.params.ElGamalKeyGenerationParameters
 import org.bouncycastle.crypto.params.ElGamalParameters
 import org.bouncycastle.crypto.params.ElGamalPrivateKeyParameters
 import org.bouncycastle.crypto.params.ElGamalPublicKeyParameters
-import java.math.BigInteger
 import java.security.SecureRandom
 
 
 object ElGamalLite {
 
-    private val P = BigInteger((
-            "FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1" +
-                    "29024E088A67CC74020BBEA63B139B22514A08798E3404DD" +
-                    "EF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245" +
-                    "E485B576625E7EC6F44C42E9A63A3620FFFFFFFFFFFFFFFF"
-            ).lowercase(), 16)
+    /** Default group size: 2048 bits (~112-bit security, same level as RSA-2048). */
+    const val DEFAULT_BITS = 2048
 
-    private val G = BigInteger.valueOf(2L)
+    /**
+     * Standard MODP groups (g = 2): RFC 2409 groups 1 and 2 (768, 1024 bits) and RFC 3526
+     * groups 14-16 (2048, 3072, 4096 bits). The original code used the 768-bit group.
+     */
+    private val GROUPS = mapOf(
+        768 to DHStandardGroups.rfc2409_768,
+        1024 to DHStandardGroups.rfc2409_1024,
+        2048 to DHStandardGroups.rfc3526_2048,
+        3072 to DHStandardGroups.rfc3526_3072,
+        4096 to DHStandardGroups.rfc3526_4096,
+    )
 
-    private val params = ElGamalParameters(P, G)
+    val SUPPORTED_BITS: Set<Int> = GROUPS.keys
+
+    fun params(bits: Int = DEFAULT_BITS): ElGamalParameters {
+        val dh = GROUPS[bits] ?: throw IllegalArgumentException("Unsupported ElGamal group size: $bits")
+        return ElGamalParameters(dh.p, dh.g)
+    }
+
     private val rnd = SecureRandom()
 
-    fun generateKeyPair(): AsymmetricCipherKeyPair {
+    fun generateKeyPair(bits: Int = DEFAULT_BITS): AsymmetricCipherKeyPair {
         val gen = ElGamalKeyPairGenerator()
-        gen.init(ElGamalKeyGenerationParameters(rnd, params))
+        gen.init(ElGamalKeyGenerationParameters(rnd, params(bits)))
         return gen.generateKeyPair()
     }
 

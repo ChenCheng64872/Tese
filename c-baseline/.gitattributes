@@ -1,0 +1,5 @@
+# Built and run on Linux (Raspberry Pi) too: keep LF line endings on every checkout
+*.sh text eol=lf
+*.c text eol=lf
+*.h text eol=lf
+*.java text eol=lf
