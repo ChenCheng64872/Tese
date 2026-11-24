@@ -7,7 +7,8 @@ const exec=promisify(execFile);
 const adbModule=require('./adbCommands');
 const iv2201Probe=require('./iv2201-probe');
 // Names as in app CryptoCase.kt: optional key size for aes/aesgcm/aesgcmbc (128/192/256), rsa (1024-4096), elgamal (768-4096).
-const allowedRe=/^(?:(?:aes|aesgcm|aesgcmbc)(?:128|192|256)?|rsa(?:1024|2048|3072|4096)?|elgamal(?:768|1024|2048|3072|4096)?|chacha20|ascon|elephant|giftcofb|grain128|xoodyak)$/;
+// With "impl":"c" (the C baseline through JNI, APK built with -PnativeBench) names may end in "_raw" (cipher only).
+const allowedRe=/^(?:(?:aes|aesgcm|aesgcmbc)(?:128|192|256)?|rsa(?:1024|2048|3072|4096)?|elgamal(?:768|1024|2048|3072|4096)?|chacha20|ascon|elephant|giftcofb|grain128|xoodyak)(?:_raw)?$/;
 const allowed={has:x=>typeof x==='string'&&allowedRe.test(x)};
 // Batched protocol (same as the desktop/Pi runs): one process per case, idle window, time-based warm-up,
 // `batches` batches of ~target_batch_ms. It is used when target_batch_ms is set. Optional keys: [default,min,max]
@@ -28,6 +29,9 @@ function validate(c) {
  if(c.probe_interval_ms!==undefined && (!Number.isInteger(c.probe_interval_ms) || c.probe_interval_ms<100 || c.probe_interval_ms>1000))throw Error('Invalid probe interval');
  if(typeof c.require_energy!=='boolean')throw Error('require_energy must be boolean');
  if(c.energy_probe!==undefined && (c.energy_probe!=='iv2201' || c.require_energy))throw Error('IV2201 probe is provisional and requires require_energy=false');
+ if(c.impl!==undefined && c.impl!=='java' && c.impl!=='c')throw Error('impl must be java or c');
+ if(c.impl!=='c' && c.algorithms.some(x=>x.endsWith('_raw')))throw Error('_raw names need impl c');
+ if(c.impl==='c' && c.algorithms.some(x=>x.startsWith('aesgcmbc')))throw Error('aesgcmbc has no C version');
  if(new Set(c.algorithms).size!==c.algorithms.length||new Set(c.powers).size!==c.powers.length)throw Error('Duplicate configurations');
  return c;
 }
@@ -142,6 +146,7 @@ async function main(args=process.argv.slice(2)) {
     ? {algorithm,contentsize:power,rounds:opt('batches'),inner_iterations:config.inner_iterations,target_ms:opt('target_batch_ms'),
        warmup_ms:opt('warmup_ms'),warmup_small_power:opt('warmup_small_power'),idle_ms:opt('idle_ms'),run_id:id}
     : {algorithm,contentsize:power,rounds:1,inner_iterations:config.inner_iterations,warmup_rounds:config.warmup_rounds,run_id:id};
+   if(config.impl)params.impl=config.impl;
    if(config.energy_probe==='iv2201')params.external_energy_probe='true';
    const opts=Object.entries(params).flatMap(([k,v])=>['-e',k,String(v)]);
    const execute=()=>runAdb(selected,'shell','am','instrument','-w',...opts,'-e','class','com.example.energy.CryptoBenchmarkInstrumentedTest#runbenchmark','com.example.energy.test/androidx.test.runner.AndroidJUnitRunner');

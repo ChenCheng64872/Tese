@@ -41,6 +41,13 @@ android {
     buildFeatures {
         compose true
     }
+    // -PnativeBench: also build the C baseline into the app (JNI, impl=c in the instrumented test).
+    // Needs c-baseline/fetch-third-party.sh and c-baseline/build-android.sh first (OpenSSL for Android).
+    if (project.hasProperty('nativeBench')) {
+        ndkVersion '30.0.16248370'
+        defaultConfig.ndk.abiFilters 'arm64-v8a'
+        externalNativeBuild { cmake { path file('src/main/cpp/CMakeLists.txt') } }
+    }
 }
 
 dependencies {

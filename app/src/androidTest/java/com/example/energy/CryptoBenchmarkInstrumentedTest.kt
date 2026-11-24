@@ -22,7 +22,9 @@ import java.util.Locale
  * Arguments (-e): algorithm (names/key sizes as in CryptoCase), contentsize (power of two),
  * rounds, target_ms, warmup_ms, warmup_small_power, idle_ms, inner_iterations, run_id,
  * foreground (default true: MainActivity is opened with FLAG_KEEP_SCREEN_ON before the idle window and
- * kept open, so the benchmark process is the top app and the screen cannot time out during the case).
+ * kept open, so the benchmark process is the top app and the screen cannot time out during the case),
+ * impl (java, default; or c: the C baseline through JNI, NativeCase, with crypto-c's names incl. "_raw";
+ * needs an APK built with -PnativeBench). Same protocol, CSV and manifest for both.
  */
 @RunWith(AndroidJUnit4::class)
 class CryptoBenchmarkInstrumentedTest {
@@ -50,9 +52,12 @@ class CryptoBenchmarkInstrumentedTest {
         }
         val meter=EnergyMeter(context)
 
-        val case=CryptoCase(algorithm)
-        val plain="A".repeat(1 shl p)
-        val (encrypt, decrypt) = case.build(plain)
+        val impl=a.getString("impl") ?: "java"
+        require(impl == "java" || impl == "c")
+        val native=if (impl == "c") NativeCase(algorithm, p) else null
+        val case=CryptoCase(if (native != null) algorithm.removeSuffix("_raw") else algorithm)
+        val plain=if (native != null) "" else "A".repeat(1 shl p)
+        val (encrypt, decrypt) = if (native != null) Pair<() -> Unit, () -> String>({}, { "" }) else case.build(plain)
 
         // 1. idle baseline (before any crypto work in this process). Window times also go out in
         // SystemClock.elapsedRealtime() ms (CLOCK_BOOTTIME), the clock of Perfetto/ODPM power-rail samples.
@@ -62,7 +67,7 @@ class CryptoBenchmarkInstrumentedTest {
         val idleW=idle?.let { if (it.energyMilliWattHour.isFinite() && it.durationMs > 0) it.energyMilliWattHour*3.6/(it.durationMs/1000.0) else Double.NaN } ?: Double.NaN
         // 2. warm-up
         val warmStart=SystemClock.elapsedRealtime()
-        val warm=case.warmUp(plain, encrypt, decrypt, warmupMs, smallPower)
+        val warm=native?.warmUp(warmupMs, smallPower) ?: case.warmUp(plain, encrypt, decrypt, warmupMs, smallPower)
         val warmEnd=SystemClock.elapsedRealtime()
 
         val dir=File(context.getExternalFilesDir(null), "automated/$runId").apply { mkdirs() }
@@ -73,10 +78,10 @@ class CryptoBenchmarkInstrumentedTest {
         repeat(rounds) { i ->
             lateinit var b: Batch
             var el0=0L; var el1=0L
-            val measured={ el0=SystemClock.elapsedRealtime(); b=runBatch(encrypt, decrypt, inner, targetMs); el1=SystemClock.elapsedRealtime() }
+            val measured={ el0=SystemClock.elapsedRealtime(); b=native?.batch(inner, targetMs) ?: runBatch(encrypt, decrypt, inner, targetMs); el1=SystemClock.elapsedRealtime() }
             // external probe (e.g. ODPM via Perfetto): no in-app battery sampling thread during the batch
             val e=if (external) { measured(); null } else meter.measure(measured)
-            check(decrypt()==plain)
+            if (native == null) check(decrypt()==plain)   // the C batch checks its own round trip
             val ej=e?.energyMilliWattHour?.times(3.6) ?: Double.NaN
             val durS=(b.endEpochMs-b.startEpochMs)/1000.0
             val bb=e?.batteryBefore; val ba=e?.batteryAfter
@@ -90,8 +95,10 @@ class CryptoBenchmarkInstrumentedTest {
         }
         csv.writeText(rows.toString())
         activity?.let { act -> instrumentation.runOnMainSync { act.finish() } }
+        val nativeInfo=native?.info()?.replace("\\", "\\\\")?.replace("\"", "\\\"")
+        native?.close()
         val debuggable=(context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
-        File(csv.path+".json").writeText("""{"algorithm":"$algorithm","algorithm_base":"${case.baseAlgorithm}","key_bits":${case.keyBits},"size_bytes":${1 shl p},"rounds":$rounds,"target_batch_ms":$targetMs,"inner_iterations":$inner,"warmup_ms":$warmupMs,"warmup_small_power":$smallPower,"warmup_pairs":${warm.pairs},"warmup_small_pairs":${warm.smallPairs},"warmup_start_epoch_ms":${warm.startEpochMs},"warmup_end_epoch_ms":${warm.endEpochMs},"idle_ms":$idleMs,"idle_start_elapsed_ms":$idleStart,"idle_end_elapsed_ms":$idleEnd,"warmup_start_elapsed_ms":$warmStart,"warmup_end_elapsed_ms":$warmEnd,"energy_probe":"${if (external) "external" else "in-app EnergyMeter"}","foreground_activity":$foreground,"idle_power_w":${if (idleW.isFinite()) idleW else "null"},"idle_status":"${idle?.status ?: "NONE"}","aesgcm_provider":"${javax.crypto.Cipher.getInstance("AES/GCM/NoPadding").provider.name}","debuggable":$debuggable,"vm":"${System.getProperty("java.vm.name")} ${System.getProperty("java.vm.version")}","device":"${Build.MANUFACTURER} ${Build.MODEL}","soc":"${if (Build.VERSION.SDK_INT >= 31) Build.SOC_MODEL else ""}","android":"${Build.VERSION.RELEASE}"}""")
+        File(csv.path+".json").writeText("""{"algorithm":"$algorithm","algorithm_base":"${case.baseAlgorithm}","key_bits":${case.keyBits},"size_bytes":${1 shl p},"rounds":$rounds,"target_batch_ms":$targetMs,"inner_iterations":$inner,"warmup_ms":$warmupMs,"warmup_small_power":$smallPower,"warmup_pairs":${warm.pairs},"warmup_small_pairs":${warm.smallPairs},"warmup_start_epoch_ms":${warm.startEpochMs},"warmup_end_epoch_ms":${warm.endEpochMs},"idle_ms":$idleMs,"idle_start_elapsed_ms":$idleStart,"idle_end_elapsed_ms":$idleEnd,"warmup_start_elapsed_ms":$warmStart,"warmup_end_elapsed_ms":$warmEnd,"energy_probe":"${if (external) "external" else "in-app EnergyMeter"}","foreground_activity":$foreground,"idle_power_w":${if (idleW.isFinite()) idleW else "null"},"idle_status":"${idle?.status ?: "NONE"}","aesgcm_provider":"${javax.crypto.Cipher.getInstance("AES/GCM/NoPadding").provider.name}","debuggable":$debuggable,"vm":"${System.getProperty("java.vm.name")} ${System.getProperty("java.vm.version")}","device":"${Build.MANUFACTURER} ${Build.MODEL}","soc":"${if (Build.VERSION.SDK_INT >= 31) Build.SOC_MODEL else ""}","android":"${Build.VERSION.RELEASE}","impl":"$impl","native_info":${nativeInfo?.let { "\"$it\"" } ?: "null"}}""")
         val lines=csv.readLines()
         check(lines.size==rounds+1 && lines.drop(1).all { it.split(',').size==HEADER.split(',').size })
         println("BENCHMARK_CSV="+csv.path)

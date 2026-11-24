@@ -14,7 +14,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 CC=${CC:-gcc}
 OPT=${OPT:-"-O2"}
 TP=third_party
-OUT=build
+OUT=${OUT:-build}
 OBJ=$OUT/obj
 WARN="-Wall -Wextra -Wno-unused-parameter -Wno-sign-compare"
 

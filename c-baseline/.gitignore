@@ -4,3 +4,4 @@ tools/lib/
 tools/vectors.txt
 tools/c2java.txt
 tools/*.log
+build-android/
